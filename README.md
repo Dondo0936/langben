@@ -4,6 +4,8 @@ Langfuse-class LLM observability plus tracing for Vietnamese AI routes (Zalo, FP
 
 **Read this first:** [docs/plans/vet-full-plan.pdf](docs/plans/vet-full-plan.pdf) (print-ready implementation plan). HTML source: [docs/plans/vet-full-plan.html](docs/plans/vet-full-plan.html).
 
+Includes built-in LLM layers for **Amazon Bedrock**, **Google Cloud Vertex AI**, and **Microsoft Foundry** (Playground + SDK wraps), separate from Google Chat / Teams channels.
+
 Not a Langfuse fork. Reuse MIT UI layout/shell, our brand, native Vietnamese chrome, then add channel connectors Langfuse does not have.
 
 ## Parked research (not this build)

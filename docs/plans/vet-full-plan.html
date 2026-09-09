@@ -75,12 +75,12 @@
 <section class="cover">
   <div class="kicker">Product &amp; implementation plan · draft for build</div>
   <h1>Vết</h1>
-  <p class="subtitle">Langfuse-class LLM observability, plus end-to-end tracing of Vietnamese AI routes (Zalo, FPT.AI, Viettel, Lark, Google Chat, .NET).</p>
+  <p class="subtitle">Langfuse-class LLM observability, plus end-to-end tracing of Vietnamese AI routes (Zalo, FPT.AI, Viettel, Lark, Google Chat, .NET). Built-in generation layers for Amazon Bedrock, Google Cloud Vertex AI, and Microsoft Foundry.</p>
   <p>Working name only. Replace before public launch. Vietnamese for “trace / mark.”</p>
   <div class="meta">
     <div><strong>Status:</strong> Plan for implementation. Not a fork of Langfuse. Reuse MIT UI shell + rebrand.</div>
     <div><strong>Audience:</strong> Builder implementing tonight after reading this document.</div>
-    <div><strong>Date:</strong> 9 September 2026</div>
+    <div><strong>Date:</strong> 9 September 2026 · updated same day (hyperscaler providers)</div>
     <div><strong>Related notes:</strong> <span class="mono">docs/ideas/01-excel-pipeline-eval.md</span> (parked), <span class="mono">docs/ideas/02-agent-trace-usage-saas.md</span> (absorbed as turn receipts).</div>
   </div>
   <p class="footer-note">License reminder: Langfuse web UI outside <span class="mono">ee/</span> is MIT. Keep copyright notices. Do not use the Langfuse name or logo. Do not copy <span class="mono">ee/</span> code.</p>
@@ -96,6 +96,7 @@
     <li>How the app looks</li>
     <li>Information architecture</li>
     <li>Part A — Langfuse-class core</li>
+    <li>Part A2 — Hyperscaler LLM layers (Bedrock, Vertex, Foundry)</li>
     <li>Part B — Vietnamese routes &amp; channels</li>
     <li>Canonical data model</li>
     <li>Ingest modes</li>
@@ -118,6 +119,7 @@
 <table>
   <tr><th>Layer</th><th>Job</th></tr>
   <tr><td>A. Core</td><td>Projects, traces, sessions, scores, prompts, playground, evals, usage dashboard — Langfuse-shaped.</td></tr>
+  <tr><td>A2. Hyperscalers</td><td>Built-in adapters: Amazon Bedrock, Google Cloud Vertex AI, Microsoft Foundry (plus Anthropic direct, OpenAI-compat, FPT Factory).</td></tr>
   <tr><td>B. Routes</td><td>Zalo OA/Bot, FPT.AI Conversation, Viettel ASR/TTS/NLP, Lark, Google Chat, .NET/Teams inbound.</td></tr>
 </table>
 <p>A without B is a weaker Langfuse. B without A is a webhook logger. Both are required.</p>
@@ -130,6 +132,7 @@
   <tr><td>Pixel-clone from screenshots?</td><td><strong>No.</strong> Use their MIT source for the shell, or rebuild the same IA with shadcn. Prefer MIT source for traces/playground speed.</td></tr>
   <tr><td>Vietnamese UI?</td><td><strong>Default vi</strong>, English toggle. Native strings, not browser translate.</td></tr>
   <tr><td>Anthropic?</td><td>First-class wrap of <code>@anthropic-ai/sdk</code> / Python Anthropic client (not OpenInference-only).</td></tr>
+  <tr><td>Hyperscaler LLMs?</td><td><strong>Yes — built-in.</strong> Amazon Bedrock, Google Cloud Vertex AI, Microsoft Foundry as named LLM connections + SDK wraps. Not “paste a custom base URL.”</td></tr>
   <tr><td>Primary VN pair</td><td>Zalo OA tap + FPT.AI Conversation, then .NET SDK, then Viettel speech/NLP, then Lark + Google Chat.</td></tr>
   <tr><td>Excel eval kit</td><td>Parked. Not in this build.</td></tr>
 </table>
@@ -138,7 +141,7 @@
 <h3>Goals</h3>
 <ul>
   <li>A developer can open a Zalo user session and see inbound message, NLU, LLM, tools, TTS, outbound reply as one tree.</li>
-  <li>A developer can wrap Anthropic (and OpenAI-compat / FPT Factory) and see Langfuse-style generations.</li>
+  <li>A developer can wrap Anthropic, Bedrock, Vertex, Foundry, and OpenAI-compat / FPT Factory and see Langfuse-style generations tagged with provider + region/project.</li>
   <li>A .NET bot can emit OTLP and land in the same UI.</li>
   <li>Empty, loading, and error states exist in Vietnamese.</li>
   <li>The product does not claim to be Langfuse.</li>
@@ -244,7 +247,7 @@ Studio
 Cài đặt
   Project, API keys, LLM connections, members
 </pre>
-<p>Playground providers: Anthropic, OpenAI-compat, FPT AI Factory. Channel connectors do <em>not</em> live in Playground.</p>
+<p>Playground providers: Anthropic, OpenAI-compat, FPT AI Factory, <strong>Amazon Bedrock</strong>, <strong>Google Cloud Vertex AI</strong>, <strong>Microsoft Foundry</strong>. Channel connectors (Zalo, Google Chat, Lark) do <em>not</em> live in Playground — Vertex ≠ Google Chat, Foundry ≠ Teams.</p>
 
 <h2>7. Part A — Langfuse-class core</h2>
 <table>
@@ -264,7 +267,64 @@ Cài đặt
   <li>Anthropic Messages API (refresh model ids; do not ship only Claude 3.x names).</li>
   <li>OpenAI-compatible (LiteLLM, vLLM, OpenRouter, FPT Factory <code>https://mkp-api.fptcloud.com/v1</code>).</li>
   <li>Named preset: <strong>FPT AI Factory</strong> with Bearer key + catalog model field.</li>
+  <li><strong>Amazon Bedrock, Google Cloud Vertex AI, Microsoft Foundry</strong> — first-class adapters (next section). Not a hidden “custom OpenAI base URL.”</li>
 </ul>
+
+<h2>7a. Built-in hyperscaler support layers</h2>
+<p>These are <strong>generation providers</strong> (Part A): Playground, LLM-as-judge, SDK wraps, cost/usage on <code>generation</code> spans. They are <em>not</em> chat channels (Part B). A Zalo turn may still <em>call</em> Bedrock underneath; the span is <code>generation</code> with <code>provider=bedrock</code>.</p>
+<div class="note">
+  Langfuse Cloud already lists Bedrock and Vertex as LLM connections. Vết copies that job and adds <strong>Microsoft Foundry</strong> as a named layer (Azure AI Foundry / model deployments), which Langfuse does not treat as a first-class VN-relevant enterprise path next to .NET.
+</div>
+<table>
+  <tr><th>Layer</th><th>What it is</th><th>What it is not</th></tr>
+  <tr><td>Amazon Bedrock</td><td>Managed models in an AWS account (Claude, Nova, Llama, …) via Converse / InvokeModel</td><td>Not CloudWatch. Not “AWS Chat.”</td></tr>
+  <tr><td>Google Cloud Vertex AI</td><td>Gemini and partner models on a GCP project + location</td><td>Not Google Chat (Workspace bot). Not Google AI Studio-only (that is a sibling adapter, API key).</td></tr>
+  <tr><td>Microsoft Foundry</td><td>Azure AI Foundry project: deployments, Azure OpenAI-compat, Foundry model APIs, Entra or key</td><td>Not Teams / Bot Framework inbound (that stays .NET channel). Not “Azure Monitor.”</td></tr>
+</table>
+<p>Every hyperscaler connection stores: provider enum, region or location, project/account id, deployment or model id, auth ref (never shown in traces), extra headers. Generations record <code>provider</code>, <code>model</code>, <code>region</code>, latency, token usage, estimated cost.</p>
+
+<h3>Amazon Bedrock</h3>
+<ul>
+  <li><strong>APIs:</strong> Converse and ConverseStream first (tool use, system, inference config). Fallback InvokeModel / InvokeModelWithResponseStream for models that are not on Converse.</li>
+  <li><strong>Auth:</strong> AWS access key + secret + optional session token, <em>or</em> default credential chain on the server (IAM role). Optional Bedrock API key if the account uses it. Region is required (e.g. <code>us-east-1</code>, <code>ap-southeast-1</code>).</li>
+  <li><strong>Model ids:</strong> first-class list plus custom: <code>anthropic.claude-*</code>, <code>amazon.nova-*</code>, <code>meta.llama-*</code>, <code>mistral.*</code>, <code>cohere.*</code>. Cross-region inference profiles allowed as custom model names.</li>
+  <li><strong>SDK wrap:</strong> <code>wrapBedrock(client)</code> around AWS SDK v3 <code>BedrockRuntimeClient</code> (JS) and <code>boto3</code> <code>bedrock-runtime</code> (Python). Map usage from Converse <code>usage</code> to our token fields. Stream: TTFT if cheap.</li>
+  <li><strong>Playground / judge:</strong> same adapter; require <code>bedrock:InvokeModel</code> and <code>bedrock:InvokeModelWithResponseStream</code> (Langfuse’s documented IAM pair).</li>
+  <li><strong>Optional later:</strong> Bedrock Guardrails as metadata on the span, not a separate product.</li>
+  <li><strong>Cost:</strong> published Bedrock token rates by model id, labeled ước tính; cache tokens if the model returns them.</li>
+</ul>
+
+<h3>Google Cloud Vertex AI</h3>
+<ul>
+  <li><strong>API:</strong> Vertex Gemini <code>generateContent</code> / stream (v1). Location + project are required (e.g. <code>asia-southeast1</code> for VN-adjacent, or <code>us-central1</code>).</li>
+  <li><strong>Auth:</strong> service account JSON (uploaded once, stored encrypted) or Application Default Credentials on the server. Do not put the JSON in traces.</li>
+  <li><strong>Model ids:</strong> <code>gemini-2.5-*</code>, <code>gemini-2.0-*</code>, <code>gemini-1.5-*</code>, plus custom publisher models enabled on the project.</li>
+  <li><strong>SDK wrap:</strong> <code>wrapVertex(client)</code> around <code>@google-cloud/vertexai</code> / official Python Vertex SDK. Record prompt + candidates, safety ratings as metadata, token counts from <code>usageMetadata</code>.</li>
+  <li><strong>Sibling, not a substitute:</strong> Google AI Studio (<code>generativelanguage.googleapis.com</code> + API key) may share the Gemini schema. Ship as provider <code>google-ai-studio</code> if it is a one-file adapter; Vertex remains the enterprise default.</li>
+  <li><strong>Do not</strong> reuse the Google Chat webhook verifier for Vertex. Different credentials, different objects.</li>
+</ul>
+
+<h3>Microsoft Foundry</h3>
+<ul>
+  <li><strong>What to support:</strong> Azure AI Foundry <em>project</em> endpoint + a <em>deployment</em> name. Chat Completions (OpenAI-compat) first; enable Responses API flag when the deployment requires it (same pattern Langfuse uses for some OpenAI-compat gateways).</li>
+  <li><strong>Auth:</strong> API key on the Foundry/Azure OpenAI resource, <em>or</em> Microsoft Entra ID (<code>DefaultAzureCredential</code>) — required for many enterprise tenants. .NET must use Azure.Identity; JS/Python equivalent.</li>
+  <li><strong>SDK wrap:</strong> <code>wrapFoundry(client)</code> — Azure OpenAI client (<code>AzureOpenAI</code> in Python, <code>@azure/openai</code> or OpenAI client with Foundry base URL). Record <code>deployment</code>, <code>api-version</code>, tokens, latency.</li>
+  <li><strong>.NET:</strong> same wrap plus OTLP so Foundry calls inside a Teams / Agents SDK turn nest under <code>channel.inbound</code> when the bot is on Microsoft 365.</li>
+  <li><strong>Playground:</strong> connection type “Microsoft Foundry” with fields: endpoint, deployment, api-version, auth mode (key vs Entra). Model dropdown = deployments the user lists, not a hardcoded OpenAI list only.</li>
+  <li><strong>Not in this adapter:</strong> Copilot Studio export, Azure Monitor. Foundry is the model plane; Teams is the channel plane.</li>
+</ul>
+
+<h3>Shared adapter contract</h3>
+<pre>interface LlmAdapter {
+  id: "anthropic" | "openai-compat" | "fpt-factory"
+      | "bedrock" | "vertex" | "foundry" | "google-ai-studio"
+  chat(req): AsyncIterable or Message   // playground + judge
+  wrap(sdkClient): TracedClient         // application SDK
+  parseUsage(response): TokenUsage
+  estimateCost(usage, model): number | null
+}</pre>
+<p>Judge evals need tool-calling on the adapter (Langfuse already requires this for OpenAI-compat judges). Bedrock Converse and Vertex Gemini function-calling must be implemented before that provider can run LLM-as-judge. Until then, judge falls back to Anthropic or OpenAI-compat.</p>
+<p><strong>UI:</strong> Cài đặt → Kết nối LLM → cards for each provider (logo, region, last test ping). Test button: one cheap completion, store latency, do not log the secret.</p>
 
 <h2>8. Part B — Vietnamese routes &amp; channels</h2>
 <p>Each connector: verify → normalize to a <strong>turn</strong> → optional forward. Same span names everywhere.</p>
@@ -272,7 +332,7 @@ Cài đặt
   <tr><th>Span</th><th>Meaning</th></tr>
   <tr><td><code>channel.inbound</code></td><td>User message from Zalo / Lark / Chat / Bot Framework</td></tr>
   <tr><td><code>nlu</code></td><td>FPT intent, Viettel NER/segment/spell</td></tr>
-  <tr><td><code>generation</code></td><td>Claude, FPT Factory, vLLM, etc.</td></tr>
+  <tr><td><code>generation</code></td><td>Claude, Bedrock, Vertex, Foundry, FPT Factory, vLLM, etc.</td></tr>
   <tr><td><code>tool</code></td><td>CRM, search, booking</td></tr>
   <tr><td><code>speech.asr</code> / <code>speech.tts</code></td><td>Viettel STT/TTS</td></tr>
   <tr><td><code>channel.outbound</code></td><td>Bot reply on the same channel</td></tr>
@@ -380,24 +440,26 @@ Prompt
                        └── trace inbound / outbound
 
 Mode 2 — SDK (in-process)
-  wrapAnthropic / wrapOpenAI / wrapFptGetAnswer / wrapViettelTts
+  wrapAnthropic / wrapBedrock / wrapVertex / wrapFoundry / wrapOpenAI / wrapFptGetAnswer / wrapViettelTts
   → POST /api/ingest  or  OTLP
 
 Mode 3 — OTLP
   .NET / Teams SDK / any OTel → /otlp/v1/traces
 </pre>
-<p>Zalo / Lark / Google Chat: Mode 1 first. FPT / Viettel / Anthropic: Mode 2. .NET: Mode 2 + 3.</p>
+<p>Zalo / Lark / Google Chat: Mode 1 first. FPT / Viettel / Anthropic / Bedrock / Vertex / Foundry: Mode 2. .NET: Mode 2 + 3 (Foundry calls often live here).</p>
 <div class="warn">Forwarding is a production liability (latency, dual delivery, secrets). v1: timeout, retries=0 or 1, kill switch, log forward failures as spans. SDK path is the reliable default once the bot can add a package.</div>
 
 <h2>11. Architecture &amp; repo layout</h2>
 <pre>apps/web              Next.js App Router — VI UI (shadcn)
 apps/ingest           Webhooks, signature verify, optional forward
 packages/schema       Zod: turns, spans, channel enums
-packages/sdk-js       observe, wrapAnthropic, wrapOpenAI
+packages/sdk-js       observe, wrapAnthropic, wrapBedrock, wrapVertex, wrapFoundry, wrapOpenAI
 packages/sdk-py       same
-packages/sdk-dotnet   OTLP + ASP.NET middleware
-connectors/
+packages/sdk-dotnet   OTLP + ASP.NET middleware + Azure.Identity for Foundry
+  connectors/
   zalo-oa, zalo-bot, fpt-conversation, viettel-speech, lark, google-chat
+packages/llm-adapters
+  anthropic, openai-compat, fpt-factory, bedrock, vertex, foundry
 LICENSE, NOTICE       MIT + Langfuse MIT attribution if UI source is copied
 </pre>
 <p><strong>Stack:</strong> Next.js, TypeScript, Tailwind, shadcn/ui. Postgres for traces (SQLite only for a laptop demo if Postgres is painful — do not design for SQLite in production). Redis optional (forward queue). No ClickHouse until one project is huge.</p>
@@ -436,6 +498,7 @@ await observe("hỗ-trợ-khách", async () => {
 }, { sessionId, userId, tags: ["zalo"] })
 </pre>
 <p>Must capture: <code>messages.create</code>, streaming, <code>tool_use</code> child spans, usage including cache, errors. Never send <code>ANTHROPIC_API_KEY</code> to Vết.</p>
+<p>Same pattern for hyperscalers: <code>wrapBedrock</code>, <code>wrapVertex</code>, <code>wrapFoundry</code> — never send AWS/GCP/Azure secrets to Vết ingest, only traces. Must capture: model/deployment, region or location, usage, latency, errors. Streaming where the official SDK supports it.</p>
 <h3>Python</h3>
 <p>Same: <code>wrap_anthropic</code>, <code>observe</code>, FPT <code>get_answer</code> helper, Viettel REST helpers.</p>
 <h3>.NET</h3>
@@ -480,7 +543,16 @@ await observe("hỗ-trợ-khách", async () => {
 <h3>Slice 5 — Lark + Google Chat</h3>
 <p>Same connector interface as Zalo.</p>
 <h3>Slice 6 — Prompts, Playground, turn evals</h3>
-<p>Then: FPT Factory as named LLM connection; cost table (ước tính).</p>
+<p>FPT Factory as named LLM connection; cost table (ước tính). Judge may use Anthropic or OpenAI-compat until hyperscaler tool-calling is ready.</p>
+<h3>Slice 7 — Hyperscaler adapters (Bedrock, Vertex, Foundry)</h3>
+<ol>
+  <li>LLM connection UI cards + encrypted secrets + “test ping.”</li>
+  <li>Playground chat via each adapter (non-stream first, then stream).</li>
+  <li>SDK wraps: <code>wrapBedrock</code>, <code>wrapVertex</code>, <code>wrapFoundry</code> — generations tagged <code>provider</code> + region/project/deployment.</li>
+  <li>Tool-calling on Converse / Gemini / Foundry enough for LLM-as-judge, or keep judge on Anthropic until then.</li>
+  <li>.NET sample: Foundry deployment inside one Agents SDK turn, visible as nested <code>generation</code>.</li>
+</ol>
+<p>Do not start Slice 7 before Slice 0 traces work. Do not block Zalo on AWS credentials.</p>
 
 <h2>16. Acceptance checks</h2>
 <p>Core is done when:</p>
@@ -489,6 +561,12 @@ await observe("hỗ-trợ-khách", async () => {
   <li>Ingest creates a visible trace without restarting the server.</li>
   <li>Seeded Zalo-shaped turn shows inbound + generation + outbound.</li>
   <li>Anthropic wrap records model, tokens, latency when a key is present; degrades cleanly when not.</li>
+</ul>
+<p>Hyperscaler layers are done when:</p>
+<ul>
+  <li>A Bedrock, Vertex, and Foundry connection can each complete a Playground message and show a <code>generation</code> with provider + region/location/deployment.</li>
+  <li>Invalid credentials fail the test ping without creating a successful trace.</li>
+  <li>Google Chat webhooks still work without Vertex credentials (and the reverse).</li>
 </ul>
 <p>Channel layer is done when:</p>
 <ul>
@@ -505,7 +583,9 @@ await observe("hỗ-trợ-khách", async () => {
   <tr><td>Webhook forward dual-sends or hangs the OA</td><td>Short timeout, kill switch, prefer SDK.</td></tr>
   <tr><td>FPT/Viettel payloads change</td><td>Versioned parsers per connector.</td></tr>
   <tr><td>Cyberbot never gets a public API</td><td>Do not block the roadmap.</td></tr>
-  <tr><td>Scope explosion</td><td>If Slice 0 + Zalo signature verify are not done, stop adding Lark.</td></tr>
+  <tr><td>Scope explosion</td><td>If Slice 0 + Zalo signature verify are not done, stop adding Lark <em>and</em> stop adding Bedrock/Vertex/Foundry.</td></tr>
+  <tr><td>IAM / Entra / GCP ADC in a laptop demo</td><td>API keys or pasted keys for ping; document role-based auth for production. Never put JSON keys in traces.</td></tr>
+  <tr><td>Confusing Vertex with Google Chat, Foundry with Teams</td><td>Separate nav: LLM connections vs Kênh. Copy in UI: “Mô hình (Vertex)” vs “Kênh Google Chat”.</td></tr>
 </table>
 <p><strong>Kill / cut:</strong> If the first merged UI is only an English traces table, the plan has failed even if ingest works. Vietnamese chrome + one Zalo-shaped session is the bar.</p>
 
@@ -519,7 +599,13 @@ await observe("hỗ-trợ-khách", async () => {
 <h3>Lark challenge</h3>
 <p>Return <code>{ "challenge": "&lt;value&gt;" }</code> within 1s on URL verification. Encrypted events need the encrypt key from the developer console.</p>
 <h3>Google Chat</h3>
-<p>Verify per Google Chat app docs (audience / bearer). Map <code>space.name</code> + user to session id.</p>
+<p>Verify per Google Chat app docs (audience / bearer). Map <code>space.name</code> + user to session id. This is <em>not</em> Vertex AI.</p>
+<h3>Amazon Bedrock</h3>
+<p>Use Converse in the configured region. Model id is the Bedrock id (optionally inference profile). IAM: <code>bedrock:InvokeModel</code>, <code>bedrock:InvokeModelWithResponseStream</code>. Do not send AWS secrets to the browser; Playground calls go server-side.</p>
+<h3>Google Cloud Vertex AI</h3>
+<p>Client needs <code>project</code>, <code>location</code>, model resource name. Auth: service account with Vertex User (or equivalent) on that project. asia-southeast1 is the default suggestion in VN docs, not a hardcode. Distinct from Google AI Studio API keys.</p>
+<h3>Microsoft Foundry</h3>
+<p>Endpoint looks like an Azure AI Foundry / Azure OpenAI resource URL. Required: deployment name + api-version. Auth: key or Entra. OpenAI-compat <code>/chat/completions</code> first; Responses API toggle if the deployment needs it. Pair with the .NET OTLP path for Teams bots that call Foundry.</p>
 <h3>Langfuse UI files to study if vendoring</h3>
 <ul>
   <li>Sidebar / nav (collapsible, project switcher)</li>
@@ -530,8 +616,8 @@ await observe("hỗ-trợ-khách", async () => {
 <p>Do not vendor worker, ClickHouse migrations, or <code>ee/</code>.</p>
 
 <h2>Document control</h2>
-<p>This PDF is the implementation source of truth for the next build. Update it if you cut Slice 5 or rename the product. Excel eval and a generic usage-report SaaS stay out of scope until this core + Zalo + FPT path exists.</p>
-<p class="footer-note">Working title Vết · 9 Sep 2026 · For implementation, not publication as Langfuse.</p>
+<p>This PDF is the implementation source of truth for the next build. Update it if you cut Slice 5 or 7, or rename the product. Excel eval and a generic usage-report SaaS stay out of scope until this core + Zalo + FPT path exists.</p>
+<p class="footer-note">Working title Vết · 9 Sep 2026 (rev. hyperscalers) · For implementation, not publication as Langfuse.</p>
 
 </body>
 </html>
