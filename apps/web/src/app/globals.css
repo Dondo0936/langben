@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-be-vietnam), "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-ibm-mono), "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --color-ink: #0c1f17;
+  --color-ink-2: #163528;
+  --color-accent: #1f6b4a;
+  --color-accent-2: #2d8a62;
+  --color-highlight: #c6f07a;
+  --color-paper: #f4f1ea;
+  --color-paper-2: #ebe6db;
+  --color-sidebar: #0b1512;
+  --color-line: #d9d3c6;
+  --color-muted: #5c6b64;
+}
+
+html,
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--color-highlight);
+  color: var(--color-ink);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

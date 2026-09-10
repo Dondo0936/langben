@@ -1,0 +1,88 @@
+import Link from "next/link";
+import { Wordmark } from "@/components/brand/Logo";
+import { LangToggle } from "@/components/LangToggle";
+import { tr, t } from "@/lib/i18n";
+import type { Lang } from "@/lib/types";
+
+export function MarketingHeader({ lang }: { lang: Lang }) {
+  const items = [
+    { href: "/#san-pham", label: tr(lang, t.nav.product) },
+    { href: "/docs", label: tr(lang, t.nav.docs) },
+    { href: "/self-host", label: tr(lang, t.nav.selfHost) },
+    { href: "/changelog", label: tr(lang, t.nav.changelog) },
+    { href: "/pricing", label: tr(lang, t.nav.pricing) },
+  ];
+  return (
+    <header className="sticky top-0 z-40 border-b border-line/80 bg-paper/85 backdrop-blur">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+        <Link href="/" className="flex items-center gap-2">
+          <Wordmark />
+        </Link>
+        <nav className="hidden items-center gap-6 text-sm text-ink-2 md:flex">
+          {items.map((item) => (
+            <Link key={item.href} href={item.href} className="hover:text-accent">
+              {item.label}
+            </Link>
+          ))}
+          <Link href="/open-source" className="hover:text-accent">
+            {tr(lang, t.nav.openSource)}
+          </Link>
+        </nav>
+        <div className="flex items-center gap-2">
+          <LangToggle lang={lang} />
+          <Link href="/login" className="hidden text-sm md:inline">
+            {tr(lang, t.nav.login)}
+          </Link>
+          <Link
+            href="/signup"
+            className="rounded-full bg-ink px-3.5 py-1.5 text-sm font-medium text-highlight"
+          >
+            {tr(lang, t.nav.signup)}
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export function MarketingFooter({ lang }: { lang: Lang }) {
+  return (
+    <footer className="border-t border-line bg-ink text-paper">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
+        <div>
+          <Wordmark light />
+          <p className="mt-3 max-w-xs text-sm text-paper/70">
+            {lang === "vi"
+              ? "Nền tảng quan sát LLM mã nguồn mở cho bot sản xuất Việt Nam. MIT. Cloud do chúng tôi host, hoặc tự vận hành."
+              : "Open-source LLM observability for Vietnamese production bots. MIT. We host Cloud, or you self-host."}
+          </p>
+        </div>
+        <div className="text-sm">
+          <div className="mb-3 font-medium">{lang === "vi" ? "Sản phẩm" : "Product"}</div>
+          <ul className="space-y-2 text-paper/70">
+            <li><Link href="/app">Cloud</Link></li>
+            <li><Link href="/self-host">{tr(lang, t.nav.selfHost)}</Link></li>
+            <li><Link href="/pricing">{tr(lang, t.nav.pricing)}</Link></li>
+            <li><Link href="/enterprise">Enterprise</Link></li>
+          </ul>
+        </div>
+        <div className="text-sm">
+          <div className="mb-3 font-medium">{lang === "vi" ? "Tài nguyên" : "Resources"}</div>
+          <ul className="space-y-2 text-paper/70">
+            <li><Link href="/docs">{tr(lang, t.nav.docs)}</Link></li>
+            <li><Link href="/open-source">{tr(lang, t.nav.openSource)}</Link></li>
+            <li><Link href="/changelog">{tr(lang, t.nav.changelog)}</Link></li>
+            <li><Link href="/security">{lang === "vi" ? "Bảo mật" : "Security"}</Link></li>
+          </ul>
+        </div>
+        <div className="text-sm">
+          <div className="mb-3 font-medium">{lang === "vi" ? "Pháp lý" : "Legal"}</div>
+          <ul className="space-y-2 text-paper/70">
+            <li><Link href="/open-source">MIT License</Link></li>
+            <li>© 2026 Vết</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  );
+}

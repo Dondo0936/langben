@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    ports:
+      - "43173:43173"
+    environment:
+      VET_DEPLOYMENT: self-host
+      VET_DATA_DIR: /data
+      VET_PUBLIC_URL: http://localhost:43173
+    volumes:
+      - vet-data:/data
+
+volumes:
+  vet-data:

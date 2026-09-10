@@ -1,0 +1,16 @@
+Vết
+Copyright (c) 2026 Vết contributors
+
+This product is licensed under the MIT License. See LICENSE.
+
+Product packaging
+-----------------
+The same MIT codebase ships in three ways, analogous to Langfuse:
+
+  1. Open Source (self-host) — you run the software; unlimited usage; community support.
+  2. Vết Cloud — we host it for you (Hobby / Core / Pro / Enterprise).
+  3. Self-hosted Enterprise — your infra, commercial support and compliance add-ons.
+
+Information architecture for the tracing console (sidebar, traces table,
+waterfall) follows the Langfuse MIT web app layout. No Langfuse source,
+wordmark, or logo is included. Do not imply affiliation with Langfuse GmbH.
