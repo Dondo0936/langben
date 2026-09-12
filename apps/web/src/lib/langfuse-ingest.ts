@@ -27,6 +27,14 @@ export function langfuseSessionId(channel: string, userId: string) {
   return `${channel}:${userId}`;
 }
 
+function outputHasText(output: unknown) {
+  return Boolean(
+    output &&
+      typeof output === "object" &&
+      typeof (output as { text?: unknown }).text === "string",
+  );
+}
+
 function observationEventType(type: ObservationType | string) {
   return type === "generation" ? "generation-create" : "span-create";
 }
@@ -64,6 +72,8 @@ export function channelEventsToLangfuseBatch(opts: {
     ...(opts.provider ? { provider: opts.provider } : {}),
     ...(opts.metadata ?? {}),
   };
+  const inbound = String(vetType).includes("inbound");
+  const outbound = String(vetType).includes("outbound");
   const traceEvent: LangfuseIngestEvent = {
     id: eventId(),
     type: "trace-create",
@@ -80,8 +90,8 @@ export function channelEventsToLangfuseBatch(opts: {
         vet_project_id: opts.projectId,
         ...(opts.routeId ? { routeId: opts.routeId } : {}),
       },
-      ...(String(vetType).includes("inbound") ? { input: opts.input } : {}),
-      ...(String(vetType).includes("outbound") ? { output: opts.output } : {}),
+      ...(inbound ? { input: opts.input } : {}),
+      ...(outbound || (inbound && outputHasText(opts.output)) ? { output: opts.output } : {}),
     },
   };
   const obsBody: Record<string, unknown> = {

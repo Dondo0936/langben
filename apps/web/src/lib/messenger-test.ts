@@ -49,7 +49,7 @@ export function buildChannelTestCalls(ch: ChannelConfig, projectId: string): Hoo
           schema: "2.0",
           header: { event_type: "im.message.receive_v1" },
           event: {
-            sender: { sender_id: { open_id: "ou_fixture" }, sender_type: "user" },
+            sender: { sender_id: { open_id: "ou_local" }, sender_type: "user" },
             message: {
               message_type: "text",
               content: JSON.stringify({ text: "xin chào từ Lark (cục bộ)" }),
@@ -71,7 +71,7 @@ export function buildChannelTestCalls(ch: ChannelConfig, projectId: string): Hoo
         },
         body: JSON.stringify({
           type: "MESSAGE",
-          user: { name: "users/fixture" },
+          user: { name: "users/local" },
           space: { name: "spaces/vet_demo", type: "DM" },
           message: { text: "xin chào từ Google Chat (cục bộ)" },
         }),

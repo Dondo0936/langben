@@ -70,7 +70,7 @@ node scripts/lark-fixture.mjs    # url_verification + inbound → session lark:o
 node scripts/gchat-fixture.mjs   # Bearer token + inbound → session gchat:users_fixture
 ```
 
-Invalid token → **401**. In the console, Kênh → Lark or Google Chat → **Gửi thử** does the same thing.
+Invalid token → **401**. In the console, Kênh → Lark or Google Chat → **Gửi thử** does the same ingest into sessions `lark:ou_local` / `gchat:users_local`.
 
 A real Lark/Google bot still needs their developer console and a public HTTPS URL. Do that when you have the app; the local fixtures cover ingest + overlay first.
 

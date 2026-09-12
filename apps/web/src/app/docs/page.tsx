@@ -74,7 +74,8 @@ await observe("hỗ-trợ-khách", () =>
         </p>
         <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-[12px] text-highlight">
 {`node scripts/lark-fixture.mjs    # session lark:ou_fixture
-node scripts/gchat-fixture.mjs   # session gchat:users_fixture`}
+node scripts/gchat-fixture.mjs   # session gchat:users_fixture
+# or Kênh → Gửi thử → lark:ou_local / gchat:users_local`}
         </pre>
         <h2 className="mt-10 text-xl font-semibold">5. OTLP</h2>
         <p className="mt-2 text-sm text-muted">
