@@ -104,6 +104,22 @@ if df.is_file():
     if "NEXT_PUBLIC_VET_MARKETING_URL" not in text and needle in text:
         df.write_text(text.replace(needle, inject, 1))
         print("dockerfile", df.relative_to(dest))
+
+ncfg = dest / "web/next.config.mjs"
+if ncfg.is_file():
+    text = ncfg.read_text()
+    old_frame = "  frame-src 'self' https://challenges.cloudflare.com"
+    new_frame = "  frame-src 'self' http://localhost:* http://127.0.0.1:* https://challenges.cloudflare.com"
+    old_font = "  font-src ${assetPrefixSrc}'self';"
+    new_font = "  font-src ${assetPrefixSrc}'self' https://fonts.gstatic.com https://fonts.googleapis.com;"
+    orig = text
+    if "http://localhost:* http://127.0.0.1:* https://challenges.cloudflare.com" not in text:
+        text = text.replace(old_frame, new_frame, 1)
+    if "https://fonts.gstatic.com" not in text:
+        text = text.replace(old_font, new_font, 1)
+    if text != orig:
+        ncfg.write_text(text)
+        print("csp", ncfg.relative_to(dest))
 PY
 
 echo "Overlay applied → $DEST"
