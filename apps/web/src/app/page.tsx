@@ -3,7 +3,6 @@ import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome"
 import { ProductPreview } from "@/components/marketing/ProductPreview";
 import { getLang } from "@/lib/get-lang";
 import { t, tr } from "@/lib/i18n";
-import { CLOUD_PLANS, formatUsd } from "@/lib/plans";
 import { consoleSignInUrl } from "@/lib/console-target";
 
 export const dynamic = "force-dynamic";
@@ -24,8 +23,8 @@ export default async function LandingPage() {
           </h1>
           <p className="rise rise-d2 mt-6 max-w-2xl text-lg text-muted">
             {vi
-              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam là Zalo → FPT / Viettel → LLM → TTS → trả lời. Vết ghi cả lộ trình đó. MIT — tự host miễn phí. Vết Cloud (chúng tôi host) sắp ra mắt."
-              : "Langfuse sees messages.create. A Vietnamese production bot is Zalo → FPT / Viettel → LLM → TTS → reply. Vết traces that whole route. MIT — self-host for free. Vết Cloud (we host it) is coming soon."}
+              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam là Zalo → FPT / Viettel → LLM → TTS → trả lời. Vết ghi cả lộ trình đó. MIT — tự host miễn phí trên infra của bạn."
+              : "Langfuse sees messages.create. A Vietnamese production bot is Zalo → FPT / Viettel → LLM → TTS → reply. Vết traces that whole route. MIT — self-host for free on your infra."}
           </p>
           <div className="rise rise-d3 mt-10 flex flex-wrap gap-3">
             <Link href="/self-host" className="btn-solid">
@@ -42,9 +41,7 @@ export default async function LandingPage() {
             </Link>
           </div>
           <p className="rise rise-d3 mt-4 text-sm text-muted">
-            {vi
-              ? "OSS không giới hạn đơn vị. Cloud Hobby / Core / Pro / Enterprise — sắp có."
-              : "OSS has unlimited units. Cloud Hobby / Core / Pro / Enterprise — coming soon."}
+            {vi ? "OSS không giới hạn đơn vị. Bạn trả infra." : "OSS has unlimited units. You pay infra."}
           </p>
         </section>
 
@@ -114,12 +111,12 @@ export default async function LandingPage() {
               </div>
               <div>
                 <h3 className="text-[11px] font-medium uppercase tracking-[0.16em]">
-                  Vết Cloud <span className="ml-2 border border-white/20 px-2 py-0.5 text-[10px] font-normal">{vi ? "Sắp có" : "Soon"}</span>
+                  {vi ? "Console" : "Console"}
                 </h3>
                 <p className="mt-2 text-sm text-muted">
                   {vi
-                    ? "Chúng tôi sẽ host cùng codebase. Chưa mở đăng ký — xem bộ công cụ đơn vị để hiểu cách tính khi Cloud ra mắt."
-                    : "We will host the same codebase. Signup is not open — see the units toolkit for how metering will work."}
+                    ? "Langfuse OSS + overlay Vết: Kênh, Lộ trình, hội thoại Zalo / Lark / Google Chat."
+                    : "Langfuse OSS plus a Vết overlay: Channels, Routes, Zalo / Lark / Google Chat replay."}
                 </p>
               </div>
             </div>
@@ -135,11 +132,11 @@ export default async function LandingPage() {
               <h2 className="text-3xl font-semibold tracking-tight">{vi ? "Giá" : "Pricing"}</h2>
               <p className="mt-2 text-muted">
                 {vi
-                  ? "Tự vận hành miễn phí hôm nay. Các gói Cloud đang chờ ra mắt."
-                  : "Self-host is free today. Cloud plans are pending launch."}
+                  ? "MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra."
+                  : "MIT, docker compose up, unlimited units. You pay infra."}
               </p>
             </div>
-            <Link href="/pricing/self-host" className="text-[12px] uppercase tracking-[0.14em] text-ink">
+            <Link href="/pricing" className="text-[12px] uppercase tracking-[0.14em] text-ink">
               {vi ? "Giá tự vận hành →" : "Self-host pricing →"}
             </Link>
           </div>
@@ -155,25 +152,7 @@ export default async function LandingPage() {
               {vi ? "Hướng dẫn deploy" : "Deployment guide"}
             </Link>
           </div>
-          <div className="grid gap-px bg-white/10 md:grid-cols-4">
-            {CLOUD_PLANS.map((p) => (
-              <div key={p.id} className="relative bg-black/70 p-5 opacity-80">
-                <span className="absolute right-4 top-4 border border-white/20 px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
-                  {vi ? "Sắp có" : "Soon"}
-                </span>
-                <div className="text-sm font-medium">{p.name}</div>
-                <div className="mt-2 text-3xl font-semibold">
-                  {formatUsd(p.monthlyUsd)}
-                  <span className="text-sm font-normal text-muted">{vi ? "/tháng" : "/mo"}</span>
-                </div>
-                <p className="mt-3 text-sm text-muted">{vi ? p.taglineVi : p.taglineEn}</p>
-                <p className="mt-5 text-xs text-muted">{vi ? "Chưa mở đăng ký" : "Signup not open"}</p>
-              </div>
-            ))}
-          </div>
           <p className="mt-4 text-sm text-muted">
-            <Link href="/pricing" className="text-ink">{vi ? "Trang Cloud (sắp có)" : "Cloud page (coming soon)"}</Link>
-            {" · "}
             <Link href="/docs/units" className="text-ink">{vi ? "Giải thích đơn vị" : "What a unit is"}</Link>
           </p>
         </section>
@@ -184,14 +163,14 @@ export default async function LandingPage() {
             {(vi
               ? [
                   ["Vết khác gì một bản Langfuse dán sticker?", "Langfuse thấy lần gọi LLM. Vết thấy Zalo vào, FPT NLU, TTS Viettel, tin ra — cùng một phiên. UI tiếng Việt gốc, không dịch trình duyệt."],
-                  ["Tự host có thật sự miễn phí?", "Có. MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra. Cloud (chúng tôi host) sắp ra mắt."],
-                  ["Đơn vị (unit) là gì?", "Không phải token. Mỗi vết, quan sát, và điểm đánh giá là một đơn vị — chỉ Cloud mới đếm. Xem bộ công cụ trên /docs/units."],
+                  ["Tự host có thật sự miễn phí?", "Có. MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra."],
+                  ["Đơn vị (unit) là gì?", "Không phải token. Mỗi vết, quan sát, và điểm đánh giá là một đơn vị. Tự vận hành không đếm. Xem /docs/units."],
                   ["Vertex khác Google Chat chứ?", "Có. Vertex/Foundry/Bedrock là lớp mô hình. Google Chat và Teams là kênh. Tách menu: Kết nối LLM vs Kênh."],
                 ]
               : [
                   ["Is this a Langfuse reskin?", "Langfuse sees the LLM call. Vết sees Zalo in, FPT NLU, Viettel TTS, the reply — one session. Native Vietnamese chrome."],
-                  ["Is self-hosting actually free?", "Yes. MIT, docker compose up, unlimited units. You pay infra. Cloud (we host) is coming soon."],
-                  ["What is a unit?", "Not a token. Each trace, observation, and score is one unit — Cloud will meter them. See /docs/units."],
+                  ["Is self-hosting actually free?", "Yes. MIT, docker compose up, unlimited units. You pay infra."],
+                  ["What is a unit?", "Not a token. Each trace, observation, and score is one unit. Self-host does not meter them. See /docs/units."],
                   ["Vertex vs Google Chat?", "Vertex/Foundry/Bedrock are model layers. Google Chat and Teams are channels. Separate nav."],
                 ]
             ).map(([q, a]) => (
@@ -206,7 +185,7 @@ export default async function LandingPage() {
         <section className="border-t border-white/10 py-16">
           <div className="mx-auto max-w-6xl px-4 text-center">
             <h2 className="text-3xl font-semibold">
-              {vi ? "Tự host tonight. Cloud khi sẵn sàng." : "Self-host tonight. Cloud when it’s ready."}
+              {vi ? "Tự host tonight." : "Self-host tonight."}
             </h2>
             <div className="mt-6 flex justify-center gap-3">
               <Link href="/self-host" className="btn-solid">

@@ -13,6 +13,16 @@ export default async function ChangelogPage() {
       <main className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-4xl font-semibold tracking-tight">{vi ? "Nhật ký" : "Changelog"}</h1>
         <article className="mt-8">
+          <p className="text-sm text-muted">12 Sep 2026 · v0.3.1</p>
+          <h2 className="mt-1 text-xl font-semibold">
+            {vi ? "Ẩn gói hosted — chỉ tự vận hành" : "Hide hosted plans — self-host only"}
+          </h2>
+          <ul className="mt-3 list-disc pl-5 text-sm text-muted">
+            <li>{vi ? "Marketing: không còn Hobby / Core / Pro / Enterprise hay “sắp có”" : "Marketing: no Hobby / Core / Pro / Enterprise or coming-soon hosted plans"}</li>
+            <li>{vi ? "Giá = MIT tự vận hành" : "Pricing = MIT self-host"}</li>
+          </ul>
+        </article>
+        <article className="mt-8">
           <p className="text-sm text-muted">12 Sep 2026 · v0.3.0</p>
           <h2 className="mt-1 text-xl font-semibold">
             {vi ? "Giao diện đen trắng + shader" : "Monochrome + shader"}
@@ -37,19 +47,18 @@ export default async function ChangelogPage() {
         <article className="mt-8">
           <p className="text-sm text-muted">10 Sep 2026 · v0.1.1</p>
           <h2 className="mt-1 text-xl font-semibold">
-            {vi ? "OSS trước — Cloud pending + bộ công cụ đơn vị" : "OSS first — Cloud pending + units toolkit"}
+            {vi ? "OSS + bộ công cụ đơn vị" : "OSS + units toolkit"}
           </h2>
           <ul className="mt-3 list-disc pl-5 text-sm text-muted">
-            <li>{vi ? "Hobby / Core / Pro / Enterprise: sắp ra mắt, không đăng ký Cloud" : "Hobby / Core / Pro / Enterprise: coming soon, Cloud signup closed"}</li>
-            <li>{vi ? "Tự vận hành MIT là sản phẩm live" : "MIT self-host is the live product"}</li>
+            <li>{vi ? "Tự vận hành MIT là sản phẩm" : "MIT self-host is the product"}</li>
             <li>{vi ? "Bộ công cụ /docs/units: đơn vị ≠ token" : "Toolkit at /docs/units: units ≠ tokens"}</li>
           </ul>
         </article>
         <article className="mt-8">
           <p className="text-sm text-muted">9 Sep 2026 · v0.1.0</p>
-          <h2 className="mt-1 text-xl font-semibold">{vi ? "Slice 0 + đóng gói Cloud/OSS" : "Slice 0 + Cloud/OSS packaging"}</h2>
+          <h2 className="mt-1 text-xl font-semibold">{vi ? "Slice 0 + đóng gói OSS" : "Slice 0 + OSS packaging"}</h2>
           <ul className="mt-3 list-disc pl-5 text-sm text-muted">
-            <li>{vi ? "Landing tiếng Việt, giá Hobby/Core/Pro/Enterprise, tự host MIT" : "Vietnamese landing, Hobby/Core/Pro/Enterprise, MIT self-host"}</li>
+            <li>{vi ? "Landing tiếng Việt, tự host MIT" : "Vietnamese landing, MIT self-host"}</li>
             <li>{vi ? "Console: Tổng quan, Vết, Phiên, hội thoại Zalo" : "Console: overview, traces, sessions, Zalo replay"}</li>
             <li>{vi ? "Ingest SDK + webhook Zalo OA (ký MAC)" : "SDK ingest + Zalo OA webhook (MAC)"}</li>
           </ul>

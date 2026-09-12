@@ -10,7 +10,7 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
     { href: "/#san-pham", label: tr(lang, t.nav.product) },
     { href: "/docs", label: tr(lang, t.nav.docs) },
     { href: "/self-host", label: tr(lang, t.nav.selfHost) },
-    { href: "/pricing/self-host", label: tr(lang, t.nav.pricing) },
+    { href: "/pricing", label: tr(lang, t.nav.pricing) },
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-black/75 backdrop-blur-md">
@@ -30,9 +30,6 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
         </nav>
         <div className="flex items-center gap-2">
           <LangToggle lang={lang} />
-          <Link href="/pricing" className="hidden text-[11px] uppercase tracking-[0.14em] text-muted xl:inline">
-            {tr(lang, t.nav.signup)}
-          </Link>
           <Link href={consoleSignInUrl()} className="hidden text-[11px] uppercase tracking-[0.14em] xl:inline">
             {tr(lang, t.nav.login)}
           </Link>
@@ -53,16 +50,15 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
           <Wordmark light />
           <p className="mt-3 max-w-xs text-sm text-muted">
             {lang === "vi"
-              ? "Nền tảng quan sát LLM mã nguồn mở cho bot sản xuất Việt Nam. MIT. Tự vận hành hôm nay; Cloud sắp ra mắt."
-              : "Open-source LLM observability for Vietnamese production bots. MIT. Self-host today; Cloud is coming soon."}
+              ? "Nền tảng quan sát LLM mã nguồn mở cho bot sản xuất Việt Nam. MIT. Tự vận hành trên infra của bạn."
+              : "Open-source LLM observability for Vietnamese production bots. MIT. Self-host on your infra."}
           </p>
         </div>
         <div className="text-sm">
           <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.16em]">{lang === "vi" ? "Sản phẩm" : "Product"}</div>
           <ul className="space-y-2 text-muted">
             <li><Link href="/self-host" className="hover:text-ink">{tr(lang, t.nav.selfHost)}</Link></li>
-            <li><Link href="/pricing/self-host" className="hover:text-ink">{tr(lang, t.nav.pricing)}</Link></li>
-            <li><Link href="/pricing" className="hover:text-ink">{tr(lang, t.nav.signup)}</Link></li>
+            <li><Link href="/pricing" className="hover:text-ink">{tr(lang, t.nav.pricing)}</Link></li>
             <li><Link href="/docs/units" className="hover:text-ink">{tr(lang, t.nav.unitsToolkit)}</Link></li>
           </ul>
         </div>

@@ -13,12 +13,12 @@ export default async function OpenSourcePage() {
       <MarketingHeader lang={lang} />
       <main className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-4xl font-semibold tracking-tight">
-          {vi ? "Mã nguồn mở trước. Cloud sau." : "Open source first. Cloud later."}
+          {vi ? "Mã nguồn mở. Tự vận hành." : "Open source. Self-host."}
         </h1>
         <p className="mt-4 text-muted">
           {vi
-            ? "Hôm nay: tự host OSS (MIT). Cùng một repo sẽ chạy Cloud khi chúng tôi host — gói đang pending, chưa mở đăng ký."
-            : "Today: OSS self-host (MIT). The same repo will run as Cloud when we host it — plans are pending, signup is closed."}
+            ? "Vết là MIT. Bạn chạy docker compose trên infra của mình — không giới hạn đơn vị."
+            : "Vết is MIT. You run docker compose on your infra — unlimited units."}
         </p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full text-left text-sm">
@@ -26,18 +26,14 @@ export default async function OpenSourcePage() {
               <tr>
                 <th className="px-3 py-2" />
                 <th className="px-3 py-2">{vi ? "Tự host OSS" : "OSS self-host"}</th>
-                <th className="px-3 py-2">
-                  Vết Cloud <span className="font-normal opacity-70">{vi ? "(sắp có)" : "(soon)"}</span>
-                </th>
               </tr>
             </thead>
             <tbody className="bg-black/40">
               {[
-                [vi ? "Tính năng sản phẩm" : "Product features", "✓", "✓"],
-                [vi ? "Đơn vị" : "Units", vi ? "Không giới hạn" : "Unlimited", vi ? "Sẽ tính khi Cloud mở" : "Metered when Cloud opens"],
-                [vi ? "Dịch vụ managed" : "Fully managed", "—", vi ? "Sắp có" : "Coming soon"],
-                [vi ? "Ai host" : "Who hosts", vi ? "Bạn" : "You", vi ? "Chúng tôi" : "We do"],
-                [vi ? "Trạng thái" : "Status", vi ? "Live" : "Live", vi ? "Pending" : "Pending"],
+                [vi ? "Tính năng sản phẩm" : "Product features", "✓"],
+                [vi ? "Đơn vị" : "Units", vi ? "Không giới hạn" : "Unlimited"],
+                [vi ? "Ai host" : "Who hosts", vi ? "Bạn" : "You"],
+                [vi ? "Giấy phép" : "License", "MIT"],
               ].map((row) => (
                 <tr key={row[0]} className="border-b border-line">
                   {row.map((c) => (

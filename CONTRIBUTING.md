@@ -19,4 +19,4 @@ Do not add Langfuse `ee/` code or the Langfuse wordmark. Overlay diffs live in `
 
 ## Packaging
 
-Product features stay in this MIT tree. Cloud is a hosted deployment of the same app (`VET_DEPLOYMENT=cloud`), not a closed-source fork.
+Product features stay in this MIT tree. The public product is self-host (`VET_DEPLOYMENT=self-host`).

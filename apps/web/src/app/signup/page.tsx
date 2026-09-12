@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Wordmark } from "@/components/brand/Logo";
-import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
 import { cloudSelfServe, isCloud } from "@/lib/deployment";
 import { getLang } from "@/lib/get-lang";
 import { t, tr } from "@/lib/i18n";
@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const lang = await getLang();
-  if (isCloud() && !cloudSelfServe()) return { title: tr(lang, t.signup.comingSoonTitle) };
+  if (isCloud() && !cloudSelfServe()) return { title: tr(lang, t.signup.selfHostTitle) };
   if (!isCloud()) return { title: tr(lang, t.signup.selfHostTitle) };
   return { title: tr(lang, t.signup.title) };
 }
@@ -20,32 +20,7 @@ export default async function SignupPage() {
   const lang = await getLang();
   const vi = lang === "vi";
   if (isCloud() && !cloudSelfServe()) {
-    return (
-      <div>
-        <MarketingHeader lang={lang} />
-        <main className="mx-auto flex max-w-lg flex-col items-center px-4 py-20 text-center">
-          <Wordmark />
-          <p className="eyebrow mt-6">
-            {tr(lang, t.signup.comingSoonTitle)}
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight">{tr(lang, t.signup.comingSoonTitle)}</h1>
-          <p className="mt-3 text-muted">{tr(lang, t.signup.comingSoon)}</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/self-host" className="btn-solid">
-              {vi ? "Tự vận hành (Docker)" : "Self-host (Docker)"}
-            </Link>
-            <Link href="/docs/units" className="btn-ghost">
-              {tr(lang, t.nav.unitsToolkit)}
-            </Link>
-          </div>
-          <p className="mt-6 text-sm text-muted">
-            {vi ? "Đã có instance?" : "Already running an instance?"}{" "}
-            <Link href="/login" className="text-ink underline-offset-4 hover:underline">{tr(lang, t.nav.login)}</Link>
-          </p>
-        </main>
-        <MarketingFooter lang={lang} />
-      </div>
-    );
+    redirect("/self-host");
   }
   return (
     <div className="console flex min-h-dvh items-center justify-center bg-paper px-4">

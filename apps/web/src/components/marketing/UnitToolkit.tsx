@@ -3,8 +3,6 @@
 import { useMemo, useState } from "react";
 import type { Lang } from "@/lib/types";
 
-const HOBBY_WHEN_CLOUD = 50_000;
-
 export function UnitToolkit({ lang }: { lang: Lang }) {
   const vi = lang === "vi";
   const [conversations, setConversations] = useState(800);
@@ -16,7 +14,6 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
   const obsTotal = traces * observations;
   const scoreTotal = traces * scores;
   const units = traces + obsTotal + scoreTotal;
-  const tokensIfConfused = traces * 800;
 
   const breakdown = useMemo(
     () => [
@@ -37,8 +34,8 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
       </h2>
       <p className="mt-2 max-w-2xl text-sm text-muted">
         {vi
-          ? "Đơn vị là đơn vị tính usage Cloud (khi Cloud mở). Một đơn vị = một vết, hoặc một quan sát, hoặc một điểm đánh giá. Token LLM (input/output) chỉ dùng ước chi phí model — không phải đơn vị."
-          : "A unit is the Cloud usage meter (when Cloud opens). One unit = one trace, or one observation, or one score. LLM tokens (input/output) only estimate model cost — they are not units."}
+          ? "Một đơn vị = một vết, hoặc một quan sát, hoặc một điểm đánh giá. Token LLM (input/output) chỉ dùng ước chi phí model — không phải đơn vị. Tự vận hành không đếm đơn vị."
+          : "One unit = one trace, or one observation, or one score. LLM tokens (input/output) only estimate model cost — they are not units. Self-host does not meter them."}
       </p>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -56,10 +53,10 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
               : "MIT: units are not metered. You pay infra.",
           },
           {
-            k: vi ? "Cloud (sắp có)" : "Cloud (coming soon)",
+            k: vi ? "Mã nguồn mở" : "Open source",
             v: vi
-              ? "Hobby dự kiến 50k đơn vị/tháng khi chúng tôi host."
-              : "Hobby is planned at 50k units/month when we host it.",
+              ? "MIT: fork, sửa, đóng góp. Không gói hosted trong bản này."
+              : "MIT: fork, modify, contribute. No hosted plan in this release.",
           },
         ].map((c) => (
           <div key={c.k} className="panel p-4">
@@ -131,19 +128,7 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
             ))}
           </ul>
           <p className="mt-4 text-sm text-ink">
-            {vi
-              ? `Khi Cloud mở, Hobby 50k ≈ ${Math.max(1, Math.floor(HOBBY_WHEN_CLOUD / (1 + observations + scores))).toLocaleString("vi-VN")} lượt kiểu này.`
-              : `When Cloud opens, Hobby 50k covers about ${Math.max(1, Math.floor(HOBBY_WHEN_CLOUD / (1 + observations + scores))).toLocaleString("en-US")} turns like this.`}
-          </p>
-          <p className="mt-2 text-xs text-muted line-through">
-            {vi
-              ? `Không tính: ${tokensIfConfused.toLocaleString("vi-VN")} token (sai đơn vị).`
-              : `Not this: ${tokensIfConfused.toLocaleString("en-US")} tokens (wrong meter).`}
-          </p>
-          <p className="mt-3 text-sm text-muted">
-            {vi
-              ? "Tự vận hành hôm nay: không có trần đơn vị."
-              : "Self-host today: no unit cap."}
+            {vi ? "Tự vận hành: không có trần đơn vị." : "Self-host: no unit cap."}
           </p>
         </div>
       </div>

@@ -15,9 +15,7 @@ export default async function DocsPage() {
       <main className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-4xl font-semibold tracking-tight">{vi ? "Tài liệu" : "Documentation"}</h1>
         <p className="mt-3 text-muted">
-          {vi
-            ? "Bắt đầu bằng instance tự host. Cloud signup chưa mở."
-            : "Start on a self-hosted instance. Cloud signup is not open."}
+          {vi ? "Bắt đầu bằng instance tự host trên infra của bạn." : "Start on a self-hosted instance on your infra."}
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Link href="/self-host" className="panel p-4">
@@ -84,8 +82,8 @@ node scripts/gchat-fixture.mjs   # session gchat:users_fixture
             : "Use OTLP on the console (:3000), or POST /otlp/v1/traces on :43173 when LANGFUSE_* is set."}
         </p>
         <p className="mt-8 text-sm text-muted">
-          {vi ? "Vết Cloud (Hobby/Core/Pro) " : "Vết Cloud (Hobby/Core/Pro) "}
-          <Link href="/pricing" className="text-ink underline-offset-4 hover:underline">{vi ? "sắp ra mắt" : "is coming soon"}</Link>.
+          {vi ? "Giá: MIT, bạn trả infra. " : "Pricing: MIT, you pay infra. "}
+          <Link href="/pricing" className="text-ink underline-offset-4 hover:underline">{vi ? "Xem giá tự vận hành" : "See self-host pricing"}</Link>.
         </p>
       </main>
       <MarketingFooter lang={lang} />

@@ -20,6 +20,12 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   transpilePackages: ["@vet/schema", "@vet/sdk"],
   allowedDevOrigins: ["127.0.0.1", "localhost"],
+  async redirects() {
+    return [
+      { source: "/pricing/self-host", destination: "/pricing", permanent: false },
+      { source: "/enterprise", destination: "/self-host", permanent: false },
+    ];
+  },
   async headers() {
     return [
       { source: "/", headers: securityHeaders },

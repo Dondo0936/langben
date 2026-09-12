@@ -1,38 +1,7 @@
-import Link from "next/link";
-import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
-import { getLang } from "@/lib/get-lang";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Enterprise" };
 
-export default async function EnterprisePage() {
-  const lang = await getLang();
-  const vi = lang === "vi";
-  return (
-    <div>
-      <MarketingHeader lang={lang} />
-      <main className="mx-auto max-w-3xl px-4 py-14">
-        <p className="eyebrow">
-          {vi ? "Sắp ra mắt" : "Coming soon"}
-        </p>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight">
-          {vi ? "Enterprise chưa mở" : "Enterprise is not open yet"}
-        </h1>
-        <p className="mt-4 text-muted">
-          {vi
-            ? "Cloud Enterprise và add-on tự host Enterprise đang pending cùng các gói Cloud. Hôm nay hãy tự vận hành MIT."
-            : "Cloud Enterprise and the self-hosted Enterprise add-on are pending with the rest of Cloud. Self-host the MIT build today."}
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/self-host" className="btn-solid">
-            {vi ? "Tự vận hành" : "Self-host"}
-          </Link>
-          <Link href="/pricing" className="btn-ghost">
-            {vi ? "Cloud sắp có" : "Cloud coming soon"}
-          </Link>
-        </div>
-      </main>
-      <MarketingFooter lang={lang} />
-    </div>
-  );
+export default function EnterpriseRedirect() {
+  redirect("/self-host");
 }

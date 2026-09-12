@@ -8,7 +8,7 @@ export function isCloud() {
   return (process.env.VET_DEPLOYMENT ?? "cloud") !== "self-host";
 }
 
-/** Cloud Hobby/Core/Pro/Enterprise are not for sale yet. OSS self-host is the live product. */
+/** Hosted self-serve is off. OSS self-host is the public product. */
 export function cloudSelfServe() {
   return process.env.VET_CLOUD_SELF_SERVE === "1";
 }

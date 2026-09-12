@@ -16,9 +16,9 @@ export default async function SelfHostPage() {
           {vi ? "Tự vận hành Vết" : "Self-host Vết"}
         </h1>
         <p className="mt-4 text-muted">
-          {vi
-            ? "Cùng image sẽ dùng cho Cloud sau này. Đặt VET_DEPLOYMENT=self-host — ẩn billing, không giới hạn đơn vị."
-            : "Same image we will use for Cloud later. Set VET_DEPLOYMENT=self-host — billing UI hides, units unlimited."}
+            {vi
+              ? "Docker Compose trên infra của bạn. Đặt VET_DEPLOYMENT=self-host."
+              : "Docker Compose on your infra. Set VET_DEPLOYMENT=self-host."}
         </p>
         <h2 className="mt-10 text-xl font-semibold">Docker Compose</h2>
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">

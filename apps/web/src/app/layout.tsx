@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s · Vết",
   },
   description:
-    "Nền tảng observability mã nguồn mở cho bot Zalo, FPT.AI, Viettel, Lark, Google Chat và .NET. Tự vận hành (MIT) hoặc Vết Cloud do chúng tôi host.",
+    "Nền tảng observability mã nguồn mở cho bot Zalo, FPT.AI, Viettel, Lark, Google Chat và .NET. Tự vận hành trên infra của bạn (MIT).",
   icons: { icon: "/logo.svg" },
 };
 

@@ -23,13 +23,9 @@ export function PlanSwitcher({
     return (
       <div className="text-sm text-muted">
         <p>
-          {cloud
-            ? vi
-              ? "Vết Cloud — gói Hobby / Core / Pro / Enterprise sắp ra mắt. Instance này chạy mã nguồn mở."
-              : "Vết Cloud — Hobby / Core / Pro / Enterprise are coming soon. This instance is running the open-source build."
-            : vi
-              ? "Instance tự vận hành — MIT, không giới hạn đơn vị, không billing Cloud."
-              : "Self-hosted instance — MIT, unlimited units, no Cloud billing."}
+          {vi
+            ? "Instance tự vận hành — MIT, không giới hạn đơn vị."
+            : "Self-hosted instance — MIT, unlimited units."}
         </p>
         <p className="mt-2">
           <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">

@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
-import { UnitToolkit } from "@/components/marketing/UnitToolkit";
 import { getLang } from "@/lib/get-lang";
-import { CLOUD_PLANS, formatUsd } from "@/lib/plans";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Giá Cloud — sắp ra mắt" };
+export const metadata = { title: "Giá tự vận hành" };
 
 export default async function PricingPage() {
   const lang = await getLang();
@@ -15,53 +13,37 @@ export default async function PricingPage() {
       <MarketingHeader lang={lang} />
       <main className="mx-auto max-w-6xl px-4 py-14">
         <p className="eyebrow">
-          {vi ? "Vết Cloud — sắp ra mắt" : "Vết Cloud — coming soon"}
+          {vi ? "Bạn host · giấy phép MIT" : "You host · MIT license"}
         </p>
         <h1 className="mt-2 text-4xl font-semibold tracking-tight">
-          {vi ? "Cloud chưa mở. Tự vận hành MIT hôm nay." : "Cloud isn’t open yet. Self-host the MIT build today."}
+          {vi ? "Tự vận hành miễn phí. Bạn trả infra." : "Self-host for free. You pay infra."}
         </h1>
         <p className="mt-3 max-w-2xl text-muted">
           {vi
-            ? "Hobby, Core, Pro, Enterprise đang pending. Cùng codebase sẽ được chúng tôi host sau — chưa có đăng ký, chưa có thanh toán."
-            : "Hobby, Core, Pro, and Enterprise are pending. We’ll host the same codebase later — no signup, no billing yet."}
+            ? "MIT — toàn bộ tính năng sản phẩm, không giới hạn đơn vị. Docker Compose trên máy bạn."
+            : "MIT — all product features, unlimited units. Docker Compose on your machines."}
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/self-host" className="btn-solid">
             {vi ? "Tự vận hành (Docker)" : "Self-host (Docker)"}
           </Link>
-          <Link href="/pricing/self-host" className="btn-ghost">
-            {vi ? "Giá mã nguồn mở" : "Open-source pricing"}
-          </Link>
           <Link href="/docs/units" className="btn-ghost">
             {vi ? "Bộ công cụ đơn vị" : "Units toolkit"}
           </Link>
         </div>
-        <div className="mt-6 inline-flex border border-white/20 p-1 text-sm">
-          <span className="bg-ink px-4 py-1.5 text-paper">{vi ? "Cloud · sắp có" : "Cloud · soon"}</span>
-          <Link href="/pricing/self-host" className="px-4 py-1.5">
-            {vi ? "Tự vận hành" : "Self-host"}
+
+        <div className="panel mt-10 max-w-xl p-6">
+          <h2 className="text-xl font-semibold">{vi ? "Mã nguồn mở" : "Open Source"}</h2>
+          <p className="mt-1 text-3xl font-semibold">{vi ? "Miễn phí" : "Free"}</p>
+          <ul className="mt-4 space-y-2 text-sm text-muted">
+            <li>{vi ? "MIT — toàn bộ tính năng sản phẩm, không giới hạn đơn vị" : "MIT — all product features, unlimited units"}</li>
+            <li>Docker Compose / Kubernetes</li>
+            <li>{vi ? "Hỗ trợ cộng đồng GitHub" : "GitHub community support"}</li>
+            <li>{vi ? "Dữ liệu ở infra của bạn" : "Data on your infrastructure"}</li>
+          </ul>
+          <Link href="/self-host" className="btn-solid mt-6">
+            {vi ? "Hướng dẫn deploy" : "Deployment guide"}
           </Link>
-        </div>
-
-        <div className="mt-10 grid gap-px bg-white/10 md:grid-cols-4">
-          {CLOUD_PLANS.map((p) => (
-            <div key={p.id} className="relative flex flex-col bg-black/70 p-5 opacity-80">
-              <span className="absolute right-4 top-4 border border-white/20 px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
-                {vi ? "Sắp có" : "Soon"}
-              </span>
-              <div className="text-sm font-medium">{p.name}</div>
-              <div className="mt-2 text-3xl font-semibold">
-                {formatUsd(p.monthlyUsd)}
-                <span className="text-sm font-normal text-muted">{vi ? "/tháng" : "/mo"}</span>
-              </div>
-              <p className="mt-3 flex-1 text-sm text-muted">{vi ? p.taglineVi : p.taglineEn}</p>
-              <p className="mt-6 text-center text-xs text-muted">{vi ? "Chưa mở đăng ký" : "Signup not open"}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-16">
-          <UnitToolkit lang={lang} />
         </div>
       </main>
       <MarketingFooter lang={lang} />

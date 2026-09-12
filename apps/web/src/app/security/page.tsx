@@ -30,8 +30,8 @@ export default async function SecurityPage() {
           </li>
           <li>
             {vi
-              ? "Cloud production bắt buộc VET_SESSION_SECRET. Khi tự vận hành, hãy đặt biến này — đừng để placeholder."
-              : "Cloud production requires VET_SESSION_SECRET. Set it for self-host too; do not leave the placeholder."}
+              ? "Production bắt buộc VET_SESSION_SECRET. Đặt biến này — đừng để placeholder."
+              : "Production requires VET_SESSION_SECRET. Set it; do not leave the placeholder."}
           </li>
         </ul>
       </main>

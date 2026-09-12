@@ -12,19 +12,9 @@ Pinned runtime: **Langfuse v4.33.0** (`81bbfd169b72ea2ed53639699cc6632e8f908ce8`
 
 ## How we package it
 
-| | **Open Source (self-host)** | **Vết Cloud** |
-|---|---|---|
-| Status | **Live** | **Coming soon** |
-| Who runs it | You | We will host it |
-| License | MIT | MIT codebase + hosted service |
-| Units | Unlimited | Planned: Hobby 50k · paid 100k + overage |
-| Start | `bash scripts/up.sh` | Pending — no signup yet |
+Vết is **open source self-host** (MIT). You run it. Units are unlimited. Start with `bash scripts/up.sh`.
 
-A **đơn vị / unit** is not an LLM token. When Cloud opens, one unit = one trace, observation, or score. Interactive explainer: `/docs/units`.
-
-Cloud plan names (Hobby / Core / Pro / Enterprise) are listed as pending on `/pricing`. Self-host pricing: `/pricing/self-host`.
-
-Same git repo. `VET_DEPLOYMENT=self-host` is the live product. Cloud self-serve stays off unless `VET_CLOUD_SELF_SERVE=1`.
+A **đơn vị / unit** is not an LLM token. One unit = one trace, observation, or score. Self-host does not meter them. Explainer: `/docs/units`. Pricing: `/pricing`.
 
 ---
 

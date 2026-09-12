@@ -18,7 +18,7 @@ export const t = {
     pricing: { vi: "Giá", en: "Pricing" },
     openSource: { vi: "Mã nguồn mở", en: "Open source" },
     login: { vi: "Đăng nhập", en: "Sign in" },
-    signup: { vi: "Cloud sắp có", en: "Cloud coming soon" },
+    signup: { vi: "Tạo org", en: "Create org" },
     demo: { vi: "Xem demo", en: "Interactive demo" },
     unitsToolkit: { vi: "Đơn vị", en: "Units" },
   },
@@ -63,15 +63,15 @@ export const t = {
     createOrg: { vi: "Tạo org", en: "Create an org" },
   },
   signup: {
-    title: { vi: "Tạo org trên Vết Cloud", en: "Create a Vết Cloud org" },
+    title: { vi: "Tạo org trên instance này", en: "Create an org on this instance" },
     selfHostTitle: { vi: "Tạo org trên instance này", en: "Create an org on this instance" },
     hobbyBlurb: {
-      vi: "Gói Hobby · $0 · 50k đơn vị · không cần thẻ. Chúng tôi host.",
-      en: "Hobby plan · $0 · 50k units · no credit card. We host it.",
+      vi: "MIT tự vận hành — không giới hạn đơn vị, bạn trả infra.",
+      en: "MIT self-host — unlimited units, you pay infra.",
     },
     selfHostBlurb: {
-      vi: "MIT tự vận hành — không giới hạn đơn vị, không gói Cloud.",
-      en: "MIT self-host — unlimited units, no Cloud plan.",
+      vi: "MIT tự vận hành — không giới hạn đơn vị, bạn trả infra.",
+      en: "MIT self-host — unlimited units, you pay infra.",
     },
     orgName: { vi: "Tên tổ chức", en: "Organization name" },
     minChars: { vi: "Tối thiểu 8 ký tự", en: "Minimum 8 characters" },
@@ -83,10 +83,10 @@ export const t = {
     hasAccount: { vi: "Đã có tài khoản?", en: "Already have an account?" },
     genericError: { vi: "Không tạo được tài khoản.", en: "Could not create account." },
     emailTaken: { vi: "Email đã được dùng.", en: "That email is already in use." },
-    comingSoonTitle: { vi: "Cloud sắp ra mắt", en: "Cloud is coming soon" },
+    comingSoonTitle: { vi: "Tự vận hành Vết", en: "Self-host Vết" },
     comingSoon: {
-      vi: "Vết Cloud chưa mở đăng ký. Tự vận hành MIT hôm nay — không giới hạn đơn vị.",
-      en: "Vết Cloud signup is not open yet. Self-host the MIT build today — unlimited units.",
+      vi: "Vết là phần mềm tự vận hành (MIT). Chạy docker compose trên infra của bạn.",
+      en: "Vết is self-hosted software (MIT). Run docker compose on your infra.",
     },
   },
 } as const;
