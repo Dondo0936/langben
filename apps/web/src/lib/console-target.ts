@@ -22,16 +22,3 @@ export function consoleProjectUrl(suffix = "") {
   if (!origin) return "/self-host";
   return `${origin}/project/${consoleProjectId()}${path}`;
 }
-
-export function consoleProjectId() {
-  return process.env.VET_CONSOLE_PROJECT_ID ?? "prj-vet-demo";
-}
-
-export function consoleSignInUrl() {
-  return `${consoleOrigin()}/auth/sign-in`;
-}
-
-export function consoleProjectUrl(suffix = "") {
-  const path = suffix.startsWith("/") ? suffix : suffix ? `/${suffix}` : "";
-  return `${consoleOrigin()}/project/${consoleProjectId()}${path}`;
-}
