@@ -7,7 +7,7 @@ import { createHash } from "node:crypto";
 
 const appId = "1234567890";
 const oaSecret = "demo-oa-secret";
-const projectId = "prj_demo";
+const projectId = process.env.VET_CONSOLE_PROJECT_ID || "prj-vet-demo";
 const base = process.env.VET_PUBLIC_URL || "http://localhost:43173";
 const timestamp = String(Date.now());
 const body = JSON.stringify({

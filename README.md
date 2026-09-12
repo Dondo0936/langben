@@ -18,7 +18,7 @@ Pinned runtime: **Langfuse v4.33.0** (`81bbfd169b72ea2ed53639699cc6632e8f908ce8`
 | Who runs it | You | We will host it |
 | License | MIT | MIT codebase + hosted service |
 | Units | Unlimited | Planned: Hobby 50k · paid 100k + overage |
-| Start | `docker compose up` | Pending — no signup yet |
+| Start | `bash scripts/up.sh` | Pending — no signup yet |
 
 A **đơn vị / unit** is not an LLM token. When Cloud opens, one unit = one trace, observation, or score. Interactive explainer: `/docs/units`.
 
@@ -33,31 +33,24 @@ Same git repo. `VET_DEPLOYMENT=self-host` is the live product. Cloud self-serve 
 ```bash
 git submodule update --init --recursive   # or: bash scripts/bootstrap-langfuse.sh
 cp .env.console.example .env
-docker compose up --build
+bash scripts/up.sh
 ```
+
+`scripts/up.sh` applies the Vết overlay, builds `vet-console:local`, and starts marketing + Langfuse. Equivalent: `COMPOSE_FILE` from `.env` + `docker compose up --build` after `bash scripts/apply-langfuse-overlay.sh`.
 
 | Surface | URL |
 |---|---|
 | Marketing / hooks / Kênh | [http://localhost:43173](http://localhost:43173) |
-| Console (Langfuse OSS) | [http://localhost:3000](http://localhost:3000) |
+| Console (Vết overlay on Langfuse OSS) | [http://localhost:3000](http://localhost:3000) |
 
 Console login: `demo@vet.dev` / `demodemo` (≥ 8 characters). Org **Vết**, project **Bot Zalo shop** (`prj-vet-demo`).
 
 Ingest keys (Langfuse public API): `pk-lf-vet-demo` / `sk-lf-vet-demo`.
 
-Seed the Zalo «hủy đơn» tree into the console (filters / waterfall, no Vết UI code):
+Seed the Zalo «hủy đơn» tree into the console (filters / waterfall):
 
 ```bash
 node scripts/seed-langfuse-zalo.mjs
-```
-
-### Branded chrome (logo, Kênh, hội thoại)
-
-Official Langfuse images are the default bring-up. Overlay Vết chrome:
-
-```bash
-bash scripts/build-console.sh
-docker compose -f docker-compose.yml -f docker-compose.branded.yml up
 ```
 
 ### Zalo OA fixture (signature verify → Langfuse traces)

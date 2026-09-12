@@ -25,7 +25,7 @@ export function LoginForm({
 }) {
   const router = useRouter();
   const [email, setEmail] = useState("demo@vet.dev");
-  const [password, setPassword] = useState("demo");
+  const [password, setPassword] = useState("demodemo");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 

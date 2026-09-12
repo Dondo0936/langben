@@ -95,6 +95,15 @@ if envp.is_file():
         )
         envp.write_text(env)
         print("env", envp.relative_to(dest))
+
+df = dest / "web/Dockerfile"
+if df.is_file():
+    text = df.read_text()
+    needle = "ARG NEXT_PUBLIC_BASE_PATH\nENV NEXT_PUBLIC_BASE_PATH=$NEXT_PUBLIC_BASE_PATH\n"
+    inject = needle + "ARG NEXT_PUBLIC_VET_MARKETING_URL\nENV NEXT_PUBLIC_VET_MARKETING_URL=$NEXT_PUBLIC_VET_MARKETING_URL\n"
+    if "NEXT_PUBLIC_VET_MARKETING_URL" not in text and needle in text:
+        df.write_text(text.replace(needle, inject, 1))
+        print("dockerfile", df.relative_to(dest))
 PY
 
 echo "Overlay applied → $DEST"

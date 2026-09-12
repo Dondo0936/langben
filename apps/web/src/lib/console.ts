@@ -5,7 +5,7 @@ import { ensureOrgProject, getOrg, getProject, listProjects } from "./store";
 import { isCloud } from "./deployment";
 import type { Organization, Project, User } from "./types";
 
-const DEMO_PROJECT = "prj_demo";
+const DEMO_PROJECT = "prj-vet-demo";
 
 export async function requireConsole(): Promise<{ user: User; project: Project; org: Organization | null }> {
   const user = await getCurrentUser();

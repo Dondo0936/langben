@@ -9,4 +9,4 @@ docker build \
   -t vet-console:local \
   "$ROOT/.build/langfuse"
 echo "Built vet-console:local"
-echo "Run: docker compose -f docker-compose.yml -f docker-compose.branded.yml up"
+echo "Run: bash scripts/up.sh"

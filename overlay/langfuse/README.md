@@ -1,6 +1,6 @@
 # Vết overlay for Langfuse OSS
 
-Copied onto `vendor/langfuse` at image-build time (`scripts/apply-langfuse-overlay.sh`).
+Copied onto a Langfuse tree at image-build time (`scripts/up.sh` / `scripts/apply-langfuse-overlay.sh`).
 Do not commit a dirty submodule. MIT UI only — never copy `ee/`.
 
 - `web/public/*.svg` — Vết mark / wordmark

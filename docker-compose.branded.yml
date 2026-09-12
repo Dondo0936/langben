@@ -1,7 +1,13 @@
-# Branded console image (after `bash scripts/build-console.sh`).
-# docker compose -f docker-compose.yml -f docker-compose.branded.yml up
+# Default console image: overlay applied (Kênh, Lộ trình, Hội thoại, Vết mark).
+# Built from .build/langfuse after scripts/apply-langfuse-overlay.sh (see scripts/up.sh).
 services:
   langfuse-web:
     image: vet-console:local
+    build:
+      context: .build/langfuse
+      dockerfile: web/Dockerfile
+      args:
+        NEXT_PUBLIC_VET_MARKETING_URL: ${VET_PUBLIC_URL:-http://localhost:43173}
     environment:
       NEXT_PUBLIC_VET_MARKETING_URL: ${VET_PUBLIC_URL:-http://localhost:43173}
+      LANGFUSE_MIGRATION_V4_WRITE_MODE: ${LANGFUSE_MIGRATION_V4_WRITE_MODE:-dual}

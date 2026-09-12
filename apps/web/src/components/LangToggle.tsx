@@ -12,6 +12,7 @@ export function LangToggle({ lang, variant = "marketing" }: { lang: Lang; varian
       body: JSON.stringify({ lang: next }),
     });
     router.refresh();
+    window.location.reload();
   }
   const wrap =
     variant === "console"

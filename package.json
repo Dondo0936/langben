@@ -11,6 +11,8 @@
     "build": "npm run build -w web",
     "start": "npm run start -w web",
     "lint": "npm run lint -w web",
+    "up": "bash scripts/up.sh",
+    "down": "bash scripts/compose.sh down",
     "console:bootstrap": "bash scripts/bootstrap-langfuse.sh",
     "console:overlay": "bash scripts/apply-langfuse-overlay.sh",
     "console:seed": "node scripts/seed-langfuse-zalo.mjs"

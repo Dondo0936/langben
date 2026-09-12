@@ -1,7 +1,7 @@
 import { hashPassword, hashSecret } from "./crypto";
 import type { Observation, StoreShape, Trace } from "./types";
 
-const PROJECT = "prj_demo";
+const PROJECT = "prj-vet-demo";
 const ORG = "org_demo";
 
 function at(iso: string) {
@@ -31,7 +31,7 @@ export const DEMO_KEYS = {
   langfusePublicKey: "pk-lf-vet-demo",
   langfuseSecretKey: "sk-lf-vet-demo",
   email: "demo@vet.dev",
-  password: "demo",
+  password: "demodemo",
   consolePassword: "demodemo",
   zaloAppId: "1234567890",
   zaloOaSecret: "demo-oa-secret",

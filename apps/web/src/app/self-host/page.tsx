@@ -22,11 +22,10 @@ export default async function SelfHostPage() {
         </p>
         <h2 className="mt-10 text-xl font-semibold">Docker Compose</h2>
         <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-sm text-highlight">
-{`git clone https://github.com/vet-dev/vet.git
-cd vet
-git submodule update --init --recursive
+{`git clone --recurse-submodules https://origin.cursor.com/git/tiendat0936/langben.git
+cd langben
 cp .env.console.example .env
-docker compose up --build`}
+bash scripts/up.sh`}
         </pre>
         <p className="mt-3 text-sm text-muted">
           {vi

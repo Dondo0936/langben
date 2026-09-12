@@ -22,7 +22,7 @@ export default async function DocsPage() {
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Link href="/self-host" className="rounded-2xl border border-ink bg-ink p-4 text-paper">
             <div className="text-sm font-medium text-highlight">{vi ? "Tự vận hành" : "Self-host"}</div>
-            <p className="mt-1 text-sm text-paper/70">docker compose up</p>
+            <p className="mt-1 text-sm text-paper/70">bash scripts/up.sh</p>
           </Link>
           <Link href="/docs/units" className="rounded-2xl border border-line bg-white p-4">
             <div className="text-sm font-medium">{vi ? "Bộ công cụ đơn vị" : "Units toolkit"}</div>
@@ -32,8 +32,8 @@ export default async function DocsPage() {
         <h2 className="mt-10 text-xl font-semibold">1. {vi ? "Chạy local" : "Run locally"}</h2>
         <p className="mt-2 text-sm text-muted">
           {vi
-            ? "docker compose up — marketing :43173, console :3000. Đăng nhập console:"
-            : "docker compose up — marketing :43173, console :3000. Console login:"}{" "}
+            ? "bash scripts/up.sh — marketing :43173, console :3000. Đăng nhập console:"
+            : "bash scripts/up.sh — marketing :43173, console :3000. Console login:"}{" "}
           <code>demo@vet.dev</code> / <code>{DEMO_KEYS.consolePassword}</code>
         </p>
         <h2 className="mt-10 text-xl font-semibold">2. SDK JavaScript</h2>
@@ -53,11 +53,11 @@ await observe("hỗ-trợ-khách", () =>
         </pre>
         <h2 className="mt-10 text-xl font-semibold">3. {vi ? "Webhook Zalo OA" : "Zalo OA webhook"}</h2>
         <p className="mt-2 text-sm text-muted">
-          POST /hooks/zalo/oa/prj_demo · mac = sha256(appId + body + timestamp + OA secret) · header X-ZEvent-Signature.
+          POST /hooks/zalo/oa/prj-vet-demo · mac = sha256(appId + body + timestamp + OA secret) · header X-ZEvent-Signature.
           {vi ? " Sau khi verify, hook ghi vào Langfuse ingest (console :3000)." : " After verify, the hook writes Langfuse ingest (console :3000)."}
         </p>
         <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-[12px] text-highlight">
-{`curl -X POST http://localhost:43173/hooks/zalo/oa/prj_demo \\
+{`curl -X POST http://localhost:43173/hooks/zalo/oa/prj-vet-demo \\
   -H "content-type: application/json" \\
   -H "X-ZEvent-Timestamp: TS" \\
   -H "X-ZEvent-Signature: MAC" \\

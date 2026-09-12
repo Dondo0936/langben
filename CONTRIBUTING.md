@@ -7,7 +7,7 @@ Vết is MIT. Issues and PRs are welcome.
 ```bash
 git submodule update --init --recursive
 cp .env.console.example .env
-docker compose up --build
+bash scripts/up.sh
 # marketing :43173 · console :3000
 ```
 
