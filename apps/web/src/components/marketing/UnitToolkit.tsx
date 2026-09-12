@@ -28,8 +28,8 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
   );
 
   return (
-    <div className="rounded-2xl border border-line bg-white p-5 md:p-6">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+    <div className="panel p-5 md:p-6">
+      <p className="eyebrow">
         {vi ? "Bộ công cụ · không phải token" : "Toolkit · not tokens"}
       </p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -62,14 +62,14 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
               : "Hobby is planned at 50k units/month when we host it.",
           },
         ].map((c) => (
-          <div key={c.k} className="rounded-xl border border-line bg-paper-2/60 p-4">
+          <div key={c.k} className="panel p-4">
             <div className="text-sm font-medium">{c.k}</div>
             <p className="mt-1 text-sm text-muted">{c.v}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-8 rounded-xl border border-line bg-paper p-4">
+      <div className="panel mt-8 p-4">
         <h3 className="font-medium">{vi ? "Ví dụ có sẵn: Zalo «hủy đơn»" : "Shipped example: Zalo “cancel order”"}</h3>
         <p className="mt-1 text-sm text-muted">
           {vi
@@ -112,35 +112,35 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
             onChange={setScores}
           />
         </div>
-        <div className="rounded-xl bg-ink p-5 text-paper">
-          <div className="text-xs uppercase tracking-wider text-paper/60">
+        <div className="panel p-5">
+          <div className="text-[11px] uppercase tracking-[0.16em] text-muted">
             {vi ? "Tổng đơn vị / tháng" : "Total units / month"}
           </div>
-          <div className="mt-1 font-mono text-4xl font-semibold tabular text-highlight">
+          <div className="mt-1 font-mono text-4xl font-semibold tabular text-ink">
             {units.toLocaleString(vi ? "vi-VN" : "en-US")}
           </div>
-          <ul className="mt-4 space-y-2 text-sm text-paper/80">
+          <ul className="mt-4 space-y-2 text-sm text-muted">
             {breakdown.map((row) => (
               <li key={row.label} className="flex justify-between gap-3 border-b border-white/10 pb-2">
                 <span>
                   {row.label}
-                  <span className="mt-0.5 block text-[11px] text-paper/50">{row.why}</span>
+                  <span className="mt-0.5 block text-[11px] text-muted">{row.why}</span>
                 </span>
-                <span className="tabular">{row.value.toLocaleString(vi ? "vi-VN" : "en-US")}</span>
+                <span className="tabular text-ink">{row.value.toLocaleString(vi ? "vi-VN" : "en-US")}</span>
               </li>
             ))}
           </ul>
-          <p className="mt-4 text-sm text-highlight">
+          <p className="mt-4 text-sm text-ink">
             {vi
               ? `Khi Cloud mở, Hobby 50k ≈ ${Math.max(1, Math.floor(HOBBY_WHEN_CLOUD / (1 + observations + scores))).toLocaleString("vi-VN")} lượt kiểu này.`
               : `When Cloud opens, Hobby 50k covers about ${Math.max(1, Math.floor(HOBBY_WHEN_CLOUD / (1 + observations + scores))).toLocaleString("en-US")} turns like this.`}
           </p>
-          <p className="mt-2 text-xs text-paper/50 line-through">
+          <p className="mt-2 text-xs text-muted line-through">
             {vi
               ? `Không tính: ${tokensIfConfused.toLocaleString("vi-VN")} token (sai đơn vị).`
               : `Not this: ${tokensIfConfused.toLocaleString("en-US")} tokens (wrong meter).`}
           </p>
-          <p className="mt-3 text-sm text-paper/80">
+          <p className="mt-3 text-sm text-muted">
             {vi
               ? "Tự vận hành hôm nay: không có trần đơn vị."
               : "Self-host today: no unit cap."}

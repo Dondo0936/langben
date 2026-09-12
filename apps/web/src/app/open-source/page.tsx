@@ -22,7 +22,7 @@ export default async function OpenSourcePage() {
         </p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-ink text-paper">
+            <thead className="bg-white/10">
               <tr>
                 <th className="px-3 py-2" />
                 <th className="px-3 py-2">{vi ? "Tự host OSS" : "OSS self-host"}</th>
@@ -31,7 +31,7 @@ export default async function OpenSourcePage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white">
+            <tbody className="bg-black/40">
               {[
                 [vi ? "Tính năng sản phẩm" : "Product features", "✓", "✓"],
                 [vi ? "Đơn vị" : "Units", vi ? "Không giới hạn" : "Unlimited", vi ? "Sẽ tính khi Cloud mở" : "Metered when Cloud opens"],
@@ -54,10 +54,10 @@ export default async function OpenSourcePage() {
             : "LICENSE is MIT. NOTICE: console runtime is Langfuse OSS (ClickHouse, Inc. MIT) plus a Vết overlay. No ee/, no Langfuse wordmark, no affiliation claim."}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/self-host" className="rounded-full bg-ink px-4 py-2 text-sm text-highlight">
+          <Link href="/self-host" className="btn-solid">
             docker compose up
           </Link>
-          <Link href="/docs/units" className="rounded-full border border-line px-4 py-2 text-sm">
+          <Link href="/docs/units" className="btn-ghost">
             {vi ? "Bộ công cụ đơn vị" : "Units toolkit"}
           </Link>
         </div>

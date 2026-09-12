@@ -16,14 +16,14 @@ export function LangToggle({ lang, variant = "marketing" }: { lang: Lang; varian
   }
   const wrap =
     variant === "console"
-      ? "inline-flex rounded-md border border-line bg-white p-0.5 text-xs font-medium"
-      : "inline-flex rounded-full border border-line bg-white/70 p-0.5 text-xs font-medium";
+      ? "inline-flex border border-line bg-paper-2 p-0.5 text-xs font-medium"
+      : "inline-flex border border-white/20 bg-black/40 p-0.5 text-xs font-medium";
   const on =
     variant === "console"
-      ? "rounded-sm bg-paper-2 px-2 py-0.5 text-ink"
-      : "rounded-full px-2.5 py-1 bg-ink text-highlight";
+      ? "bg-ink px-2 py-0.5 text-paper"
+      : "bg-ink px-2.5 py-1 text-paper";
   const off =
-    variant === "console" ? "rounded-sm px-2 py-0.5 text-muted" : "rounded-full px-2.5 py-1 text-muted";
+    variant === "console" ? "px-2 py-0.5 text-muted" : "px-2.5 py-1 text-muted";
   return (
     <div className={wrap}>
       <button type="button" onClick={() => setLang("vi")} className={lang === "vi" ? on : off}>

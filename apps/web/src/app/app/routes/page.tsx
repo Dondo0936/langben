@@ -25,7 +25,7 @@ export default async function RoutesPage({
           const n = traces.filter((t) => t.routeId === r.id).length;
           const errors = traces.filter((t) => t.routeId === r.id && t.status === "error").length;
           return (
-            <div key={r.id} className="rounded-md border border-line bg-white p-4">
+            <div key={r.id} className="panel p-4">
               <div className="font-medium">{r.name}</div>
               <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
                 {r.steps.map((s, i) => (

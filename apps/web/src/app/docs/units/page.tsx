@@ -13,7 +13,7 @@ export default async function UnitsToolkitPage() {
     <div>
       <MarketingHeader lang={lang} />
       <main className="mx-auto max-w-6xl px-4 py-14">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+        <p className="eyebrow">
           {vi ? "Tài liệu · usage" : "Docs · usage"}
         </p>
         <h1 className="mt-2 text-4xl font-semibold tracking-tight">
@@ -25,9 +25,9 @@ export default async function UnitsToolkitPage() {
             : "Use this when reading Cloud pricing (coming soon) or explaining usage to your team. Self-host does not meter units."}
         </p>
         <p className="mt-3 text-sm">
-          <Link href="/docs" className="text-accent">{vi ? "← Tài liệu" : "← Docs"}</Link>
+          <Link href="/docs" className="text-ink underline-offset-4 hover:underline">{vi ? "← Tài liệu" : "← Docs"}</Link>
           {" · "}
-          <Link href="/pricing" className="text-accent">{vi ? "Cloud sắp có" : "Cloud coming soon"}</Link>
+          <Link href="/pricing" className="text-ink underline-offset-4 hover:underline">{vi ? "Cloud sắp có" : "Cloud coming soon"}</Link>
         </p>
         <div className="mt-10">
           <UnitToolkit lang={lang} />

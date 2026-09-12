@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import { SiteFx } from "@/components/brand/SiteFx";
 import { getLang } from "@/lib/get-lang";
 
 const sans = Be_Vietnam_Pro({
@@ -25,11 +26,19 @@ export const metadata: Metadata = {
   icons: { icon: "/logo.svg" },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  colorScheme: "dark",
+};
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const lang = await getLang();
   return (
     <html lang={lang} className={`${sans.variable} ${mono.variable}`}>
-      <body className="min-h-screen font-sans antialiased">{children}</body>
+      <body className="min-h-screen font-sans antialiased">
+        <SiteFx />
+        <div className="site-shell">{children}</div>
+      </body>
     </html>
   );
 }

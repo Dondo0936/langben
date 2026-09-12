@@ -16,7 +16,7 @@ export function ChannelShell({
   }
   return (
     <div className="console min-h-dvh bg-paper text-ink">
-      <header className="flex h-12 items-center justify-between border-b border-line bg-white px-4">
+      <header className="flex h-12 items-center justify-between border-b border-line bg-black px-4">
         <div className="flex items-center gap-2">
           <Logo className="h-5 w-5" />
           <span className="text-sm font-semibold">Vết</span>

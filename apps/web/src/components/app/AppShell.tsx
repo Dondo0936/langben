@@ -37,7 +37,7 @@ export async function AppShell({
 
   return (
     <div className="console flex h-dvh overflow-hidden bg-paper text-ink">
-      <aside className="hidden w-[232px] shrink-0 flex-col border-r border-line bg-white md:flex">
+      <aside className="hidden w-[232px] shrink-0 flex-col border-r border-line bg-black md:flex">
         <div className="flex h-12 items-center gap-2 border-b border-line px-3">
           <Logo className="h-5 w-5" />
           <span className="text-sm font-semibold tracking-tight">Vết</span>
@@ -60,7 +60,7 @@ export async function AppShell({
         </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-line bg-white px-3">
+        <header className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-line bg-black px-3">
           <div className="flex min-w-0 items-center gap-2 text-sm">
             <span className="truncate font-medium">{project.name}</span>
             <span className="text-muted">/</span>
@@ -72,7 +72,7 @@ export async function AppShell({
             <LogoutButton label={lang === "vi" ? "Thoát" : "Sign out"} />
           </div>
         </header>
-        <div className="flex gap-1 overflow-x-auto border-b border-line bg-white px-2 py-1 text-xs md:hidden">
+        <div className="flex gap-1 overflow-x-auto border-b border-line bg-black px-2 py-1 text-xs md:hidden">
           {NAV.map((item) => (
             <Link
               key={item.href}

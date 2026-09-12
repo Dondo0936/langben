@@ -32,11 +32,11 @@ export function PlanSwitcher({
               : "Self-hosted instance — MIT, unlimited units, no Cloud billing."}
         </p>
         <p className="mt-2">
-          <Link href="/docs/units" className="text-accent">
+          <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">
             {vi ? "Bộ công cụ đơn vị" : "Units toolkit"}
           </Link>
           {" · "}
-          <Link href="/self-host" className="text-accent">
+          <Link href="/self-host" className="text-ink underline-offset-4 hover:underline">
             {vi ? "Tự vận hành" : "Self-host"}
           </Link>
         </p>
@@ -59,14 +59,14 @@ export function PlanSwitcher({
           key={p}
           type="button"
           onClick={() => choose(p)}
-          className={`rounded-md px-3 py-1.5 text-sm ${current === p ? "bg-ink text-white" : "border border-line bg-white"}`}
+          className={`px-3 py-1.5 text-sm ${current === p ? "bg-ink text-paper" : "border border-line"}`}
         >
           {p}
         </button>
       ))}
       <Link
         href="/enterprise"
-        className={`rounded-md px-3 py-1.5 text-sm ${current === "enterprise" ? "bg-ink text-white" : "border border-line bg-white"}`}
+        className={`px-3 py-1.5 text-sm ${current === "enterprise" ? "bg-ink text-paper" : "border border-line"}`}
       >
         enterprise
       </Link>

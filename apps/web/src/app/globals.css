@@ -3,21 +3,26 @@
 @theme {
   --font-sans: var(--font-be-vietnam), "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-ibm-mono), "IBM Plex Mono", ui-monospace, Menlo, monospace;
-  --color-ink: #0c1f17;
-  --color-ink-2: #163528;
-  --color-accent: #1f6b4a;
-  --color-accent-2: #2d8a62;
-  --color-highlight: #c6f07a;
-  --color-paper: #f4f1ea;
-  --color-paper-2: #ebe6db;
-  --color-sidebar: #0b1512;
-  --color-line: #d9d3c6;
-  --color-muted: #5c6b64;
+  --color-ink: #f0f0fa;
+  --color-ink-2: #c8c8d4;
+  --color-accent: #f0f0fa;
+  --color-accent-2: #9a9aa8;
+  --color-highlight: #ffffff;
+  --color-paper: #000000;
+  --color-paper-2: #0b0b0e;
+  --color-sidebar: #050506;
+  --color-line: #2a2a32;
+  --color-muted: #8a8a96;
+}
+
+html {
+  color-scheme: dark;
+  background: #000;
 }
 
 html,
 body {
-  background: var(--color-paper);
+  background: #000;
   color: var(--color-ink);
 }
 
@@ -30,31 +35,183 @@ a {
 }
 
 ::selection {
-  background: var(--color-highlight);
-  color: var(--color-ink);
+  background: #f0f0fa;
+  color: #000;
 }
 
 .tabular {
   font-variant-numeric: tabular-nums;
 }
 
-/* Console: Langfuse-like zinc shell. Marketing pages keep the paper brand. */
+.space-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: #000;
+}
+
+.site-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+  animation: grain-shift 0.8s steps(4) infinite;
+}
+
+@keyframes grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-1%, 1%);
+  }
+  50% {
+    transform: translate(1%, -1%);
+  }
+  75% {
+    transform: translate(-1%, -2%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.site-shell {
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  opacity: 0.72;
+}
+
+.btn-solid,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 42px;
+  padding: 0.65rem 1.35rem;
+  border: 1px solid rgba(240, 240, 250, 0.38);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+.btn-solid {
+  background: #f0f0fa;
+  color: #000;
+  border-color: #f0f0fa;
+}
+
+.btn-solid:hover {
+  background: transparent;
+  color: #f0f0fa;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #f0f0fa;
+}
+
+.btn-ghost:hover {
+  background: #f0f0fa;
+  color: #000;
+}
+
+.panel {
+  background: rgba(240, 240, 250, 0.035);
+  border: 1px solid rgba(240, 240, 250, 0.14);
+}
+
+.rise {
+  animation: rise 1.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rise-d1 {
+  animation-delay: 0.1s;
+}
+.rise-d2 {
+  animation-delay: 0.2s;
+}
+.rise-d3 {
+  animation-delay: 0.32s;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+input,
+textarea,
+select {
+  background: rgba(240, 240, 250, 0.04);
+  color: var(--color-ink);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-muted);
+}
+
+pre {
+  background: rgba(240, 240, 250, 0.04);
+  color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-grain,
+  .rise,
+  .rise-d1,
+  .rise-d2,
+  .rise-d3 {
+    animation: none;
+  }
+}
+
+/* Console / channel iframes: same void, no lime zinc shell. */
 .console {
-  --color-ink: #09090b;
-  --color-ink-2: #18181b;
-  --color-accent: #18181b;
-  --color-accent-2: #3f3f46;
-  --color-highlight: #f4f4f5;
-  --color-paper: #fafafa;
-  --color-paper-2: #f4f4f5;
-  --color-sidebar: #fafafa;
-  --color-line: #e4e4e7;
-  --color-muted: #71717a;
-  background: #fafafa;
-  color: #09090b;
+  --color-ink: #f0f0fa;
+  --color-ink-2: #c8c8d4;
+  --color-accent: #f0f0fa;
+  --color-accent-2: #9a9aa8;
+  --color-highlight: #ffffff;
+  --color-paper: #000000;
+  --color-paper-2: #0b0b0e;
+  --color-sidebar: #050506;
+  --color-line: #2a2a32;
+  --color-muted: #8a8a96;
+  position: relative;
+  z-index: 2;
+  background: #000;
+  color: #f0f0fa;
 }
 
 .console ::selection {
-  background: #e4e4e7;
-  color: #09090b;
+  background: #f0f0fa;
+  color: #000;
 }

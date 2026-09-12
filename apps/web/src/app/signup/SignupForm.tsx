@@ -73,7 +73,7 @@ export function SignupForm({
         <CopyField label="secretKey" value={ingest.secretKey} />
         <button
           type="button"
-          className="mt-4 h-9 w-full rounded-md bg-ink text-sm font-medium text-white"
+          className="mt-4 h-9 w-full bg-ink text-sm font-medium text-paper"
           onClick={() => {
             router.push("/app");
             router.refresh();
@@ -101,13 +101,13 @@ export function SignupForm({
         {orgName}
         <input className="mt-1 h-9 w-full rounded-md border border-line px-3 text-[13px]" value={org} onChange={(e) => setOrg(e.target.value)} />
       </label>
-      {error ? <p className="mt-2 text-sm text-red-700">{error}</p> : null}
-      <button disabled={pending} className="mt-4 h-9 w-full rounded-md bg-ink text-sm font-medium text-white">
+      {error ? <p className="mt-2 text-sm text-ink">{error}</p> : null}
+      <button disabled={pending} className="mt-4 h-9 w-full bg-ink text-sm font-medium text-paper">
         {pending ? pendingLabel : submitLabel}
       </button>
       <p className="mt-3 text-center text-sm text-muted">
         {hasAccount}{" "}
-        <Link href="/login" className="text-accent">{loginLabel}</Link>
+        <Link href="/login" className="text-ink underline-offset-4 hover:underline">{loginLabel}</Link>
       </p>
     </form>
   );

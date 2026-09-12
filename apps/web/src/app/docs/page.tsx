@@ -20,11 +20,11 @@ export default async function DocsPage() {
             : "Start on a self-hosted instance. Cloud signup is not open."}
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <Link href="/self-host" className="rounded-2xl border border-ink bg-ink p-4 text-paper">
-            <div className="text-sm font-medium text-highlight">{vi ? "Tự vận hành" : "Self-host"}</div>
-            <p className="mt-1 text-sm text-paper/70">bash scripts/up.sh</p>
+          <Link href="/self-host" className="panel p-4">
+            <div className="text-sm font-medium">{vi ? "Tự vận hành" : "Self-host"}</div>
+            <p className="mt-1 text-sm text-muted">bash scripts/up.sh</p>
           </Link>
-          <Link href="/docs/units" className="rounded-2xl border border-line bg-white p-4">
+          <Link href="/docs/units" className="panel p-4">
             <div className="text-sm font-medium">{vi ? "Bộ công cụ đơn vị" : "Units toolkit"}</div>
             <p className="mt-1 text-sm text-muted">{vi ? "Đơn vị ≠ token. Máy tính usage." : "Units ≠ tokens. Usage calculator."}</p>
           </Link>
@@ -37,7 +37,7 @@ export default async function DocsPage() {
           <code>demo@vet.dev</code> / <code>{DEMO_KEYS.consolePassword}</code>
         </p>
         <h2 className="mt-10 text-xl font-semibold">2. SDK JavaScript</h2>
-        <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-[12px] text-highlight">
+        <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-[12px]">
 {`import Anthropic from "@anthropic-ai/sdk"
 import { wrapAnthropic, observe } from "@vet/sdk"
 
@@ -56,7 +56,7 @@ await observe("hỗ-trợ-khách", () =>
           POST /hooks/zalo/oa/prj-vet-demo · mac = sha256(appId + body + timestamp + OA secret) · header X-ZEvent-Signature.
           {vi ? " Sau khi verify, hook ghi vào Langfuse ingest (console :3000)." : " After verify, the hook writes Langfuse ingest (console :3000)."}
         </p>
-        <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-[12px] text-highlight">
+        <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-[12px]">
 {`curl -X POST http://localhost:43173/hooks/zalo/oa/prj-vet-demo \\
   -H "content-type: application/json" \\
   -H "X-ZEvent-Timestamp: TS" \\
@@ -72,7 +72,7 @@ await observe("hỗ-trợ-khách", () =>
             ? "Chưa có Zalo OA cũng chưa cần app Lark/Google. Token demo đã nằm trên Kênh. node scripts/lark-fixture.mjs và node scripts/gchat-fixture.mjs — hoặc nút Gửi thử trên trang kênh."
             : "No Zalo OA and no Lark/Google app required. Demo tokens are already on Channels. node scripts/lark-fixture.mjs and node scripts/gchat-fixture.mjs — or Gửi thử on the channel page."}
         </p>
-        <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-[12px] text-highlight">
+        <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-[12px]">
 {`node scripts/lark-fixture.mjs    # session lark:ou_fixture
 node scripts/gchat-fixture.mjs   # session gchat:users_fixture
 # or Kênh → Gửi thử → lark:ou_local / gchat:users_local`}
@@ -85,7 +85,7 @@ node scripts/gchat-fixture.mjs   # session gchat:users_fixture
         </p>
         <p className="mt-8 text-sm text-muted">
           {vi ? "Vết Cloud (Hobby/Core/Pro) " : "Vết Cloud (Hobby/Core/Pro) "}
-          <Link href="/pricing" className="text-accent">{vi ? "sắp ra mắt" : "is coming soon"}</Link>.
+          <Link href="/pricing" className="text-ink underline-offset-4 hover:underline">{vi ? "sắp ra mắt" : "is coming soon"}</Link>.
         </p>
       </main>
       <MarketingFooter lang={lang} />

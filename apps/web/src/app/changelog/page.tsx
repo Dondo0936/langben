@@ -13,6 +13,17 @@ export default async function ChangelogPage() {
       <main className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-4xl font-semibold tracking-tight">{vi ? "Nhật ký" : "Changelog"}</h1>
         <article className="mt-8">
+          <p className="text-sm text-muted">12 Sep 2026 · v0.3.0</p>
+          <h2 className="mt-1 text-xl font-semibold">
+            {vi ? "Giao diện đen trắng + shader" : "Monochrome + shader"}
+          </h2>
+          <ul className="mt-3 list-disc pl-5 text-sm text-muted">
+            <li>{vi ? "Marketing và Kênh: canvas đen, chữ trắng, không accent màu" : "Marketing and Channels: black canvas, white type, no color accent"}</li>
+            <li>{vi ? "Nền WebGL (khói / sao / chuột) kiểu SpaceXAI; tôn trọng prefers-reduced-motion" : "SpaceXAI-style WebGL field (smoke / stars / cursor); respects prefers-reduced-motion"}</li>
+            <li>{vi ? "Console Langfuse ép dark + grayscale overlay" : "Langfuse console forced dark + grayscale overlay"}</li>
+          </ul>
+        </article>
+        <article className="mt-8">
           <p className="text-sm text-muted">10 Sep 2026 · v0.2.0</p>
           <h2 className="mt-1 text-xl font-semibold">
             {vi ? "Console = Langfuse OSS" : "Console is Langfuse OSS"}

@@ -17,33 +17,31 @@ export default async function LandingPage() {
     <div>
       <MarketingHeader lang={lang} />
       <main>
-        <section className="mx-auto max-w-6xl px-4 pb-8 pt-16 md:pt-24">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-            {vi ? "Mã nguồn mở · MIT · tự vận hành hôm nay" : "Open source · MIT · self-host today"}
-          </p>
-          <h1 className="max-w-4xl text-4xl font-semibold leading-[1.12] tracking-tight md:text-6xl">
+        <section className="mx-auto flex min-h-[calc(100svh-3.5rem)] max-w-6xl flex-col justify-center px-4 py-16 md:py-24">
+          <p className="eyebrow rise">{vi ? "Mã nguồn mở · MIT · tự vận hành hôm nay" : "Open source · MIT · self-host today"}</p>
+          <h1 className="rise rise-d1 mt-6 max-w-4xl text-4xl font-semibold leading-[1.08] tracking-tight md:text-7xl">
             {tr(lang, t.tagline)}
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted">
+          <p className="rise rise-d2 mt-6 max-w-2xl text-lg text-muted">
             {vi
               ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam là Zalo → FPT / Viettel → LLM → TTS → trả lời. Vết ghi cả lộ trình đó. MIT — tự host miễn phí. Vết Cloud (chúng tôi host) sắp ra mắt."
               : "Langfuse sees messages.create. A Vietnamese production bot is Zalo → FPT / Viettel → LLM → TTS → reply. Vết traces that whole route. MIT — self-host for free. Vết Cloud (we host it) is coming soon."}
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/self-host" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-highlight">
+          <div className="rise rise-d3 mt-10 flex flex-wrap gap-3">
+            <Link href="/self-host" className="btn-solid">
               {vi ? "Tự vận hành (Docker)" : "Self-host (Docker)"}
             </Link>
-            <Link href={consoleSignInUrl()} className="rounded-full border border-ink/20 px-5 py-2.5 text-sm font-medium">
+            <Link href={consoleSignInUrl()} className="btn-ghost">
               {tr(lang, t.nav.demo)}
             </Link>
-            <Link href="/docs" className="rounded-full border border-ink/20 px-5 py-2.5 text-sm font-medium">
+            <Link href="/docs" className="btn-ghost">
               {tr(lang, t.nav.docs)}
             </Link>
-            <Link href="/docs/units" className="rounded-full px-5 py-2.5 text-sm font-medium text-accent">
+            <Link href="/docs/units" className="inline-flex items-center px-3 text-[12px] uppercase tracking-[0.14em] text-muted hover:text-ink">
               {vi ? "Đơn vị là gì?" : "What is a unit?"} →
             </Link>
           </div>
-          <p className="mt-3 text-sm text-muted">
+          <p className="rise rise-d3 mt-4 text-sm text-muted">
             {vi
               ? "OSS không giới hạn đơn vị. Cloud Hobby / Core / Pro / Enterprise — sắp có."
               : "OSS has unlimited units. Cloud Hobby / Core / Pro / Enterprise — coming soon."}
@@ -51,7 +49,7 @@ export default async function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-8">
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium uppercase tracking-wider text-muted">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted">
             {logos.map((l) => (
               <span key={l}>{l}</span>
             ))}
@@ -62,7 +60,8 @@ export default async function LandingPage() {
           <ProductPreview />
         </section>
 
-        <section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 md:grid-cols-3">
+        <section className="mx-auto max-w-6xl px-4 py-16">
+          <div className="grid gap-px bg-white/10 md:grid-cols-3">
           {[
             {
               k: vi ? "Hội thoại kênh" : "Channel replay",
@@ -83,47 +82,48 @@ export default async function LandingPage() {
                 : "Anthropic, FPT Factory, Bedrock, Vertex, Foundry — generations tagged with provider + region, not mixed up with Chat/Teams.",
             },
           ].map((c) => (
-            <div key={c.k} className="rounded-2xl border border-line bg-white p-6">
-              <h2 className="text-lg font-semibold">{c.k}</h2>
+            <div key={c.k} className="bg-black/70 p-6">
+              <h2 className="text-lg font-semibold tracking-tight">{c.k}</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">{c.v}</p>
             </div>
           ))}
+          </div>
         </section>
 
-        <section className="bg-ink py-16 text-paper">
+        <section className="border-y border-white/10 py-16">
           <div className="mx-auto max-w-6xl px-4">
             <h2 className="text-3xl font-semibold tracking-tight">
               {vi ? "Mở, không khóa dữ liệu" : "Open platform, no lock-in"}
             </h2>
             <div className="mt-8 grid gap-6 md:grid-cols-3">
               <div>
-                <h3 className="font-medium text-highlight">MIT</h3>
-                <p className="mt-2 text-sm text-paper/70">
+                <h3 className="text-[11px] font-medium uppercase tracking-[0.16em]">MIT</h3>
+                <p className="mt-2 text-sm text-muted">
                   {vi
                     ? "Toàn bộ tính năng sản phẩm nằm trong giấy phép MIT. Fork, sửa, đóng góp. Không nhánh ee/."
                     : "All product features ship under MIT. Fork, modify, contribute. No ee/ split in v1."}
                 </p>
               </div>
               <div>
-                <h3 className="font-medium text-highlight">{vi ? "Tự vận hành" : "Self-host"}</h3>
-                <p className="mt-2 text-sm text-paper/70">
+                <h3 className="text-[11px] font-medium uppercase tracking-[0.16em]">{vi ? "Tự vận hành" : "Self-host"}</h3>
+                <p className="mt-2 text-sm text-muted">
                   {vi
                     ? "docker compose up. Không giới hạn đơn vị. Dữ liệu ở infra của bạn."
                     : "docker compose up. Unlimited units. Data stays on your infra."}
                 </p>
               </div>
               <div>
-                <h3 className="font-medium text-highlight">
-                  Vết Cloud <span className="ml-2 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-normal">{vi ? "Sắp có" : "Soon"}</span>
+                <h3 className="text-[11px] font-medium uppercase tracking-[0.16em]">
+                  Vết Cloud <span className="ml-2 border border-white/20 px-2 py-0.5 text-[10px] font-normal">{vi ? "Sắp có" : "Soon"}</span>
                 </h3>
-                <p className="mt-2 text-sm text-paper/70">
+                <p className="mt-2 text-sm text-muted">
                   {vi
                     ? "Chúng tôi sẽ host cùng codebase. Chưa mở đăng ký — xem bộ công cụ đơn vị để hiểu cách tính khi Cloud ra mắt."
                     : "We will host the same codebase. Signup is not open — see the units toolkit for how metering will work."}
                 </p>
               </div>
             </div>
-            <Link href="/open-source" className="mt-8 inline-block text-sm text-highlight">
+            <Link href="/open-source" className="mt-8 inline-block text-[12px] uppercase tracking-[0.14em] text-ink">
               {vi ? "Xem cách đóng gói mã nguồn mở →" : "See how we package open source →"}
             </Link>
           </div>
@@ -139,26 +139,26 @@ export default async function LandingPage() {
                   : "Self-host is free today. Cloud plans are pending launch."}
               </p>
             </div>
-            <Link href="/pricing/self-host" className="text-sm text-accent">
+            <Link href="/pricing/self-host" className="text-[12px] uppercase tracking-[0.14em] text-ink">
               {vi ? "Giá tự vận hành →" : "Self-host pricing →"}
             </Link>
           </div>
-          <div className="mb-6 rounded-2xl border border-ink bg-ink p-6 text-paper">
-            <div className="text-sm font-medium text-highlight">{vi ? "Mã nguồn mở" : "Open Source"}</div>
+          <div className="panel mb-6 p-6">
+            <div className="text-[11px] font-medium uppercase tracking-[0.16em]">{vi ? "Mã nguồn mở" : "Open Source"}</div>
             <div className="mt-2 text-3xl font-semibold">{vi ? "Miễn phí" : "Free"}</div>
-            <p className="mt-3 max-w-xl text-sm text-paper/70">
+            <p className="mt-3 max-w-xl text-sm text-muted">
               {vi
                 ? "MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra."
                 : "MIT, docker compose up, unlimited units. You pay infra."}
             </p>
-            <Link href="/self-host" className="mt-5 inline-block rounded-full bg-highlight px-4 py-2 text-sm font-medium text-ink">
+            <Link href="/self-host" className="btn-solid mt-5">
               {vi ? "Hướng dẫn deploy" : "Deployment guide"}
             </Link>
           </div>
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-px bg-white/10 md:grid-cols-4">
             {CLOUD_PLANS.map((p) => (
-              <div key={p.id} className="relative rounded-2xl border border-line bg-white p-5 opacity-70">
-                <span className="absolute right-4 top-4 rounded-full border border-line px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
+              <div key={p.id} className="relative bg-black/70 p-5 opacity-80">
+                <span className="absolute right-4 top-4 border border-white/20 px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
                   {vi ? "Sắp có" : "Soon"}
                 </span>
                 <div className="text-sm font-medium">{p.name}</div>
@@ -172,9 +172,9 @@ export default async function LandingPage() {
             ))}
           </div>
           <p className="mt-4 text-sm text-muted">
-            <Link href="/pricing" className="text-accent">{vi ? "Trang Cloud (sắp có)" : "Cloud page (coming soon)"}</Link>
+            <Link href="/pricing" className="text-ink">{vi ? "Trang Cloud (sắp có)" : "Cloud page (coming soon)"}</Link>
             {" · "}
-            <Link href="/docs/units" className="text-accent">{vi ? "Giải thích đơn vị" : "What a unit is"}</Link>
+            <Link href="/docs/units" className="text-ink">{vi ? "Giải thích đơn vị" : "What a unit is"}</Link>
           </p>
         </section>
 
@@ -203,16 +203,16 @@ export default async function LandingPage() {
           </dl>
         </section>
 
-        <section className="border-t border-line bg-paper-2 py-16">
+        <section className="border-t border-white/10 py-16">
           <div className="mx-auto max-w-6xl px-4 text-center">
             <h2 className="text-3xl font-semibold">
               {vi ? "Tự host tonight. Cloud khi sẵn sàng." : "Self-host tonight. Cloud when it’s ready."}
             </h2>
             <div className="mt-6 flex justify-center gap-3">
-              <Link href="/self-host" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-highlight">
-                {vi ? "docker compose up" : "docker compose up"}
+              <Link href="/self-host" className="btn-solid">
+                docker compose up
               </Link>
-              <Link href="/docs" className="rounded-full border border-ink/20 bg-white px-5 py-2.5 text-sm">
+              <Link href="/docs" className="btn-ghost">
                 {tr(lang, t.nav.docs)}
               </Link>
             </div>

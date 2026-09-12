@@ -69,15 +69,68 @@ if doc.is_file():
 css = dest / "web/src/styles/globals.css"
 if css.is_file():
     extra = """
-/* Vết overlay: keep Langfuse zinc shell; Be Vietnam Pro for Vietnamese chrome. */
+/* Vết overlay: SpaceXAI monochrome + Be Vietnam Pro. */
 html {
   font-family: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  color-scheme: dark;
+}
+.dark {
+  --primary-accent: 0 0% 88%;
+  --link: 0 0% 88%;
+  --link-hover: 0 0% 100%;
+  --ring: 0 0% 80%;
+  --destructive: 0 0% 72%;
+  --muted-blue: 0 0% 72%;
+  --muted-green: 0 0% 72%;
+  --muted-magenta: 0 0% 72%;
+  --light-red: oklch(28% 0 0 / 0.7);
+  --dark-red: oklch(78% 0 0);
+  --light-yellow: oklch(32% 0 0 / 0.45);
+  --dark-yellow: oklch(82% 0 0);
+  --light-green: oklch(30% 0 0 / 0.7);
+  --dark-green: oklch(80% 0 0);
+  --light-blue: 0 0% 16%;
+  --dark-blue: 0 0% 72%;
+  --accent-light-green: 0 0% 9%;
+  --accent-dark-green: 0 0% 70%;
+  --accent-light-blue: 0 0% 12%;
+  --accent-dark-blue: 0 0% 78%;
+  --light-violet: 0 0% 16%;
+  --dark-violet: 0 0% 78%;
+  --light-teal: 0 0% 12%;
+  --dark-teal: 0 0% 70%;
+  --qlang-field: 0 0% 78%;
+  --qlang-value: 0 0% 70%;
+  --qlang-number: 0 0% 82%;
+  --qlang-keyword: 0 0% 74%;
+  --preview-banner: 0 0% 12%;
+  --preview-banner-border: 0 0% 22%;
+  --preview-banner-link: 0 0% 80%;
+  --preview-banner-link-hover: 0 0% 92%;
 }
 """
     current = css.read_text()
     if "Vết overlay" not in current:
         css.write_text(current + extra)
         print("css", css.relative_to(dest))
+
+app = dest / "web/src/pages/_app.tsx"
+if app.is_file():
+    text = app.read_text()
+    old_theme = """                        <ThemeProvider
+                          attribute="class"
+                          enableSystem
+                          disableTransitionOnChange
+                        >"""
+    new_theme = """                        <ThemeProvider
+                          attribute="class"
+                          forcedTheme="dark"
+                          enableSystem={false}
+                          disableTransitionOnChange
+                        >"""
+    if "forcedTheme" not in text and old_theme in text:
+        app.write_text(text.replace(old_theme, new_theme, 1))
+        print("theme", app.relative_to(dest))
 
 envp = dest / "web/src/env.mjs"
 if envp.is_file():

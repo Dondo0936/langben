@@ -25,22 +25,22 @@ export default async function SignupPage() {
         <MarketingHeader lang={lang} />
         <main className="mx-auto flex max-w-lg flex-col items-center px-4 py-20 text-center">
           <Wordmark />
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+          <p className="eyebrow mt-6">
             {tr(lang, t.signup.comingSoonTitle)}
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{tr(lang, t.signup.comingSoonTitle)}</h1>
           <p className="mt-3 text-muted">{tr(lang, t.signup.comingSoon)}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/self-host" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-highlight">
+            <Link href="/self-host" className="btn-solid">
               {vi ? "Tự vận hành (Docker)" : "Self-host (Docker)"}
             </Link>
-            <Link href="/docs/units" className="rounded-full border border-ink/20 px-5 py-2.5 text-sm">
+            <Link href="/docs/units" className="btn-ghost">
               {tr(lang, t.nav.unitsToolkit)}
             </Link>
           </div>
           <p className="mt-6 text-sm text-muted">
             {vi ? "Đã có instance?" : "Already running an instance?"}{" "}
-            <Link href="/login" className="text-accent">{tr(lang, t.nav.login)}</Link>
+            <Link href="/login" className="text-ink underline-offset-4 hover:underline">{tr(lang, t.nav.login)}</Link>
           </p>
         </main>
         <MarketingFooter lang={lang} />
@@ -49,7 +49,7 @@ export default async function SignupPage() {
   }
   return (
     <div className="console flex min-h-dvh items-center justify-center bg-paper px-4">
-      <div className="w-full max-w-sm rounded-md border border-line bg-white p-6">
+      <div className="panel w-full max-w-sm p-6">
         <Wordmark />
         <h1 className="mt-4 text-xl font-semibold">{tr(lang, isCloud() ? t.signup.title : t.signup.selfHostTitle)}</h1>
         <SignupForm
@@ -67,7 +67,7 @@ export default async function SignupPage() {
         />
         {!isCloud() ? (
           <p className="mt-4 text-center text-xs text-muted">
-            <Link href="/docs/units" className="text-accent">{tr(lang, t.nav.unitsToolkit)}</Link>
+            <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">{tr(lang, t.nav.unitsToolkit)}</Link>
             {vi ? " — đơn vị không phải token, và instance này không đếm." : " — a unit is not a token, and this instance does not meter them."}
           </p>
         ) : null}

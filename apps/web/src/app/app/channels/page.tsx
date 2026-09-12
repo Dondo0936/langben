@@ -44,11 +44,11 @@ export default async function ChannelsPage({
           <Link
             key={ch.id}
             href={`/app/channels/${ch.type}${q}`}
-            className="rounded-md border border-line bg-white p-4 hover:bg-paper-2"
+            className="panel p-4 hover:bg-white/5"
           >
             <div className="flex items-center justify-between">
               <h2 className="font-medium">{LABELS[ch.type] ?? ch.name}</h2>
-              <span className={`text-xs ${ch.enabled ? "text-emerald-700" : "text-muted"}`}>
+              <span className={`text-xs ${ch.enabled ? "text-ink" : "text-muted"}`}>
                 {ch.enabled ? (vi ? "bật" : "on") : vi ? "tắt" : "off"}
               </span>
             </div>

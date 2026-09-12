@@ -38,7 +38,7 @@ export function TraceView({
           <button
             key={k}
             onClick={() => setTab(k)}
-            className={`rounded-md px-2.5 py-1 text-xs ${tab === k ? "bg-ink text-white" : "border border-line bg-white"}`}
+            className={`px-2.5 py-1 text-xs ${tab === k ? "bg-ink text-paper" : "border border-line"}`}
           >
             {label}
           </button>
@@ -60,7 +60,7 @@ export function TraceView({
                   <div className="mb-0.5 truncate font-mono text-[10px] text-muted">{o.name}</div>
                   <div className="relative h-2 rounded-sm bg-paper-2">
                     <div
-                      className={`absolute h-2 rounded-sm ${o.status === "error" ? "bg-red-500" : "bg-zinc-800"}`}
+                      className={`absolute h-2 ${o.status === "error" ? "bg-ink" : "bg-white/40"}`}
                       style={{ left: `${(start / span) * 100}%`, width: `${Math.max(2, (dur / span) * 100)}%` }}
                     />
                   </div>
@@ -93,7 +93,7 @@ export function TraceView({
 
 function Panel({ title, children, flush }: { title: string; children: React.ReactNode; flush?: boolean }) {
   return (
-    <div className="flex min-h-0 flex-col overflow-hidden bg-white">
+    <div className="flex min-h-0 flex-col overflow-hidden bg-black">
       <div className="shrink-0 border-b border-line px-2.5 py-1.5 text-[11px] font-medium text-muted">{title}</div>
       <div className={`min-h-0 flex-1 overflow-auto ${flush ? "" : "p-2"}`}>{children}</div>
     </div>
@@ -185,7 +185,7 @@ function Chat({ observations, lang }: { observations: Observation[]; lang: Lang 
     return <p className="text-sm text-muted">{lang === "vi" ? "Không phải phiên kênh." : "Not a channel session."}</p>;
   }
   return (
-    <div className="space-y-1.5 rounded-md border border-line bg-white p-2">
+    <div className="panel space-y-1.5 p-2">
       {turns.map((o) => {
         const who =
           o.type === "channel.inbound"

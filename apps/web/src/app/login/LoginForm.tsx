@@ -58,13 +58,13 @@ export function LoginForm({
         {passwordLabel}
         <input type="password" className="mt-1 h-9 w-full rounded-md border border-line px-3 text-[13px]" value={password} onChange={(e) => setPassword(e.target.value)} />
       </label>
-      {error ? <p className="mt-2 text-sm text-red-700">{error}</p> : null}
-      <button disabled={pending} className="mt-4 h-9 w-full rounded-md bg-ink text-sm font-medium text-white">
+      {error ? <p className="mt-2 text-sm text-ink">{error}</p> : null}
+      <button disabled={pending} className="mt-4 h-9 w-full bg-ink text-sm font-medium text-paper">
         {pending ? pendingLabel : submitLabel}
       </button>
       <p className="mt-3 text-center text-sm text-muted">
         {noOrg}{" "}
-        <Link href="/signup" className="text-accent">{signupLabel}</Link>
+        <Link href="/signup" className="text-ink underline-offset-4 hover:underline">{signupLabel}</Link>
       </p>
     </form>
   );

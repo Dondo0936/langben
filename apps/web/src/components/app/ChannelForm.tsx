@@ -74,7 +74,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
   }
 
   return (
-    <form onSubmit={save} className="max-w-xl space-y-3 rounded-md border border-line bg-white p-4 text-sm">
+    <form onSubmit={save} className="panel max-w-xl space-y-3 p-4 text-sm">
       <label className="flex items-center gap-2">
         <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
         Kênh bật
@@ -173,11 +173,11 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
         </p>
       ) : null}
       <div className="flex flex-wrap items-center gap-2">
-        <button className="h-9 rounded-md bg-ink px-4 text-white">Lưu</button>
+        <button className="h-9 bg-ink px-4 text-paper">Lưu</button>
         {["lark", "gchat", "zalo_oa", "zalo_bot", "fpt"].includes(channel.type) ? (
           <button
             type="button"
-            className="h-9 rounded-md border border-ink/20 px-4"
+            className="h-9 border border-white/25 px-4"
             onClick={() => void sendTest()}
           >
             Gửi thử
