@@ -74,12 +74,27 @@ html {
   font-family: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   color-scheme: dark;
 }
+html, body, #__next {
+  background: #000 !important;
+}
 .dark {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 88%;
+  --card: 0 0% 4%;
+  --header: 0 0% 0%;
   --primary-accent: 0 0% 88%;
   --link: 0 0% 88%;
   --link-hover: 0 0% 100%;
   --ring: 0 0% 80%;
   --destructive: 0 0% 72%;
+  --chart-1: 0 0% 88%;
+  --chart-2: 0 0% 72%;
+  --chart-3: 0 0% 54%;
+  --chart-4: 0 0% 80%;
+  --chart-5: 0 0% 64%;
+  --chart-6: 0 0% 48%;
+  --chart-7: 0 0% 76%;
+  --chart-8: 0 0% 40%;
   --muted-blue: 0 0% 72%;
   --muted-green: 0 0% 72%;
   --muted-magenta: 0 0% 72%;

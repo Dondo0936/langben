@@ -85,7 +85,7 @@ void main() {
   float t = uTime * (1.0 - uReduce * 0.85);
   float n1 = fbm(p * 1.35 + vec2(t * 0.04, -t * 0.03));
   float n2 = fbm(p * 2.6 - vec2(t * 0.05, t * 0.02) + n1);
-  float nebula = pow(smoothstep(0.22, 0.78, n2), 1.35) * 0.38 + n1 * 0.12;
+  float nebula = pow(smoothstep(0.22, 0.78, n2), 1.35) * 0.22 + n1 * 0.07;
 
   float stars = 0.0;
   vec2 sp = uv * vec2(90.0, 56.0);
@@ -102,13 +102,13 @@ void main() {
   smoke += texture2D(uTrail, uv - vec2(texel.x * 3.0, 0.0)).a * 0.45;
   smoke += texture2D(uTrail, uv + vec2(0.0, texel.y * 3.0)).a * 0.45;
   smoke += texture2D(uTrail, uv - vec2(0.0, texel.y * 3.0)).a * 0.45;
-  smoke = pow(clamp(smoke * 0.55, 0.0, 1.0), 0.72);
+  smoke = pow(clamp(smoke * 0.4, 0.0, 1.0), 0.85);
 
   float mark = texture2D(uMark, vec2(uv.x, 1.0 - uv.y)).r;
-  float markGlow = mark * (0.28 + 0.16 * n2);
+  float markGlow = mark * (0.12 + 0.06 * n2);
   vec2 mp = (uv - uMouse) * aspect;
-  float cursor = exp(-dot(mp, mp) * 10.0) * 0.16;
-  float g = nebula + stars * 0.55 + smoke * 1.15 + markGlow + cursor;
+  float cursor = exp(-dot(mp, mp) * 14.0) * 0.08;
+  float g = nebula + stars * 0.28 + smoke * 0.55 + markGlow + cursor;
   float vig = smoothstep(1.45, 0.12, length(p));
   g *= vig;
   g = clamp(g, 0.0, 1.0);
@@ -167,11 +167,11 @@ function makeMarkTexture(gl: WebGLRenderingContext) {
     getComputedStyle(document.documentElement).getPropertyValue("--font-be-vietnam").trim() ||
     '"Be Vietnam Pro", sans-serif';
   ctx.fillStyle = "#fff";
-  ctx.font = `600 380px ${family}`;
+  ctx.font = `600 240px ${family}`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.shadowColor = "#fff";
-  ctx.shadowBlur = 64;
+  ctx.shadowBlur = 28;
   ctx.fillText("Vết", c.width / 2, c.height * 0.48);
   const tex = gl.createTexture();
   if (!tex) throw new Error("mark");
@@ -251,18 +251,21 @@ function run2d(canvas: HTMLCanvasElement, reduce: boolean, overlay = false) {
       ctx.fillRect(0, 0, w, h);
     }
 
-    ctx.fillStyle = "#f0f0fa";
-    for (const s of stars) {
-      const a = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph));
-      ctx.globalAlpha = a;
-      ctx.beginPath();
-      ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2);
-      ctx.fill();
+    if (!overlay) {
+      ctx.fillStyle = "#f0f0fa";
+      for (const s of stars) {
+        const a = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph));
+        ctx.globalAlpha = a;
+        ctx.beginPath();
+        ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
     }
-    ctx.globalAlpha = 1;
 
     if (!reduce && force > 0.02) {
-      for (let i = 0; i < 6; i++) {
+      const n = overlay ? 3 : 6;
+      for (let i = 0; i < n; i++) {
         sparks.push({
           x: mx,
           y: my,
@@ -284,19 +287,20 @@ function run2d(canvas: HTMLCanvasElement, reduce: boolean, overlay = false) {
         sparks.splice(i, 1);
         continue;
       }
-      ctx.globalAlpha = p.life * 0.55;
+      ctx.globalAlpha = p.life * (overlay ? 0.22 : 0.55);
       ctx.fillStyle = "#f0f0fa";
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 7 * p.life + 1, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, (overlay ? 3 : 7) * p.life + 1, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
 
-    const glow = ctx.createRadialGradient(mx, my, 0, mx, my, 140);
-    glow.addColorStop(0, "rgba(240,240,250,0.16)");
+    const glow = ctx.createRadialGradient(mx, my, 0, mx, my, overlay ? 90 : 140);
+    glow.addColorStop(0, overlay ? "rgba(240,240,250,0.05)" : "rgba(240,240,250,0.10)");
     glow.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = glow;
-    ctx.fillRect(mx - 140, my - 140, 280, 280);
+    const glowR = overlay ? 90 : 140;
+    ctx.fillRect(mx - glowR, my - glowR, glowR * 2, glowR * 2);
 
     if (!overlay) {
       ctx.save();
@@ -335,7 +339,7 @@ function runWebgl(canvas: HTMLCanvasElement, reduce: boolean) {
   gl.bindBuffer(gl.ARRAY_BUFFER, quad);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
 
-  const mouse = { x: 0.5, y: 0.5, dx: 0, dy: 0, force: 0.15 };
+  const mouse = { x: 0.5, y: 0.5, dx: 0, dy: 0, force: 0.04 };
   const loc = { x: 0.5, y: 0.5 };
   const onMove = (e: PointerEvent) => {
     const r = canvas.getBoundingClientRect();
@@ -387,8 +391,8 @@ function runWebgl(canvas: HTMLCanvasElement, reduce: boolean) {
   const frame = (now: number) => {
     if (!alive) return;
     const { w, h } = fitCanvas(canvas);
-    const tw = Math.max(32, Math.floor(w * 0.4));
-    const th = Math.max(32, Math.floor(h * 0.4));
+    const tw = Math.max(32, Math.floor(w * 0.65));
+    const th = Math.max(32, Math.floor(h * 0.65));
     if (ping.w !== tw || ping.h !== th) {
       ping = makeTarget(gl, tw, th);
       pong = makeTarget(gl, tw, th);
@@ -412,7 +416,7 @@ function runWebgl(canvas: HTMLCanvasElement, reduce: boolean) {
     gl.uniform1f(u.tDecay, reduce ? 0.9 : 0.968);
     gl.uniform1f(u.tForce, Math.max(0.12, mouse.force));
     gl.uniform1f(u.tTime, t);
-    gl.uniform1f(u.tEmit, reduce ? 0.03 : 0.05);
+    gl.uniform1f(u.tEmit, reduce ? 0.004 : 0.007);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);

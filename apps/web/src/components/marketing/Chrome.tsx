@@ -13,7 +13,7 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
     { href: "/pricing/self-host", label: tr(lang, t.nav.pricing) },
   ];
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-black/55 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-black/75 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <Wordmark />
