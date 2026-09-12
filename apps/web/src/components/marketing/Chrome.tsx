@@ -10,8 +10,6 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
     { href: "/#san-pham", label: tr(lang, t.nav.product) },
     { href: "/docs", label: tr(lang, t.nav.docs) },
     { href: "/self-host", label: tr(lang, t.nav.selfHost) },
-    { href: "/docs/units", label: tr(lang, t.nav.unitsToolkit) },
-    { href: "/changelog", label: tr(lang, t.nav.changelog) },
     { href: "/pricing/self-host", label: tr(lang, t.nav.pricing) },
   ];
   return (
@@ -20,7 +18,7 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
         <Link href="/" className="flex items-center gap-2">
           <Wordmark />
         </Link>
-        <nav className="hidden items-center gap-6 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-2 md:flex">
+        <nav className="hidden items-center gap-5 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-2 lg:flex">
           {items.map((item) => (
             <Link key={item.href} href={item.href} className="hover:text-ink">
               {item.label}
@@ -32,13 +30,13 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
         </nav>
         <div className="flex items-center gap-2">
           <LangToggle lang={lang} />
-          <Link href="/pricing" className="hidden text-[11px] uppercase tracking-[0.14em] text-muted md:inline">
+          <Link href="/pricing" className="hidden text-[11px] uppercase tracking-[0.14em] text-muted xl:inline">
             {tr(lang, t.nav.signup)}
           </Link>
-          <Link href={consoleSignInUrl()} className="hidden text-[11px] uppercase tracking-[0.14em] md:inline">
+          <Link href={consoleSignInUrl()} className="hidden text-[11px] uppercase tracking-[0.14em] xl:inline">
             {tr(lang, t.nav.login)}
           </Link>
-          <Link href="/self-host" className="btn-solid !min-h-0 px-3.5 py-1.5 text-[11px]">
+          <Link href="/self-host" className="btn-solid !min-h-0 whitespace-nowrap px-3 py-1.5 text-[11px]">
             {tr(lang, t.nav.selfHost)}
           </Link>
         </div>
