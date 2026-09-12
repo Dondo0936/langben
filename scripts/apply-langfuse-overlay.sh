@@ -109,12 +109,20 @@ ncfg = dest / "web/next.config.mjs"
 if ncfg.is_file():
     text = ncfg.read_text()
     old_frame = "  frame-src 'self' https://challenges.cloudflare.com"
-    new_frame = "  frame-src 'self' http://localhost:* http://127.0.0.1:* https://challenges.cloudflare.com"
+    new_frame = (
+        "  frame-src 'self' http://localhost:43173 http://127.0.0.1:43173 "
+        "http://localhost:* http://127.0.0.1:* https://challenges.cloudflare.com"
+    )
     old_font = "  font-src ${assetPrefixSrc}'self';"
     new_font = "  font-src ${assetPrefixSrc}'self' https://fonts.gstatic.com https://fonts.googleapis.com;"
     orig = text
-    if "http://localhost:* http://127.0.0.1:* https://challenges.cloudflare.com" not in text:
+    if "http://localhost:43173" not in text:
         text = text.replace(old_frame, new_frame, 1)
+        text = text.replace(
+            "  frame-src 'self' http://localhost:* http://127.0.0.1:* https://challenges.cloudflare.com",
+            new_frame,
+            1,
+        )
     if "https://fonts.gstatic.com" not in text:
         text = text.replace(old_font, new_font, 1)
     if text != orig:
