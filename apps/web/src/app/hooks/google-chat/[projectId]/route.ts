@@ -17,9 +17,12 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
   if (!sharedOk) {
     const hookPath = new URL(req.url).pathname;
     const publicBase = process.env.VET_PUBLIC_URL?.replace(/\/$/, "");
+    const xfHost = req.headers.get("x-forwarded-host");
+    const xfProto = req.headers.get("x-forwarded-proto") || "https";
     const jwtOk = await googleChatBearerOk(presented, [
       req.url,
       publicBase ? `${publicBase}${hookPath}` : undefined,
+      xfHost ? `${xfProto}://${xfHost}${hookPath}` : undefined,
       ch.secrets.audience,
       ch.secrets.googleProjectNumber,
     ]);
