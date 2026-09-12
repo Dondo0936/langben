@@ -1,6 +1,7 @@
 import { addObservation, getChannel, upsertSession, upsertTrace, updateChannel } from "./store";
 import { safeEqualString } from "./crypto";
 import { assertSafeForwardUrl } from "./ssrf";
+import { channelEventsToLangfuseBatch, ingestLangfuseBatch } from "./langfuse-ingest";
 import type { ObservationType } from "./types";
 
 const FORWARD_SKIP_HEADERS = new Set([
@@ -84,7 +85,7 @@ export async function maybeForward(projectId: string, type: string, req: Request
   }
 }
 
-export function recordChannelEvent(opts: {
+export async function recordChannelEvent(opts: {
   projectId: string;
   channel: string;
   channelType: string;
@@ -124,5 +125,23 @@ export function recordChannelEvent(opts: {
     metadata: opts.metadata,
   });
   updateChannel(opts.projectId, opts.channelType, { lastEventAt: at, lastError: null });
+  await ingestLangfuseBatch(
+    channelEventsToLangfuseBatch({
+      traceId: trace.id,
+      observationId: observation.id,
+      projectId: opts.projectId,
+      channel: opts.channel,
+      userId,
+      name: opts.name,
+      type: opts.type,
+      input: opts.input,
+      output: opts.output,
+      metadata: opts.metadata,
+      routeId: opts.routeId,
+      traceName: opts.traceName,
+      startTime: at,
+      endTime: at,
+    }),
+  );
   return { trace, observation, sessionId };
 }

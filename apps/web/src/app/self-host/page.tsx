@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
 import { getLang } from "@/lib/get-lang";
 
@@ -16,16 +17,22 @@ export default async function SelfHostPage() {
         </h1>
         <p className="mt-4 text-muted">
           {vi
-            ? "Cùng image với Cloud. Đặt VET_DEPLOYMENT=self-host — ẩn billing, không giới hạn đơn vị."
-            : "Same image as Cloud. Set VET_DEPLOYMENT=self-host — billing UI hides, units unlimited."}
+            ? "Cùng image sẽ dùng cho Cloud sau này. Đặt VET_DEPLOYMENT=self-host — ẩn billing, không giới hạn đơn vị."
+            : "Same image we will use for Cloud later. Set VET_DEPLOYMENT=self-host — billing UI hides, units unlimited."}
         </p>
         <h2 className="mt-10 text-xl font-semibold">Docker Compose</h2>
         <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-sm text-highlight">
 {`git clone https://github.com/vet-dev/vet.git
 cd vet
+git submodule update --init --recursive
+cp .env.console.example .env
 docker compose up --build`}
         </pre>
-        <p className="mt-3 text-sm text-muted">http://localhost:43173 — {vi ? "console tiếng Việt, dữ liệu seed sẵn." : "Vietnamese console, seeded traces."}</p>
+        <p className="mt-3 text-sm text-muted">
+          {vi
+            ? "Marketing http://localhost:43173 · Console http://localhost:3000 — demo@vet.dev / demodemo."
+            : "Marketing http://localhost:43173 · Console http://localhost:3000 — demo@vet.dev / demodemo."}
+        </p>
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Biến môi trường" : "Environment"}</h2>
         <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-sm text-highlight">
 {`VET_DEPLOYMENT=self-host
@@ -33,6 +40,11 @@ VET_DATA_DIR=/data
 VET_PUBLIC_URL=https://vet.internal
 VET_SESSION_SECRET=...`}
         </pre>
+        <p className="mt-6 text-sm">
+          <Link href="/docs/units" className="text-accent">
+            {vi ? "Bộ công cụ đơn vị — đơn vị không phải token" : "Units toolkit — a unit is not a token"}
+          </Link>
+        </p>
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Dev laptop (không Docker)" : "Laptop (no Docker)"}</h2>
         <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-sm text-highlight">
 {`npm install

@@ -4,6 +4,7 @@ import { ProductPreview } from "@/components/marketing/ProductPreview";
 import { getLang } from "@/lib/get-lang";
 import { t, tr } from "@/lib/i18n";
 import { CLOUD_PLANS, formatUsd } from "@/lib/plans";
+import { consoleSignInUrl } from "@/lib/console-target";
 
 export const dynamic = "force-dynamic";
 
@@ -18,31 +19,34 @@ export default async function LandingPage() {
       <main>
         <section className="mx-auto max-w-6xl px-4 pb-8 pt-16 md:pt-24">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-            {vi ? "Mã nguồn mở · Cloud do chúng tôi host" : "Open source · Cloud we host"}
+            {vi ? "Mã nguồn mở · MIT · tự vận hành hôm nay" : "Open source · MIT · self-host today"}
           </p>
           <h1 className="max-w-4xl text-4xl font-semibold leading-[1.12] tracking-tight md:text-6xl">
             {tr(lang, t.tagline)}
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted">
             {vi
-              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam là Zalo → FPT / Viettel → LLM → TTS → trả lời. Vết ghi cả lộ trình đó. MIT — tự host miễn phí, hoặc dùng Vết Cloud, chúng tôi vận hành giúp bạn."
-              : "Langfuse sees messages.create. A Vietnamese production bot is Zalo → FPT / Viettel → LLM → TTS → reply. Vết traces that whole route. MIT — self-host for free, or use Vết Cloud and we run it for you."}
+              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam là Zalo → FPT / Viettel → LLM → TTS → trả lời. Vết ghi cả lộ trình đó. MIT — tự host miễn phí. Vết Cloud (chúng tôi host) sắp ra mắt."
+              : "Langfuse sees messages.create. A Vietnamese production bot is Zalo → FPT / Viettel → LLM → TTS → reply. Vết traces that whole route. MIT — self-host for free. Vết Cloud (we host it) is coming soon."}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/signup" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-highlight">
-              {tr(lang, t.nav.signup)}
-            </Link>
-            <Link href="/self-host" className="rounded-full border border-ink/20 px-5 py-2.5 text-sm font-medium">
+            <Link href="/self-host" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-highlight">
               {vi ? "Tự vận hành (Docker)" : "Self-host (Docker)"}
             </Link>
-            <Link href="/demo" className="rounded-full px-5 py-2.5 text-sm font-medium text-accent">
-              {tr(lang, t.nav.demo)} →
+            <Link href={consoleSignInUrl()} className="rounded-full border border-ink/20 px-5 py-2.5 text-sm font-medium">
+              {tr(lang, t.nav.demo)}
+            </Link>
+            <Link href="/docs" className="rounded-full border border-ink/20 px-5 py-2.5 text-sm font-medium">
+              {tr(lang, t.nav.docs)}
+            </Link>
+            <Link href="/docs/units" className="rounded-full px-5 py-2.5 text-sm font-medium text-accent">
+              {vi ? "Đơn vị là gì?" : "What is a unit?"} →
             </Link>
           </div>
           <p className="mt-3 text-sm text-muted">
             {vi
-              ? "Hobby miễn phí · 50k đơn vị/tháng · không cần thẻ."
-              : "Hobby is free · 50k units/month · no credit card."}
+              ? "OSS không giới hạn đơn vị. Cloud Hobby / Core / Pro / Enterprise — sắp có."
+              : "OSS has unlimited units. Cloud Hobby / Core / Pro / Enterprise — coming soon."}
           </p>
         </section>
 
@@ -109,11 +113,13 @@ export default async function LandingPage() {
                 </p>
               </div>
               <div>
-                <h3 className="font-medium text-highlight">Vết Cloud</h3>
+                <h3 className="font-medium text-highlight">
+                  Vết Cloud <span className="ml-2 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-normal">{vi ? "Sắp có" : "Soon"}</span>
+                </h3>
                 <p className="mt-2 text-sm text-paper/70">
                   {vi
-                    ? "Chúng tôi host. Cùng một codebase. Vùng Singapore mặc định. Nâng gói khi bot lên production."
-                    : "We host it. Same codebase. Singapore region by default. Upgrade when the bot hits production."}
+                    ? "Chúng tôi sẽ host cùng codebase. Chưa mở đăng ký — xem bộ công cụ đơn vị để hiểu cách tính khi Cloud ra mắt."
+                    : "We will host the same codebase. Signup is not open — see the units toolkit for how metering will work."}
                 </p>
               </div>
             </div>
@@ -126,44 +132,50 @@ export default async function LandingPage() {
         <section className="mx-auto max-w-6xl px-4 py-16">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight">{vi ? "Giá Cloud" : "Cloud pricing"}</h2>
+              <h2 className="text-3xl font-semibold tracking-tight">{vi ? "Giá" : "Pricing"}</h2>
               <p className="mt-2 text-muted">
                 {vi
-                  ? "Cùng mô hình Hobby / Core / Pro / Enterprise. Tự vận hành thì miễn phí."
-                  : "Same Hobby / Core / Pro / Enterprise motion. Self-host is free."}
+                  ? "Tự vận hành miễn phí hôm nay. Các gói Cloud đang chờ ra mắt."
+                  : "Self-host is free today. Cloud plans are pending launch."}
               </p>
             </div>
-            <Link href="/pricing" className="text-sm text-accent">
-              {vi ? "Bảng so sánh đầy đủ →" : "Full comparison →"}
+            <Link href="/pricing/self-host" className="text-sm text-accent">
+              {vi ? "Giá tự vận hành →" : "Self-host pricing →"}
+            </Link>
+          </div>
+          <div className="mb-6 rounded-2xl border border-ink bg-ink p-6 text-paper">
+            <div className="text-sm font-medium text-highlight">{vi ? "Mã nguồn mở" : "Open Source"}</div>
+            <div className="mt-2 text-3xl font-semibold">{vi ? "Miễn phí" : "Free"}</div>
+            <p className="mt-3 max-w-xl text-sm text-paper/70">
+              {vi
+                ? "MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra."
+                : "MIT, docker compose up, unlimited units. You pay infra."}
+            </p>
+            <Link href="/self-host" className="mt-5 inline-block rounded-full bg-highlight px-4 py-2 text-sm font-medium text-ink">
+              {vi ? "Hướng dẫn deploy" : "Deployment guide"}
             </Link>
           </div>
           <div className="grid gap-4 md:grid-cols-4">
             {CLOUD_PLANS.map((p) => (
-              <div
-                key={p.id}
-                className={`rounded-2xl border p-5 ${p.highlighted ? "border-ink bg-ink text-paper" : "border-line bg-white"}`}
-              >
+              <div key={p.id} className="relative rounded-2xl border border-line bg-white p-5 opacity-70">
+                <span className="absolute right-4 top-4 rounded-full border border-line px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
+                  {vi ? "Sắp có" : "Soon"}
+                </span>
                 <div className="text-sm font-medium">{p.name}</div>
                 <div className="mt-2 text-3xl font-semibold">
                   {formatUsd(p.monthlyUsd)}
-                  <span className={`text-sm font-normal ${p.highlighted ? "text-paper/60" : "text-muted"}`}>
-                    {vi ? "/tháng" : "/mo"}
-                  </span>
+                  <span className="text-sm font-normal text-muted">{vi ? "/tháng" : "/mo"}</span>
                 </div>
-                <p className={`mt-3 text-sm ${p.highlighted ? "text-paper/70" : "text-muted"}`}>
-                  {vi ? p.taglineVi : p.taglineEn}
-                </p>
-                <Link
-                  href={p.id === "enterprise" ? "/enterprise" : "/signup"}
-                  className={`mt-5 inline-block rounded-full px-4 py-2 text-sm font-medium ${
-                    p.highlighted ? "bg-highlight text-ink" : "bg-ink text-highlight"
-                  }`}
-                >
-                  {vi ? p.ctaVi : p.ctaEn}
-                </Link>
+                <p className="mt-3 text-sm text-muted">{vi ? p.taglineVi : p.taglineEn}</p>
+                <p className="mt-5 text-xs text-muted">{vi ? "Chưa mở đăng ký" : "Signup not open"}</p>
               </div>
             ))}
           </div>
+          <p className="mt-4 text-sm text-muted">
+            <Link href="/pricing" className="text-accent">{vi ? "Trang Cloud (sắp có)" : "Cloud page (coming soon)"}</Link>
+            {" · "}
+            <Link href="/docs/units" className="text-accent">{vi ? "Giải thích đơn vị" : "What a unit is"}</Link>
+          </p>
         </section>
 
         <section className="mx-auto max-w-3xl px-4 py-12">
@@ -172,14 +184,14 @@ export default async function LandingPage() {
             {(vi
               ? [
                   ["Vết khác gì một bản Langfuse dán sticker?", "Langfuse thấy lần gọi LLM. Vết thấy Zalo vào, FPT NLU, TTS Viettel, tin ra — cùng một phiên. UI tiếng Việt gốc, không dịch trình duyệt."],
-                  ["Tự host có thật sự miễn phí?", "Có. MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra. Cloud là chúng tôi host, tính theo gói + đơn vị."],
-                  ["Đơn vị (unit) là gì?", "Mỗi vết, quan sát (span/lần sinh/kênh) và điểm đánh giá gửi lên đều là một đơn vị — cùng cách đóng gói usage-based."],
+                  ["Tự host có thật sự miễn phí?", "Có. MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra. Cloud (chúng tôi host) sắp ra mắt."],
+                  ["Đơn vị (unit) là gì?", "Không phải token. Mỗi vết, quan sát, và điểm đánh giá là một đơn vị — chỉ Cloud mới đếm. Xem bộ công cụ trên /docs/units."],
                   ["Vertex khác Google Chat chứ?", "Có. Vertex/Foundry/Bedrock là lớp mô hình. Google Chat và Teams là kênh. Tách menu: Kết nối LLM vs Kênh."],
                 ]
               : [
                   ["Is this a Langfuse reskin?", "Langfuse sees the LLM call. Vết sees Zalo in, FPT NLU, Viettel TTS, the reply — one session. Native Vietnamese chrome."],
-                  ["Is self-hosting actually free?", "Yes. MIT, docker compose up, unlimited units. You pay infra. Cloud is us hosting, billed by plan + units."],
-                  ["What is a unit?", "Each trace, observation (span/generation/channel), and score you send — the same usage-based packaging."],
+                  ["Is self-hosting actually free?", "Yes. MIT, docker compose up, unlimited units. You pay infra. Cloud (we host) is coming soon."],
+                  ["What is a unit?", "Not a token. Each trace, observation, and score is one unit — Cloud will meter them. See /docs/units."],
                   ["Vertex vs Google Chat?", "Vertex/Foundry/Bedrock are model layers. Google Chat and Teams are channels. Separate nav."],
                 ]
             ).map(([q, a]) => (
@@ -194,11 +206,11 @@ export default async function LandingPage() {
         <section className="border-t border-line bg-paper-2 py-16">
           <div className="mx-auto max-w-6xl px-4 text-center">
             <h2 className="text-3xl font-semibold">
-              {vi ? "Bắt đầu miễn phí trên Cloud, hoặc tự host tonight." : "Start free on Cloud, or self-host tonight."}
+              {vi ? "Tự host tonight. Cloud khi sẵn sàng." : "Self-host tonight. Cloud when it’s ready."}
             </h2>
             <div className="mt-6 flex justify-center gap-3">
-              <Link href="/signup" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-highlight">
-                {tr(lang, t.nav.signup)}
+              <Link href="/self-host" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-highlight">
+                {vi ? "docker compose up" : "docker compose up"}
               </Link>
               <Link href="/docs" className="rounded-full border border-ink/20 bg-white px-5 py-2.5 text-sm">
                 {tr(lang, t.nav.docs)}

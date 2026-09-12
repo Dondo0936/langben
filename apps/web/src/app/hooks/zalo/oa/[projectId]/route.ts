@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { addObservation, claimWebhookReplay, getChannel, getProject } from "@/lib/store";
 import { freshZaloTimestamp, verifyZaloOaSignature } from "@/lib/zalo";
 import { maybeForward, recordChannelEvent } from "@/lib/hooks";
+import { ingestLangfuseBatch } from "@/lib/langfuse-ingest";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     return NextResponse.json({ ok: true, duplicate: true });
   }
 
-  const recorded = recordChannelEvent({
+  const recorded = await recordChannelEvent({
     projectId,
     channel: "zalo_oa",
     channelType: "zalo_oa",
@@ -73,7 +74,8 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
 
   const fwd = await maybeForward(projectId, "zalo_oa", req, raw);
   if (fwd.forwarded) {
-    addObservation(projectId, {
+    const at = new Date().toISOString();
+    const forwarded = addObservation(projectId, {
       traceId: recorded.trace.id,
       parentId: recorded.observation.id,
       type: "span",
@@ -82,6 +84,24 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
       input: { url: ch.forwardUrl },
       output: fwd,
     });
+    await ingestLangfuseBatch([
+      {
+        id: crypto.randomUUID(),
+        type: "span-create",
+        timestamp: at,
+        body: {
+          id: forwarded.id,
+          traceId: recorded.trace.id,
+          parentObservationId: recorded.observation.id,
+          name: "zalo.forward",
+          startTime: at,
+          endTime: at,
+          input: { url: ch.forwardUrl },
+          output: fwd,
+          metadata: { vet_type: "span" },
+        },
+      },
+    ]);
   }
 
   return NextResponse.json({ ok: true, traceId: recorded.trace.id, sessionId: recorded.sessionId });

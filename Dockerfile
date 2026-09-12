@@ -10,6 +10,8 @@ FROM deps AS build
 COPY package.json ./
 COPY apps/web ./apps/web
 COPY packages ./packages
+ARG NEXT_PUBLIC_VET_CONSOLE_URL=http://localhost:3000
+ENV NEXT_PUBLIC_VET_CONSOLE_URL=$NEXT_PUBLIC_VET_CONSOLE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 

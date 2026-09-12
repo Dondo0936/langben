@@ -3,14 +3,45 @@ Copyright (c) 2026 Vết contributors
 
 This product is licensed under the MIT License. See LICENSE.
 
+Console runtime
+---------------
+The tracing console is Langfuse OSS (MIT), vendored as git submodule
+`vendor/langfuse` at tag v4.33.0 (see vendor/langfuse.pin). Copyright on that
+MIT tree is ClickHouse, Inc. (see vendor/langfuse/LICENSE). Portions under
+ee/, web/src/ee/, and worker/src/ee/ are not used and must not be copied.
+
+The ClickHouse, Inc. copyright notice and MIT permission text from
+vendor/langfuse/LICENSE:
+
+  Copyright (c) 2023-2026 ClickHouse, Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+Vết overlay (logo, product name, Kênh / Lộ trình / hội thoại, Vietnamese
+channel hooks) is original. Chrome must not show a Langfuse wordmark. Do not
+imply affiliation with Langfuse GmbH or ClickHouse, Inc.
+
 Product packaging
 -----------------
-The same MIT codebase ships in three ways, analogous to Langfuse:
+The same MIT codebase ships in three ways:
 
-  1. Open Source (self-host) — you run the software; unlimited usage; community support.
+  1. Open Source (self-host) — you run marketing (:43173) + Langfuse OSS
+     console (:3000: web, worker, Postgres, ClickHouse, Redis, MinIO).
   2. Vết Cloud — we host it for you (Hobby / Core / Pro / Enterprise).
   3. Self-hosted Enterprise — your infra, commercial support and compliance add-ons.
-
-Information architecture for the tracing console (sidebar, traces table,
-waterfall) follows the Langfuse MIT web app layout. No Langfuse source,
-wordmark, or logo is included. Do not imply affiliation with Langfuse GmbH.

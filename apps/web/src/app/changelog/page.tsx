@@ -13,6 +13,28 @@ export default async function ChangelogPage() {
       <main className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-4xl font-semibold tracking-tight">{vi ? "Nhật ký" : "Changelog"}</h1>
         <article className="mt-8">
+          <p className="text-sm text-muted">10 Sep 2026 · v0.2.0</p>
+          <h2 className="mt-1 text-xl font-semibold">
+            {vi ? "Console = Langfuse OSS" : "Console is Langfuse OSS"}
+          </h2>
+          <ul className="mt-3 list-disc pl-5 text-sm text-muted">
+            <li>{vi ? "Compose: web, worker, Postgres, ClickHouse, Redis, MinIO (:3000)" : "Compose: web, worker, Postgres, ClickHouse, Redis, MinIO (:3000)"}</li>
+            <li>{vi ? "Kênh / Lộ trình / hội thoại overlay; hook Zalo ghi ingest Langfuse" : "Kênh / Lộ trình / hội thoại overlay; Zalo hooks write Langfuse ingest"}</li>
+            <li>{vi ? "Homemade /app traces chuyển sang console" : "Homemade /app traces redirect to the console"}</li>
+          </ul>
+        </article>
+        <article className="mt-8">
+          <p className="text-sm text-muted">10 Sep 2026 · v0.1.1</p>
+          <h2 className="mt-1 text-xl font-semibold">
+            {vi ? "OSS trước — Cloud pending + bộ công cụ đơn vị" : "OSS first — Cloud pending + units toolkit"}
+          </h2>
+          <ul className="mt-3 list-disc pl-5 text-sm text-muted">
+            <li>{vi ? "Hobby / Core / Pro / Enterprise: sắp ra mắt, không đăng ký Cloud" : "Hobby / Core / Pro / Enterprise: coming soon, Cloud signup closed"}</li>
+            <li>{vi ? "Tự vận hành MIT là sản phẩm live" : "MIT self-host is the live product"}</li>
+            <li>{vi ? "Bộ công cụ /docs/units: đơn vị ≠ token" : "Toolkit at /docs/units: units ≠ tokens"}</li>
+          </ul>
+        </article>
+        <article className="mt-8">
           <p className="text-sm text-muted">9 Sep 2026 · v0.1.0</p>
           <h2 className="mt-1 text-xl font-semibold">{vi ? "Slice 0 + đóng gói Cloud/OSS" : "Slice 0 + Cloud/OSS packaging"}</h2>
           <ul className="mt-3 list-disc pl-5 text-sm text-muted">

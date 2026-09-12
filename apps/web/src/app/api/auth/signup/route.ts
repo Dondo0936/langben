@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cloudSelfServe, isCloud } from "@/lib/deployment";
 import { addOrg, createProjectForOrg, createUser, getUserByEmail } from "@/lib/store";
 import { hashPassword } from "@/lib/crypto";
 import { SESSION_COOKIE, sessionCookieOptions, signSession } from "@/lib/auth";
@@ -6,6 +7,12 @@ import { SESSION_COOKIE, sessionCookieOptions, signSession } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
+  if (isCloud() && !cloudSelfServe()) {
+    return NextResponse.json(
+      { error: "Vết Cloud signup is not open yet. Self-host the MIT build.", comingSoon: true },
+      { status: 503 },
+    );
+  }
   const body = (await req.json().catch(() => null)) as {
     email?: string;
     password?: string;
@@ -42,7 +49,8 @@ export async function POST(req: Request) {
   const { project, secretKey } = createProjectForOrg({ id: org.id, name: org.name });
   const res = NextResponse.json({
     ok: true,
-    plan: "hobby",
+    deployment: isCloud() ? "cloud" : "self-host",
+    ...(isCloud() ? { plan: "hobby" as const } : {}),
     ingest: { publicKey: project.publicKey, secretKey },
   });
   res.cookies.set(SESSION_COOKIE, signSession(user.id, 0), sessionCookieOptions());

@@ -8,6 +8,11 @@ export function isCloud() {
   return (process.env.VET_DEPLOYMENT ?? "cloud") !== "self-host";
 }
 
+/** Cloud Hobby/Core/Pro/Enterprise are not for sale yet. OSS self-host is the live product. */
+export function cloudSelfServe() {
+  return process.env.VET_CLOUD_SELF_SERVE === "1";
+}
+
 export function publicUrl() {
   return (process.env.VET_PUBLIC_URL ?? "http://localhost:43173").replace(/\/$/, "");
 }

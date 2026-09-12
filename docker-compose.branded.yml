@@ -1,0 +1,7 @@
+# Branded console image (after `bash scripts/build-console.sh`).
+# docker compose -f docker-compose.yml -f docker-compose.branded.yml up
+services:
+  langfuse-web:
+    image: vet-console:local
+    environment:
+      NEXT_PUBLIC_VET_MARKETING_URL: ${VET_PUBLIC_URL:-http://localhost:43173}

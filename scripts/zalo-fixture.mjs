@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Signed Zalo OA fixture → Vết.
+ * Signed Zalo OA fixture → Vết hooks (:43173) → Langfuse console (:3000).
  * Usage: node scripts/zalo-fixture.mjs
  */
 import { createHash } from "node:crypto";

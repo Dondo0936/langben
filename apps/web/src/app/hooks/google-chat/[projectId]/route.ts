@@ -19,7 +19,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
   const payload = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   const chat = payload.chat as { user?: { name?: string }; space?: { name?: string } } | undefined;
   const userId = String(chat?.user?.name ?? "unknown");
-  const recorded = recordChannelEvent({
+  const recorded = await recordChannelEvent({
     projectId,
     channel: "gchat",
     channelType: "gchat",

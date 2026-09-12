@@ -1,0 +1,4 @@
+[submodule "vendor/langfuse"]
+	path = vendor/langfuse
+	url = https://github.com/langfuse/langfuse.git
+	branch = v4.33.0

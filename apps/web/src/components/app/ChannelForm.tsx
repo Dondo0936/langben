@@ -46,7 +46,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
   }
 
   return (
-    <form onSubmit={save} className="max-w-xl space-y-3 rounded-xl border border-line bg-white p-4 text-sm">
+    <form onSubmit={save} className="max-w-xl space-y-3 rounded-md border border-line bg-white p-4 text-sm">
       <label className="flex items-center gap-2">
         <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
         Kênh bật
@@ -56,7 +56,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
           <label className="block">
             App ID
             <input
-              className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+              className="mt-1 h-9 w-full rounded-md border border-line px-3"
               value={appId}
               onChange={(e) => setAppId(e.target.value)}
               placeholder={SAVED}
@@ -67,7 +67,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
             OA secret
             <input
               type="password"
-              className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+              className="mt-1 h-9 w-full rounded-md border border-line px-3"
               value={oaSecret}
               onChange={(e) => setOaSecret(e.target.value)}
               placeholder={SAVED}
@@ -81,7 +81,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
           Bot token
           <input
             type="password"
-            className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+            className="mt-1 h-9 w-full rounded-md border border-line px-3"
             value={botToken}
             onChange={(e) => setBotToken(e.target.value)}
             placeholder={SAVED}
@@ -94,7 +94,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
           Webhook token
           <input
             type="password"
-            className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+            className="mt-1 h-9 w-full rounded-md border border-line px-3"
             value={webhookToken}
             onChange={(e) => setWebhookToken(e.target.value)}
             placeholder={SAVED}
@@ -107,7 +107,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
           Verification token
           <input
             type="password"
-            className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+            className="mt-1 h-9 w-full rounded-md border border-line px-3"
             value={verificationToken}
             onChange={(e) => setVerificationToken(e.target.value)}
             placeholder={SAVED}
@@ -117,14 +117,14 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
       ) : null}
       <label className="block">
         Forward URL (tap)
-        <input className="mt-1 w-full rounded-lg border border-line px-3 py-2" value={forwardUrl} onChange={(e) => setForwardUrl(e.target.value)} placeholder="https://bot.example.com/zalo" />
+        <input className="mt-1 h-9 w-full rounded-md border border-line px-3" value={forwardUrl} onChange={(e) => setForwardUrl(e.target.value)} placeholder="https://bot.example.com/zalo" />
       </label>
       <label className="flex items-center gap-2">
         <input type="checkbox" checked={forwardEnabled} onChange={(e) => setForwardEnabled(e.target.checked)} />
         Bật forward (timeout 4s, 0 retry)
       </label>
       <p className="text-xs text-muted">Tắt forward không ảnh hưởng ingest. Signature sai → 401, không tạo lượt.</p>
-      <button className="rounded-full bg-ink px-4 py-2 text-highlight">Lưu</button>
+      <button className="h-9 rounded-md bg-ink px-4 text-white">Lưu</button>
       {msg ? <span className="ml-2 text-muted">{msg}</span> : null}
     </form>
   );

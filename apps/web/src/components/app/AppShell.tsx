@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { LangToggle } from "@/components/LangToggle";
-import { isCloud } from "@/lib/deployment";
+import { cloudSelfServe, isCloud } from "@/lib/deployment";
 import { getLang } from "@/lib/get-lang";
 import { t, tr } from "@/lib/i18n";
 import { requireConsole } from "@/lib/console";
@@ -32,25 +32,26 @@ export async function AppShell({
   const lang = await getLang();
   const { user, project, org } = await requireConsole();
   const cloud = isCloud();
+  const live = cloudSelfServe();
   const plan = CLOUD_PLANS.find((p) => p.id === (org?.plan ?? "hobby"));
 
   return (
-    <div className="flex min-h-screen bg-paper">
-      <aside className="hidden w-[220px] shrink-0 flex-col bg-sidebar text-paper md:flex">
-        <div className="flex items-center gap-2 px-4 py-4">
-          <Logo className="h-6 w-6" />
-          <span className="font-semibold">Vết</span>
+    <div className="console flex h-dvh overflow-hidden bg-paper text-ink">
+      <aside className="hidden w-[232px] shrink-0 flex-col border-r border-line bg-white md:flex">
+        <div className="flex h-12 items-center gap-2 border-b border-line px-3">
+          <Logo className="h-5 w-5" />
+          <span className="text-sm font-semibold tracking-tight">Vết</span>
         </div>
-        <nav className="flex-1 space-y-4 px-2 text-sm">
+        <nav className="flex-1 space-y-4 overflow-y-auto px-2 py-3 text-[13px]">
           <NavGroup label={tr(lang, t.app.tracing)} items={NAV.filter((i) => i.group === "tracing")} active={active} lang={lang} />
           <NavGroup label={tr(lang, t.app.channels)} items={NAV.filter((i) => i.group === "channels")} active={active} lang={lang} />
           <NavGroup label={tr(lang, t.app.routes)} items={NAV.filter((i) => i.group === "routes")} active={active} lang={lang} />
           <NavGroup label={tr(lang, t.app.studio)} items={NAV.filter((i) => i.group === "studio")} active={active} lang={lang} />
           <NavGroup label={tr(lang, t.app.settings)} items={NAV.filter((i) => i.group === "settings")} active={active} lang={lang} />
         </nav>
-        <div className="px-3 py-3 text-[11px] text-paper/50">
-          {cloud ? (
-            <Link href="/app/settings" className="rounded bg-white/10 px-2 py-1 text-highlight">
+        <div className="border-t border-line px-3 py-2 text-[11px] text-muted">
+          {cloud && live ? (
+            <Link href="/app/settings" className="text-ink">
               Cloud · {plan?.name ?? "Hobby"}
             </Link>
           ) : (
@@ -59,29 +60,38 @@ export async function AppShell({
         </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-12 items-center justify-between gap-3 border-b border-line bg-white px-3">
+        <header className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-line bg-white px-3">
           <div className="flex min-w-0 items-center gap-2 text-sm">
             <span className="truncate font-medium">{project.name}</span>
-            <span className="text-muted">·</span>
-            <span className="text-muted">{tr(lang, t.app.tracing)}</span>
+            <span className="text-muted">/</span>
+            <span className="text-muted">{crumb(active, lang)}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <LangToggle lang={lang} />
+          <div className="flex items-center gap-3">
+            <LangToggle lang={lang} variant="console" />
             <span className="hidden text-xs text-muted sm:inline">{user?.email ?? (lang === "vi" ? "chưa đăng nhập" : "signed out")}</span>
             <LogoutButton label={lang === "vi" ? "Thoát" : "Sign out"} />
           </div>
         </header>
         <div className="flex gap-1 overflow-x-auto border-b border-line bg-white px-2 py-1 text-xs md:hidden">
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className={`whitespace-nowrap rounded px-2 py-1 ${active === item.key ? "bg-ink text-highlight" : ""}`}>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`whitespace-nowrap rounded-md px-2 py-1 ${active === item.key ? "bg-paper-2 font-medium" : "text-muted"}`}
+            >
               {tr(lang, t.app[item.key])}
             </Link>
           ))}
         </div>
-        <main className="min-w-0 flex-1 p-4">{children}</main>
+        <main className="min-h-0 flex-1 overflow-auto p-4">{children}</main>
       </div>
     </div>
   );
+}
+
+function crumb(active: string, lang: Lang) {
+  const item = NAV.find((n) => n.key === active);
+  return item ? tr(lang, t.app[item.key]) : tr(lang, t.app.tracing);
 }
 
 function NavGroup({
@@ -97,12 +107,14 @@ function NavGroup({
 }) {
   return (
     <div>
-      <div className="px-2 pb-1 text-[10px] uppercase tracking-wider text-paper/40">{label}</div>
+      {items.length > 1 ? (
+        <div className="px-2 pb-1 text-[11px] font-medium text-muted">{label}</div>
+      ) : null}
       {items.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className={`block rounded-md px-2 py-1.5 ${active === item.key ? "bg-white/10 text-highlight" : "text-paper/80 hover:bg-white/5"}`}
+          className={`block rounded-md px-2 py-1.5 ${active === item.key ? "bg-paper-2 font-medium text-ink" : "text-ink-2 hover:bg-paper-2"}`}
         >
           {tr(lang, t.app[item.key])}
         </Link>

@@ -12,23 +12,25 @@ export default async function EnterprisePage() {
     <div>
       <MarketingHeader lang={lang} />
       <main className="mx-auto max-w-3xl px-4 py-14">
-        <h1 className="text-4xl font-semibold tracking-tight">
-          {vi ? "Vết cho doanh nghiệp" : "Vết for enterprise"}
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+          {vi ? "Sắp ra mắt" : "Coming soon"}
+        </p>
+        <h1 className="mt-2 text-4xl font-semibold tracking-tight">
+          {vi ? "Enterprise chưa mở" : "Enterprise is not open yet"}
         </h1>
         <p className="mt-4 text-muted">
           {vi
-            ? "Cloud Enterprise hoặc tự host Enterprise: SLA, SCIM, audit, vùng dữ liệu, hóa đơn. Cùng codebase MIT."
-            : "Cloud Enterprise or self-hosted Enterprise: SLA, SCIM, audit, residency, invoice. Same MIT codebase."}
+            ? "Cloud Enterprise và add-on tự host Enterprise đang pending cùng các gói Cloud. Hôm nay hãy tự vận hành MIT."
+            : "Cloud Enterprise and the self-hosted Enterprise add-on are pending with the rest of Cloud. Self-host the MIT build today."}
         </p>
-        <ul className="mt-6 list-disc space-y-2 pl-5 text-sm text-muted">
-          <li>{vi ? "Vùng Singapore / EU / US (Cloud)" : "Singapore / EU / US regions (Cloud)"}</li>
-          <li>SSO Okta / Entra · SCIM</li>
-          <li>{vi ? "Hỗ trợ riêng, review kiến trúc" : "Named support, architecture review"}</li>
-          <li>AWS Marketplace / invoice</li>
-        </ul>
-        <Link href="/pricing" className="mt-6 inline-block text-accent">
-          {vi ? "Xem giá →" : "See pricing →"}
-        </Link>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/self-host" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-highlight">
+            {vi ? "Tự vận hành" : "Self-host"}
+          </Link>
+          <Link href="/pricing" className="rounded-full border border-ink/20 px-5 py-2.5 text-sm">
+            {vi ? "Cloud sắp có" : "Cloud coming soon"}
+          </Link>
+        </div>
       </main>
       <MarketingFooter lang={lang} />
     </div>

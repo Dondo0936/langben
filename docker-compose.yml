@@ -1,14 +1,57 @@
+# Vết = marketing (:43173) + Langfuse OSS console (:3000).
+# Requires vendor/langfuse (git submodule update --init, pinned v4.33.0).
+# Copy .env.console.example → .env before first up.
+
+include:
+  - path: vendor/langfuse/docker-compose.yml
+
 services:
-  web:
-    build: .
+  langfuse-web:
+    environment:
+      TELEMETRY_ENABLED: ${TELEMETRY_ENABLED:-false}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-vet-dev-nextauth-secret-change-me}
+      SALT: ${SALT:-vet-dev-salt-change-me}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000}
+      LANGFUSE_INIT_ORG_ID: ${LANGFUSE_INIT_ORG_ID:-org-vet-demo}
+      LANGFUSE_INIT_ORG_NAME: ${LANGFUSE_INIT_ORG_NAME:-Vết}
+      LANGFUSE_INIT_PROJECT_ID: ${LANGFUSE_INIT_PROJECT_ID:-prj-vet-demo}
+      LANGFUSE_INIT_PROJECT_NAME: ${LANGFUSE_INIT_PROJECT_NAME:-Bot Zalo shop}
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_INIT_PROJECT_PUBLIC_KEY:-pk-lf-vet-demo}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_INIT_PROJECT_SECRET_KEY:-sk-lf-vet-demo}
+      LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_INIT_USER_EMAIL:-demo@vet.dev}
+      LANGFUSE_INIT_USER_NAME: ${LANGFUSE_INIT_USER_NAME:-Demo}
+      LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_USER_PASSWORD:-demodemo}
+      NEXT_PUBLIC_VET_MARKETING_URL: ${VET_PUBLIC_URL:-http://localhost:43173}
+
+  langfuse-worker:
+    environment:
+      TELEMETRY_ENABLED: ${TELEMETRY_ENABLED:-false}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      SALT: ${SALT:-vet-dev-salt-change-me}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000}
+
+  marketing:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_VET_CONSOLE_URL: ${NEXTAUTH_URL:-http://localhost:3000}
     ports:
       - "43173:43173"
     environment:
       VET_DEPLOYMENT: self-host
       VET_DATA_DIR: /data
-      VET_PUBLIC_URL: http://localhost:43173
+      VET_PUBLIC_URL: ${VET_PUBLIC_URL:-http://localhost:43173}
+      VET_CONSOLE_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXT_PUBLIC_VET_CONSOLE_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      VET_CONSOLE_PROJECT_ID: ${LANGFUSE_INIT_PROJECT_ID:-prj-vet-demo}
+      LANGFUSE_BASE_URL: http://langfuse-web:3000
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_INIT_PROJECT_PUBLIC_KEY:-pk-lf-vet-demo}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_INIT_PROJECT_SECRET_KEY:-sk-lf-vet-demo}
     volumes:
       - vet-data:/data
+    depends_on:
+      - langfuse-web
 
 volumes:
   vet-data:

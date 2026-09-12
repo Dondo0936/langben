@@ -2,14 +2,46 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { PlanId } from "@/lib/types";
+import type { Lang, PlanId } from "@/lib/types";
 
 const SELF_SERVE: PlanId[] = ["hobby", "core", "pro"];
 
-export function PlanSwitcher({ current, cloud }: { current: PlanId; cloud: boolean }) {
+export function PlanSwitcher({
+  current,
+  cloud,
+  live,
+  lang,
+}: {
+  current: PlanId;
+  cloud: boolean;
+  live: boolean;
+  lang: Lang;
+}) {
   const router = useRouter();
-  if (!cloud) {
-    return <p className="text-sm text-muted">Instance tự vận hành — MIT, không giới hạn đơn vị, không billing Cloud.</p>;
+  const vi = lang === "vi";
+  if (!cloud || !live) {
+    return (
+      <div className="text-sm text-muted">
+        <p>
+          {cloud
+            ? vi
+              ? "Vết Cloud — gói Hobby / Core / Pro / Enterprise sắp ra mắt. Instance này chạy mã nguồn mở."
+              : "Vết Cloud — Hobby / Core / Pro / Enterprise are coming soon. This instance is running the open-source build."
+            : vi
+              ? "Instance tự vận hành — MIT, không giới hạn đơn vị, không billing Cloud."
+              : "Self-hosted instance — MIT, unlimited units, no Cloud billing."}
+        </p>
+        <p className="mt-2">
+          <Link href="/docs/units" className="text-accent">
+            {vi ? "Bộ công cụ đơn vị" : "Units toolkit"}
+          </Link>
+          {" · "}
+          <Link href="/self-host" className="text-accent">
+            {vi ? "Tự vận hành" : "Self-host"}
+          </Link>
+        </p>
+      </div>
+    );
   }
   async function choose(plan: PlanId) {
     await fetch("/api/org", {
@@ -27,14 +59,14 @@ export function PlanSwitcher({ current, cloud }: { current: PlanId; cloud: boole
           key={p}
           type="button"
           onClick={() => choose(p)}
-          className={`rounded-full px-3 py-1.5 text-sm ${current === p ? "bg-ink text-highlight" : "border border-line bg-white"}`}
+          className={`rounded-md px-3 py-1.5 text-sm ${current === p ? "bg-ink text-white" : "border border-line bg-white"}`}
         >
           {p}
         </button>
       ))}
       <Link
         href="/enterprise"
-        className={`rounded-full px-3 py-1.5 text-sm ${current === "enterprise" ? "bg-ink text-highlight" : "border border-line bg-white"}`}
+        className={`rounded-md px-3 py-1.5 text-sm ${current === "enterprise" ? "bg-ink text-white" : "border border-line bg-white"}`}
       >
         enterprise
       </Link>

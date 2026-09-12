@@ -4,63 +4,88 @@ Langfuse-class LLM observability **plus** Vietnamese production channels (Zalo, 
 
 **Working name.** Vietnamese for “trace / mark.” MIT licensed.
 
-This is **not** a Langfuse fork. Console IA follows the Langfuse MIT shell (sidebar, traces table, waterfall). Brand, Vietnamese chrome, and channel screens are original. See [NOTICE](NOTICE).
+The **console** is Langfuse OSS (MIT, ClickHouse, Inc.) rebranded as Vết. Marketing, Kênh / Lộ trình, and Zalo–FPT hooks are original. We do not ship `ee/` or `LANGFUSE_EE_LICENSE_KEY`. See [NOTICE](NOTICE).
+
+Pinned runtime: **Langfuse v4.33.0** (`81bbfd169b72ea2ed53639699cc6632e8f908ce8`) in `vendor/langfuse`.
 
 ---
 
-## How we package it (same motion as Langfuse)
+## How we package it
 
-| | **Open Source (self-host)** | **Vết Cloud** | **Enterprise self-host** |
-|---|---|---|---|
-| Who runs it | You | **We host it for you** | You |
-| License | MIT | MIT codebase + hosted service | MIT + commercial add-ons |
-| Units | Unlimited | Hobby 50k · paid plans 100k + overage | Unlimited |
-| Support | GitHub | In-app (paid) | SLA / named engineer |
-| Start | `docker compose up` | [Hobby signup](http://localhost:43173/signup) (no credit card) | Talk to sales |
+| | **Open Source (self-host)** | **Vết Cloud** |
+|---|---|---|
+| Status | **Live** | **Coming soon** |
+| Who runs it | You | We will host it |
+| License | MIT | MIT codebase + hosted service |
+| Units | Unlimited | Planned: Hobby 50k · paid 100k + overage |
+| Start | `docker compose up` | Pending — no signup yet |
 
-Cloud plans: **Hobby ($0)** · **Core ($29/mo)** · **Pro ($199/mo)** · **Enterprise ($2,499/mo)**, plus a **Teams** add-on on Pro — usage-based units (traces + observations + scores), graduated overage. Details: `/pricing` and `/pricing/self-host`.
+A **đơn vị / unit** is not an LLM token. When Cloud opens, one unit = one trace, observation, or score. Interactive explainer: `/docs/units`.
 
-Same git repo. `VET_DEPLOYMENT=cloud` shows billing UI. `VET_DEPLOYMENT=self-host` hides it.
+Cloud plan names (Hobby / Core / Pro / Enterprise) are listed as pending on `/pricing`. Self-host pricing: `/pricing/self-host`.
+
+Same git repo. `VET_DEPLOYMENT=self-host` is the live product. Cloud self-serve stays off unless `VET_CLOUD_SELF_SERVE=1`.
 
 ---
 
 ## Run locally
 
 ```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:43173](http://localhost:43173) (uncommon port **43173**).
-
-- Landing (Vietnamese, EN toggle)
-- **Xem demo** → console with seeded Zalo / FPT / Viettel traces  
-  Login: `demo@vet.dev` / `demo`
-- Ingest keys (demo): `pk-vet-demo` / `sk-vet-demo`
-
-Self-host image:
-
-```bash
+git submodule update --init --recursive   # or: bash scripts/bootstrap-langfuse.sh
+cp .env.console.example .env
 docker compose up --build
 ```
 
-### Zalo OA fixture (signature verify)
+| Surface | URL |
+|---|---|
+| Marketing / hooks / Kênh | [http://localhost:43173](http://localhost:43173) |
+| Console (Langfuse OSS) | [http://localhost:3000](http://localhost:3000) |
+
+Console login: `demo@vet.dev` / `demodemo` (≥ 8 characters). Org **Vết**, project **Bot Zalo shop** (`prj-vet-demo`).
+
+Ingest keys (Langfuse public API): `pk-lf-vet-demo` / `sk-lf-vet-demo`.
+
+Seed the Zalo «hủy đơn» tree into the console (filters / waterfall, no Vết UI code):
+
+```bash
+node scripts/seed-langfuse-zalo.mjs
+```
+
+### Branded chrome (logo, Kênh, hội thoại)
+
+Official Langfuse images are the default bring-up. Overlay Vết chrome:
+
+```bash
+bash scripts/build-console.sh
+docker compose -f docker-compose.yml -f docker-compose.branded.yml up
+```
+
+### Zalo OA fixture (signature verify → Langfuse traces)
 
 ```bash
 node scripts/zalo-fixture.mjs
 ```
 
-Invalid MAC → **401** and no turn. Valid MAC → session on **Phiên**.
+Invalid MAC → **401** and no turn. Valid MAC → session `zalo_oa:user_fixture` on **Sessions** in the console.
+
+Marketing-only (no console):
+
+```bash
+npm install
+npm run dev   # :43173 only
+```
 
 ---
 
 ## Repo layout
 
 ```
-apps/web              Next.js App Router — marketing + VI console + ingest/hooks
-packages/schema       Zod: turns, spans, channel enums
-packages/sdk-js       observe, wrapAnthropic, wrapFptGetAnswer
-docs/plans            Product plan (HTML)
+apps/web                 Marketing, webhooks, Kênh / Lộ trình (port 43173)
+vendor/langfuse          Langfuse OSS submodule (console :3000)
+overlay/langfuse         Vết logo, nav, hội thoại — applied at image build
+packages/schema          Zod: turns, spans, channel enums
+packages/sdk-js          observe, wrapAnthropic, wrapFptGetAnswer → Langfuse ingest
+docs/plans               Product plan (HTML)
 LICENSE · NOTICE
 ```
 
@@ -73,9 +98,9 @@ import Anthropic from "@anthropic-ai/sdk"
 import { wrapAnthropic, observe } from "@vet/sdk"
 
 const client = wrapAnthropic(new Anthropic(), {
-  publicKey: "pk-vet-demo",
-  secretKey: "sk-vet-demo",
-  baseUrl: "http://localhost:43173",
+  publicKey: "pk-lf-vet-demo",
+  secretKey: "sk-lf-vet-demo",
+  baseUrl: "http://localhost:3000",
 })
 
 await observe("hỗ-trợ-khách", () =>
@@ -85,7 +110,7 @@ await observe("hỗ-trợ-khách", () =>
 
 Never send `ANTHROPIC_API_KEY` (or AWS/GCP/Azure secrets) to Vết — only traces.
 
-OTLP: `POST /otlp/v1/traces` with Basic `pk:sk`.
+OTLP: Langfuse public OTLP on the console. Homemade `POST /otlp/v1/traces` on :43173 still dual-writes when `LANGFUSE_*` keys are set.
 
 ---
 

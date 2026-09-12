@@ -37,3 +37,24 @@ a {
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+/* Console: Langfuse-like zinc shell. Marketing pages keep the paper brand. */
+.console {
+  --color-ink: #09090b;
+  --color-ink-2: #18181b;
+  --color-accent: #18181b;
+  --color-accent-2: #3f3f46;
+  --color-highlight: #f4f4f5;
+  --color-paper: #fafafa;
+  --color-paper-2: #f4f4f5;
+  --color-sidebar: #fafafa;
+  --color-line: #e4e4e7;
+  --color-muted: #71717a;
+  background: #fafafa;
+  color: #09090b;
+}
+
+.console ::selection {
+  background: #e4e4e7;
+  color: #09090b;
+}

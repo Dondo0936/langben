@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireApiSession } from "@/lib/console";
+import { requireChannelApi } from "@/lib/console";
 import { getChannel, listChannels, updateChannel } from "@/lib/store";
 import { assertSafeForwardUrl } from "@/lib/ssrf";
 import type { ChannelConfig } from "@/lib/types";
@@ -29,13 +29,13 @@ function publicChannel(ch: ChannelConfig) {
 }
 
 export async function GET() {
-  const auth = await requireApiSession();
+  const auth = await requireChannelApi();
   if ("error" in auth) return auth.error;
   return NextResponse.json({ channels: listChannels(auth.project.id).map(publicChannel) });
 }
 
 export async function PATCH(req: NextRequest) {
-  const auth = await requireApiSession();
+  const auth = await requireChannelApi();
   if ("error" in auth) return auth.error;
   const project = auth.project;
   const body = (await req.json().catch(() => null)) as {

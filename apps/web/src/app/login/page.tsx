@@ -1,14 +1,8 @@
-import { Suspense } from "react";
-import { getLang } from "@/lib/get-lang";
-import { LoginForm } from "./LoginForm";
+import { redirect } from "next/navigation";
+import { consoleSignInUrl } from "@/lib/console-target";
 
 export const dynamic = "force-dynamic";
 
-export default async function LoginPage() {
-  const lang = await getLang();
-  return (
-    <Suspense>
-      <LoginForm lang={lang} />
-    </Suspense>
-  );
+export default function LoginPage() {
+  redirect(consoleSignInUrl());
 }

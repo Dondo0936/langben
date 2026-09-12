@@ -1,17 +1,12 @@
 import { NextResponse } from "next/server";
-import { SESSION_COOKIE, sessionCookieOptions, signSession } from "@/lib/auth";
+import { consoleProjectUrl, consoleSignInUrl } from "@/lib/console-target";
 import { allowPublicDemo } from "@/lib/deployment";
-import { getUser } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: Request) {
+export async function GET() {
   if (!allowPublicDemo()) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(consoleSignInUrl());
   }
-  const url = new URL("/app", req.url);
-  const res = NextResponse.redirect(url);
-  const epoch = getUser("usr_demo")?.sessionEpoch ?? 0;
-  res.cookies.set(SESSION_COOKIE, signSession("usr_demo", epoch), sessionCookieOptions());
-  return res;
+  return NextResponse.redirect(consoleProjectUrl("/traces"));
 }

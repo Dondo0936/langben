@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
+import { cloudSelfServe } from "@/lib/deployment";
 import { CLOUD_PLANS } from "@/lib/plans";
 import { getOrg, updateOrgPlan } from "@/lib/store";
 import type { PlanId } from "@/lib/types";
@@ -18,6 +19,12 @@ export async function GET() {
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!cloudSelfServe()) {
+    return NextResponse.json(
+      { error: "Cloud plans are not self-serve yet.", comingSoon: true },
+      { status: 503 },
+    );
+  }
   const body = (await req.json().catch(() => null)) as { plan?: string; teamsAddon?: boolean } | null;
   if (!body?.plan) return NextResponse.json({ error: "plan required" }, { status: 400 });
   if (body.plan === "enterprise") {

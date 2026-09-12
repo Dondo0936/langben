@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Wordmark } from "@/components/brand/Logo";
 import { LangToggle } from "@/components/LangToggle";
 import { tr, t } from "@/lib/i18n";
+import { consoleSignInUrl } from "@/lib/console-target";
 import type { Lang } from "@/lib/types";
 
 export function MarketingHeader({ lang }: { lang: Lang }) {
@@ -9,8 +10,9 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
     { href: "/#san-pham", label: tr(lang, t.nav.product) },
     { href: "/docs", label: tr(lang, t.nav.docs) },
     { href: "/self-host", label: tr(lang, t.nav.selfHost) },
+    { href: "/docs/units", label: tr(lang, t.nav.unitsToolkit) },
     { href: "/changelog", label: tr(lang, t.nav.changelog) },
-    { href: "/pricing", label: tr(lang, t.nav.pricing) },
+    { href: "/pricing/self-host", label: tr(lang, t.nav.pricing) },
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-line/80 bg-paper/85 backdrop-blur">
@@ -30,14 +32,17 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
         </nav>
         <div className="flex items-center gap-2">
           <LangToggle lang={lang} />
-          <Link href="/login" className="hidden text-sm md:inline">
+          <Link href="/pricing" className="hidden text-sm text-muted md:inline">
+            {tr(lang, t.nav.signup)}
+          </Link>
+          <Link href={consoleSignInUrl()} className="hidden text-sm md:inline">
             {tr(lang, t.nav.login)}
           </Link>
           <Link
-            href="/signup"
+            href="/self-host"
             className="rounded-full bg-ink px-3.5 py-1.5 text-sm font-medium text-highlight"
           >
-            {tr(lang, t.nav.signup)}
+            {tr(lang, t.nav.selfHost)}
           </Link>
         </div>
       </div>
@@ -53,17 +58,17 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
           <Wordmark light />
           <p className="mt-3 max-w-xs text-sm text-paper/70">
             {lang === "vi"
-              ? "Nền tảng quan sát LLM mã nguồn mở cho bot sản xuất Việt Nam. MIT. Cloud do chúng tôi host, hoặc tự vận hành."
-              : "Open-source LLM observability for Vietnamese production bots. MIT. We host Cloud, or you self-host."}
+              ? "Nền tảng quan sát LLM mã nguồn mở cho bot sản xuất Việt Nam. MIT. Tự vận hành hôm nay; Cloud sắp ra mắt."
+              : "Open-source LLM observability for Vietnamese production bots. MIT. Self-host today; Cloud is coming soon."}
           </p>
         </div>
         <div className="text-sm">
           <div className="mb-3 font-medium">{lang === "vi" ? "Sản phẩm" : "Product"}</div>
           <ul className="space-y-2 text-paper/70">
-            <li><Link href="/app">Cloud</Link></li>
             <li><Link href="/self-host">{tr(lang, t.nav.selfHost)}</Link></li>
-            <li><Link href="/pricing">{tr(lang, t.nav.pricing)}</Link></li>
-            <li><Link href="/enterprise">Enterprise</Link></li>
+            <li><Link href="/pricing/self-host">{tr(lang, t.nav.pricing)}</Link></li>
+            <li><Link href="/pricing">{tr(lang, t.nav.signup)}</Link></li>
+            <li><Link href="/docs/units">{tr(lang, t.nav.unitsToolkit)}</Link></li>
           </ul>
         </div>
         <div className="text-sm">

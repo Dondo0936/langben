@@ -26,7 +26,7 @@ export function TraceView({
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap gap-1 md:hidden">
+      <div className="mb-2 flex flex-wrap gap-1 md:hidden">
         {(
           [
             ["tree", lang === "vi" ? "Cây" : "Tree"],
@@ -35,28 +35,32 @@ export function TraceView({
             ["chat", lang === "vi" ? "Hội thoại" : "Replay"],
           ] as const
         ).map(([k, label]) => (
-          <button key={k} onClick={() => setTab(k)} className={`rounded-full px-3 py-1 text-xs ${tab === k ? "bg-ink text-highlight" : "bg-white border border-line"}`}>
+          <button
+            key={k}
+            onClick={() => setTab(k)}
+            className={`rounded-md px-2.5 py-1 text-xs ${tab === k ? "bg-ink text-white" : "border border-line bg-white"}`}
+          >
             {label}
           </button>
         ))}
       </div>
-      <div className="hidden min-h-[480px] grid-cols-[240px_1fr_280px] gap-3 md:grid">
+      <div className="hidden min-h-[min(560px,calc(100dvh-13rem))] overflow-hidden rounded-md border border-line md:grid md:grid-cols-[220px_minmax(0,1fr)_280px] md:divide-x md:divide-line">
         <Panel title={lang === "vi" ? "Cây quan sát" : "Observation tree"}>
           {roots.map((o) => (
             <TreeNode key={o.id} node={o} all={observations} selected={selected} onSelect={setSelected} lang={lang} />
           ))}
         </Panel>
-        <Panel title="Waterfall">
-          <div className="space-y-1.5">
+        <Panel title="Waterfall" flush>
+          <div className="space-y-1 p-2">
             {observations.map((o) => {
               const start = new Date(o.startTime).getTime() - t0;
               const dur = latencyOf(o.startTime, o.endTime) ?? 8;
               return (
                 <button key={o.id} onClick={() => setSelected(o.id)} className="block w-full text-left">
                   <div className="mb-0.5 truncate font-mono text-[10px] text-muted">{o.name}</div>
-                  <div className="relative h-3 rounded bg-paper-2">
+                  <div className="relative h-2 rounded-sm bg-paper-2">
                     <div
-                      className={`absolute h-3 rounded ${o.status === "error" ? "bg-red-400" : "bg-accent"}`}
+                      className={`absolute h-2 rounded-sm ${o.status === "error" ? "bg-red-500" : "bg-zinc-800"}`}
                       style={{ left: `${(start / span) * 100}%`, width: `${Math.max(2, (dur / span) * 100)}%` }}
                     />
                   </div>
@@ -79,19 +83,19 @@ export function TraceView({
         {tab === "io" && current && <Io current={current} lang={lang} />}
         {tab === "chat" && <Chat observations={observations} lang={lang} />}
       </div>
-      <div className="mt-4 hidden md:block">
-        <h3 className="mb-2 text-sm font-medium">{lang === "vi" ? "Hội thoại" : "Replay"}</h3>
+      <div className="mt-3 hidden md:block">
+        <h3 className="mb-2 text-xs font-medium text-muted">{lang === "vi" ? "Hội thoại" : "Replay"}</h3>
         <Chat observations={observations} lang={lang} />
       </div>
     </div>
   );
 }
 
-function Panel({ title, children }: { title: string; children: React.ReactNode }) {
+function Panel({ title, children, flush }: { title: string; children: React.ReactNode; flush?: boolean }) {
   return (
-    <div className="overflow-auto rounded-xl border border-line bg-white p-3">
-      <div className="mb-2 text-xs font-medium text-muted">{title}</div>
-      {children}
+    <div className="flex min-h-0 flex-col overflow-hidden bg-white">
+      <div className="shrink-0 border-b border-line px-2.5 py-1.5 text-[11px] font-medium text-muted">{title}</div>
+      <div className={`min-h-0 flex-1 overflow-auto ${flush ? "" : "p-2"}`}>{children}</div>
     </div>
   );
 }
@@ -116,12 +120,12 @@ function TreeNode({
     <div>
       <button
         onClick={() => onSelect(node.id)}
-        className={`flex w-full items-center gap-2 rounded px-1 py-1 text-left text-xs ${selected === node.id ? "bg-highlight/40" : "hover:bg-paper-2"}`}
+        className={`flex w-full items-center gap-1.5 rounded-sm px-1 py-0.5 text-left text-xs ${selected === node.id ? "bg-paper-2" : "hover:bg-paper-2/80"}`}
         style={{ paddingLeft: 4 + depth * 12 }}
       >
         <StatusPill status={node.status} />
-        <span className="truncate font-medium">{node.name}</span>
-        <span className="ml-auto text-[10px] text-muted">{typeLabel(node.type, lang)}</span>
+        <span className="min-w-0 truncate font-medium">{node.name}</span>
+        <span className="ml-auto shrink-0 whitespace-nowrap text-[10px] text-muted">{typeLabel(node.type, lang)}</span>
       </button>
       {kids.map((k) => (
         <TreeNode key={k.id} node={k} all={all} selected={selected} onSelect={onSelect} lang={lang} depth={depth + 1} />
@@ -133,7 +137,7 @@ function TreeNode({
 function Io({ current, lang }: { current: Observation; lang: Lang }) {
   return (
     <div className="space-y-3 text-xs">
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-2">
         <span className="font-medium">{current.name}</span>
         <span className="text-muted">{formatTime(current.startTime, lang)}</span>
       </div>
@@ -151,11 +155,11 @@ function Io({ current, lang }: { current: Observation; lang: Lang }) {
       ) : null}
       <div>
         <div className="mb-1 font-medium">Input</div>
-        <pre className="max-h-40 overflow-auto rounded bg-paper p-2 font-mono">{previewJson(current.input, 2000)}</pre>
+        <pre className="max-h-44 overflow-auto rounded-sm bg-paper-2 p-2 font-mono text-[11px]">{previewJson(current.input, 2000)}</pre>
       </div>
       <div>
         <div className="mb-1 font-medium">Output</div>
-        <pre className="max-h-40 overflow-auto rounded bg-paper p-2 font-mono">{previewJson(current.output, 2000)}</pre>
+        <pre className="max-h-44 overflow-auto rounded-sm bg-paper-2 p-2 font-mono text-[11px]">{previewJson(current.output, 2000)}</pre>
       </div>
     </div>
   );
@@ -181,7 +185,7 @@ function Chat({ observations, lang }: { observations: Observation[]; lang: Lang 
     return <p className="text-sm text-muted">{lang === "vi" ? "Không phải phiên kênh." : "Not a channel session."}</p>;
   }
   return (
-    <div className="space-y-2 rounded-xl border border-line bg-white p-3">
+    <div className="space-y-1.5 rounded-md border border-line bg-white p-2">
       {turns.map((o) => {
         const who =
           o.type === "channel.inbound"
@@ -195,8 +199,8 @@ function Chat({ observations, lang }: { observations: Observation[]; lang: Lang 
                   : "LLM";
         const text = turnText(o);
         return (
-          <div key={o.id} className="rounded-lg bg-paper px-3 py-2 text-sm">
-            <div className="mb-1 flex gap-2 text-[10px] uppercase tracking-wide text-muted">
+          <div key={o.id} className="rounded-sm bg-paper-2 px-2.5 py-1.5 text-sm">
+            <div className="mb-0.5 flex gap-2 text-[10px] uppercase tracking-wide text-muted">
               <span>{who}</span>
               <span>{formatTime(o.startTime, lang)}</span>
               <span className="font-mono">{o.name}</span>

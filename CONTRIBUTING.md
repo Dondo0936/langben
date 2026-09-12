@@ -5,13 +5,17 @@ Vết is MIT. Issues and PRs are welcome.
 ## Dev
 
 ```bash
-npm install
-npm run dev   # http://localhost:43173
+git submodule update --init --recursive
+cp .env.console.example .env
+docker compose up --build
+# marketing :43173 · console :3000
 ```
 
-Vietnamese UI copy is native — do not paste browser-translate English. Keep channel screens (Kênh, Lộ trình, hội thoại) distinct from a generic traces table.
+Marketing-only: `npm install && npm run dev`.
 
-Do not add Langfuse `ee/` code or the Langfuse wordmark.
+Vietnamese UI copy is native — do not paste browser-translate English. Keep channel screens (Kênh, Lộ trình, hội thoại) distinct from the Langfuse traces table.
+
+Do not add Langfuse `ee/` code or the Langfuse wordmark. Overlay diffs live in `overlay/langfuse/`; do not rewrite half of `vendor/langfuse` in place.
 
 ## Packaging
 

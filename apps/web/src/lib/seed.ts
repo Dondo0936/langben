@@ -28,8 +28,11 @@ function obs(partial: Partial<Observation> & Pick<Observation, "id" | "traceId" 
 export const DEMO_KEYS = {
   publicKey: "pk-vet-demo",
   secretKey: "sk-vet-demo",
+  langfusePublicKey: "pk-lf-vet-demo",
+  langfuseSecretKey: "sk-lf-vet-demo",
   email: "demo@vet.dev",
   password: "demo",
+  consolePassword: "demodemo",
   zaloAppId: "1234567890",
   zaloOaSecret: "demo-oa-secret",
   zaloBotToken: "demo-bot-token",

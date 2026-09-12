@@ -28,12 +28,12 @@ export function PlaygroundForm() {
   return (
     <form onSubmit={run} className="grid gap-4 lg:grid-cols-2">
       <div>
-        <textarea className="h-48 w-full rounded-xl border border-line bg-white p-3 text-sm" value={message} onChange={(e) => setMessage(e.target.value)} />
-        <button disabled={pending} className="mt-3 rounded-full bg-ink px-4 py-2 text-sm text-highlight">
+        <textarea className="h-48 w-full rounded-md border border-line bg-white p-3 text-sm" value={message} onChange={(e) => setMessage(e.target.value)} />
+        <button disabled={pending} className="mt-3 h-9 rounded-md bg-ink px-4 text-sm text-white">
           {pending ? "Đang gọi…" : "Chạy & ghi vết"}
         </button>
       </div>
-      <pre className="min-h-48 overflow-auto rounded-xl border border-line bg-white p-3 font-mono text-xs">{out || "Output"}</pre>
+      <pre className="min-h-48 overflow-auto rounded-md border border-line bg-white p-3 font-mono text-xs">{out || "Output"}</pre>
     </form>
   );
 }

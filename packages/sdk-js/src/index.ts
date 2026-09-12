@@ -12,6 +12,23 @@ type TraceContext = {
   userId?: string;
 };
 
+type LegacyObservation = {
+  id: string;
+  traceId: string;
+  parentId?: string | null;
+  type: string;
+  name: string;
+  startTime: string;
+  endTime?: string;
+  status?: string;
+  model?: string;
+  provider?: string;
+  input?: unknown;
+  output?: unknown;
+  usage?: { inputTokens?: number; outputTokens?: number };
+  metadata?: Record<string, unknown>;
+};
+
 const context = new AsyncLocalStorage<TraceContext>();
 
 function nowIso() {
@@ -22,22 +39,88 @@ function id(prefix: string) {
   return `${prefix}_${crypto.randomUUID().replace(/-/g, "").slice(0, 20)}`;
 }
 
-async function postIngest(opts: VetClientOptions, body: unknown) {
-  const base = (opts.baseUrl ?? "http://localhost:43173").replace(/\/$/, "");
+function toLangfuseBatch(body: {
+  traces?: Array<Record<string, unknown>>;
+  observations?: LegacyObservation[];
+}) {
+  const batch: Array<{ id: string; type: string; timestamp: string; body: Record<string, unknown> }> = [];
+  for (const t of body.traces ?? []) {
+    const timestamp = String(t.startTime ?? t.timestamp ?? nowIso());
+    const channel = typeof t.channel === "string" ? t.channel : undefined;
+    batch.push({
+      id: crypto.randomUUID(),
+      type: "trace-create",
+      timestamp,
+      body: {
+        id: t.id,
+        name: t.name,
+        userId: t.userId,
+        sessionId: t.sessionId,
+        timestamp,
+        tags: [
+          ...((t.tags as string[] | undefined) ?? []),
+          ...(channel ? [`channel:${channel}`] : []),
+        ],
+        metadata: {
+          ...(typeof t.metadata === "object" && t.metadata ? (t.metadata as Record<string, unknown>) : {}),
+          ...(channel ? { vet_channel: channel } : {}),
+          ...(t.status ? { vet_status: t.status } : {}),
+        },
+      },
+    });
+  }
+  for (const o of body.observations ?? []) {
+    const isGen = o.type === "generation";
+    const obsBody: Record<string, unknown> = {
+      id: o.id,
+      traceId: o.traceId,
+      name: o.name,
+      startTime: o.startTime,
+      endTime: o.endTime ?? o.startTime,
+      input: o.input,
+      output: o.output,
+      metadata: { vet_type: o.type, ...(o.provider ? { provider: o.provider } : {}), ...(o.metadata ?? {}) },
+    };
+    if (o.parentId) obsBody.parentObservationId = o.parentId;
+    if (isGen) {
+      if (o.model) obsBody.model = o.model;
+      if (o.usage && (o.usage.inputTokens || o.usage.outputTokens)) {
+        obsBody.usageDetails = {
+          input: o.usage.inputTokens ?? 0,
+          output: o.usage.outputTokens ?? 0,
+        };
+      }
+    }
+    batch.push({
+      id: crypto.randomUUID(),
+      type: isGen ? "generation-create" : "span-create",
+      timestamp: o.startTime,
+      body: obsBody,
+    });
+  }
+  return { batch };
+}
+
+async function postIngest(opts: VetClientOptions, body: { traces?: Array<Record<string, unknown>>; observations?: LegacyObservation[] }) {
+  const base = (opts.baseUrl ?? "http://localhost:3000").replace(/\/$/, "");
   const token = Buffer.from(`${opts.publicKey}:${opts.secretKey}`).toString("base64");
-  const res = await fetch(`${base}/api/ingest`, {
+  const payload = toLangfuseBatch(body);
+  if (!payload.batch.length) return {};
+  const res = await fetch(`${base}/api/public/ingestion`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
       authorization: `Basic ${token}`,
+      "x-langfuse-sdk-name": "vet-sdk",
+      "x-langfuse-sdk-version": "0.1.0",
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
-  if (!res.ok) {
+  if (!res.ok && res.status !== 207) {
     const text = await res.text();
     throw new Error(`Vết ingest ${res.status}: ${text}`);
   }
-  return res.json();
+  return res.json().catch(() => ({}));
 }
 
 export async function observe<T>(

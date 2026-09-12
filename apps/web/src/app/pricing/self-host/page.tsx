@@ -20,11 +20,11 @@ export default async function SelfHostPricingPage() {
           {vi ? "Tự vận hành OSS hôm nay. Enterprise khi cần." : "Deploy OSS today. Upgrade to Enterprise anytime."}
         </h1>
         <p className="mt-3 text-muted">
-          {vi ? "Xem thêm: " : "See also: "}
-          <Link href="/pricing" className="text-accent">{vi ? "giá Cloud" : "Cloud pricing"}</Link>.
+          {vi ? "Cloud đang pending — " : "Cloud is pending — "}
+          <Link href="/pricing" className="text-accent">{vi ? "xem trang sắp ra mắt" : "see the coming-soon page"}</Link>.
         </p>
         <div className="mt-6 inline-flex rounded-full border border-line bg-white p-1 text-sm">
-          <Link href="/pricing" className="rounded-full px-4 py-1.5">{vi ? "Cloud" : "Cloud"}</Link>
+          <Link href="/pricing" className="rounded-full px-4 py-1.5">{vi ? "Cloud · sắp có" : "Cloud · soon"}</Link>
           <span className="rounded-full bg-ink px-4 py-1.5 text-highlight">{vi ? "Tự vận hành" : "Self-host"}</span>
         </div>
 
@@ -42,17 +42,20 @@ export default async function SelfHostPricingPage() {
               {vi ? "Hướng dẫn deploy" : "Deployment guide"}
             </Link>
           </div>
-          <div className="rounded-2xl border border-ink bg-ink p-6 text-paper">
-            <h2 className="text-xl font-semibold">Enterprise</h2>
-            <p className="mt-1 text-3xl font-semibold">{vi ? "Liên hệ" : "Custom"}</p>
-            <ul className="mt-4 space-y-2 text-sm text-paper/70">
-              <li>{vi ? "Mọi thứ OSS + RBAC project, audit, SCIM, retention" : "Everything in OSS plus project RBAC, audit, SCIM, retention"}</li>
-              <li>{vi ? "Kỹ sư hỗ trợ + SLA" : "Named support engineer + SLA"}</li>
-              <li>SOC 2 / ISO 27001</li>
-              <li>{vi ? "Hóa đơn / AWS Marketplace" : "Invoice / AWS Marketplace"}</li>
+          <div className="rounded-2xl border border-line bg-white p-6 opacity-80">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-xl font-semibold">Enterprise</h2>
+              <span className="rounded-full border border-line px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
+                {vi ? "Sắp có" : "Soon"}
+              </span>
+            </div>
+            <p className="mt-1 text-3xl font-semibold">{vi ? "Pending" : "Pending"}</p>
+            <ul className="mt-4 space-y-2 text-sm text-muted">
+              <li>{vi ? "Add-on thương mại trên OSS: RBAC, audit, SCIM, SLA" : "Commercial add-on on OSS: RBAC, audit, SCIM, SLA"}</li>
+              <li>{vi ? "Chưa mở sales — dùng MIT hôm nay" : "Sales not open — run MIT today"}</li>
             </ul>
-            <Link href="/enterprise" className="mt-6 inline-block rounded-full bg-highlight px-4 py-2 text-sm text-ink">
-              {vi ? "Nói chuyện với sales" : "Talk to sales"}
+            <Link href="/enterprise" className="mt-6 inline-block rounded-full border border-line px-4 py-2 text-sm">
+              {vi ? "Trang Enterprise" : "Enterprise page"}
             </Link>
           </div>
         </div>

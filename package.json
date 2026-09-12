@@ -10,7 +10,10 @@
     "dev": "npm run dev -w web",
     "build": "npm run build -w web",
     "start": "npm run start -w web",
-    "lint": "npm run lint -w web"
+    "lint": "npm run lint -w web",
+    "console:bootstrap": "bash scripts/bootstrap-langfuse.sh",
+    "console:overlay": "bash scripts/apply-langfuse-overlay.sh",
+    "console:seed": "node scripts/seed-langfuse-zalo.mjs"
   },
   "engines": {
     "node": ">=20"

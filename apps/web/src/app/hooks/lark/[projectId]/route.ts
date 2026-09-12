@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
 
   const event = payload.event as { sender?: { sender_id?: string }; message?: { content?: string } } | undefined;
   const userId = String(event?.sender?.sender_id ?? "unknown");
-  const recorded = recordChannelEvent({
+  const recorded = await recordChannelEvent({
     projectId,
     channel: "lark",
     channelType: "lark",

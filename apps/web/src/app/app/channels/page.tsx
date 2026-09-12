@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { AppShell } from "@/components/app/AppShell";
-import { getLang } from "@/lib/get-lang";
-import { formatTime } from "@/lib/format";
-import { requireConsole } from "@/lib/console";
-import { listChannels } from "@/lib/store";
+import { ChannelShell } from "@/components/app/ChannelShell";
+import { requireChannelConsole } from "@/lib/console";
 import { publicUrl } from "@/lib/deployment";
+import { formatTime } from "@/lib/format";
+import { getLang } from "@/lib/get-lang";
+import { listChannels } from "@/lib/store";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -18,28 +18,43 @@ const LABELS: Record<string, string> = {
   msteams: ".NET / Teams",
 };
 
-export default async function ChannelsPage() {
+export default async function ChannelsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ embed?: string }>;
+}) {
   const lang = await getLang();
-  const { project } = await requireConsole();
+  const { embed } = await searchParams;
+  const embedded = embed === "1";
+  const { project } = await requireChannelConsole();
   const channels = listChannels(project.id);
   const vi = lang === "vi";
   const base = publicUrl();
+  const q = embedded ? "?embed=1" : "";
   return (
-    <AppShell active="channels">
-      <h1 className="mb-1 text-xl font-semibold">{vi ? "Kênh" : "Channels"}</h1>
+    <ChannelShell embed={embedded} title={vi ? "Kênh" : "Channels"}>
+      <h1 className="mb-1 text-lg font-semibold">{vi ? "Kênh" : "Channels"}</h1>
       <p className="mb-4 text-sm text-muted">
         {vi
-          ? "Webhook URL — dán vào Zalo OA. Chưa có webhook thì đây là empty state, không phải “No traces yet”."
-          : "Webhook URLs — paste into Zalo OA. Empty means no webhook yet, not “No traces yet”."}
+          ? "Webhook URL — dán vào Zalo OA. Secret kênh lưu ở Vết, không phải project settings Langfuse."
+          : "Webhook URLs — paste into Zalo OA. Channel secrets stay in Vết, not Langfuse project settings."}
       </p>
       <div className="grid gap-3 md:grid-cols-2">
         {channels.map((ch) => (
-          <Link key={ch.id} href={`/app/channels/${ch.type}`} className="rounded-xl border border-line bg-white p-4 hover:border-ink">
+          <Link
+            key={ch.id}
+            href={`/app/channels/${ch.type}${q}`}
+            className="rounded-md border border-line bg-white p-4 hover:bg-paper-2"
+          >
             <div className="flex items-center justify-between">
               <h2 className="font-medium">{LABELS[ch.type] ?? ch.name}</h2>
-              <span className={`text-xs ${ch.enabled ? "text-accent" : "text-muted"}`}>{ch.enabled ? (vi ? "bật" : "on") : (vi ? "tắt" : "off")}</span>
+              <span className={`text-xs ${ch.enabled ? "text-emerald-700" : "text-muted"}`}>
+                {ch.enabled ? (vi ? "bật" : "on") : vi ? "tắt" : "off"}
+              </span>
             </div>
-            <p className="mt-2 font-mono text-[11px] text-muted">{ch.webhookPath ? `${base}${ch.webhookPath}` : (vi ? "SDK / OTLP — không webhook" : "SDK / OTLP — no webhook")}</p>
+            <p className="mt-2 font-mono text-[11px] text-muted">
+              {ch.webhookPath ? `${base}${ch.webhookPath}` : vi ? "SDK / OTLP — không webhook" : "SDK / OTLP — no webhook"}
+            </p>
             <p className="mt-2 text-xs text-muted">
               {vi ? "Sự kiện cuối" : "Last event"}: {ch.lastEventAt ? formatTime(ch.lastEventAt, lang) : "—"}
               {ch.signatureFailures ? ` · ${ch.signatureFailures} MAC lỗi` : ""}
@@ -47,6 +62,6 @@ export default async function ChannelsPage() {
           </Link>
         ))}
       </div>
-    </AppShell>
+    </ChannelShell>
   );
 }

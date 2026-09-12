@@ -19,7 +19,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
   }
   const payload = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   const senderId = String(payload.sender_id ?? payload.senderId ?? "unknown");
-  const recorded = recordChannelEvent({
+  const recorded = await recordChannelEvent({
     projectId,
     channel: "zalo_oa",
     channelType: "fpt",
