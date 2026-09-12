@@ -35,9 +35,15 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
+  const headerObj = payload.header as { token?: string } | undefined;
+  const bodyToken =
+    (typeof payload.token === "string" && payload.token) ||
+    (typeof headerObj?.token === "string" && headerObj.token) ||
+    "";
+
   if (payload.challenge || payload.type === "url_verification") {
     const expected = ch.secrets.verificationToken || ch.secrets.webhookToken;
-    if (!tokenMatches(String(payload.token ?? ""), expected)) {
+    if (!tokenMatches(bodyToken, expected)) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
     return NextResponse.json({ challenge: payload.challenge });
@@ -45,7 +51,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
 
   const headerToken =
     bearerToken(req) ?? req.headers.get("x-lark-token") ?? req.headers.get("x-lark-verification-token");
-  const tokenOk = tokenMatches(headerToken, ch.secrets.webhookToken, ch.secrets.verificationToken);
+  const tokenOk =
+    tokenMatches(headerToken, ch.secrets.webhookToken, ch.secrets.verificationToken) ||
+    tokenMatches(bodyToken, ch.secrets.webhookToken, ch.secrets.verificationToken);
   const sigOk = larkSignatureOk(req, raw, ch.secrets.encryptKey);
   if (!tokenOk && !sigOk) {
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });

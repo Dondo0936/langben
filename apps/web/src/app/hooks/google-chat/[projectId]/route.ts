@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getChannel, getProject } from "@/lib/store";
 import { bearerToken, recordChannelEvent, tokenMatches } from "@/lib/hooks";
+import { googleChatBearerOk } from "@/lib/google-chat-verify";
 import { gchatInbound } from "@/lib/messenger-inbound";
 
 export const runtime = "nodejs";
@@ -11,11 +12,20 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
   if (!getProject(projectId)) return NextResponse.json({ error: "Unknown project" }, { status: 404 });
   const ch = getChannel(projectId, "gchat");
   if (!ch?.enabled) return NextResponse.json({ error: "Channel disabled" }, { status: 403 });
-  if (!ch.secrets.webhookToken?.trim() && !ch.secrets.verificationToken?.trim()) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!tokenMatches(bearerToken(req), ch.secrets.verificationToken, ch.secrets.webhookToken)) {
-    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+  const presented = bearerToken(req);
+  const sharedOk = tokenMatches(presented, ch.secrets.verificationToken, ch.secrets.webhookToken);
+  if (!sharedOk) {
+    const hookPath = new URL(req.url).pathname;
+    const publicBase = process.env.VET_PUBLIC_URL?.replace(/\/$/, "");
+    const jwtOk = await googleChatBearerOk(presented, [
+      req.url,
+      publicBase ? `${publicBase}${hookPath}` : undefined,
+      ch.secrets.audience,
+      ch.secrets.googleProjectNumber,
+    ]);
+    if (!jwtOk) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
   }
   const payload = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   const inbound = gchatInbound(payload);
