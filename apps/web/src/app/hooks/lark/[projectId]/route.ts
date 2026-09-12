@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getChannel, getProject } from "@/lib/store";
 import { bearerToken, hasSharedWebhookSecret, recordChannelEvent, tokenMatches } from "@/lib/hooks";
 import { safeEqualHex, sha256Hex } from "@/lib/crypto";
+import { unwrapLarkPayload } from "@/lib/lark-crypto";
 import { larkInbound } from "@/lib/messenger-inbound";
 
 export const runtime = "nodejs";
@@ -28,11 +29,22 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
   }
 
   const raw = await req.text();
-  let payload: Record<string, unknown> = {};
+  let parsed: Record<string, unknown> = {};
   try {
-    payload = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
+    parsed = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  let payload: Record<string, unknown>;
+  try {
+    payload = unwrapLarkPayload(parsed, ch.secrets.encryptKey);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "";
+    if (msg === "encrypted") {
+      return NextResponse.json({ error: "Encrypt key required" }, { status: 401 });
+    }
+    return NextResponse.json({ error: "Invalid ciphertext" }, { status: 400 });
   }
 
   const headerObj = payload.header as { token?: string } | undefined;
@@ -42,8 +54,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     "";
 
   if (payload.challenge || payload.type === "url_verification") {
-    const expected = ch.secrets.verificationToken || ch.secrets.webhookToken;
-    if (!tokenMatches(bodyToken, expected)) {
+    if (!tokenMatches(bodyToken, ch.secrets.verificationToken, ch.secrets.webhookToken)) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
     return NextResponse.json({ challenge: payload.challenge });

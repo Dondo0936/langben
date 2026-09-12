@@ -16,6 +16,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
   const [botToken, setBotToken] = useState("");
   const [webhookToken, setWebhookToken] = useState("");
   const [verificationToken, setVerificationToken] = useState("");
+  const [encryptKey, setEncryptKey] = useState("");
   const [msg, setMsg] = useState("");
 
   async function save(e: React.FormEvent) {
@@ -27,7 +28,10 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
     }
     if (channel.type === "zalo_bot" && botToken.trim()) secrets.botToken = botToken.trim();
     if (channel.type === "fpt" && webhookToken.trim()) secrets.webhookToken = webhookToken.trim();
-    if (channel.type === "lark" && verificationToken.trim()) secrets.verificationToken = verificationToken.trim();
+    if (channel.type === "lark") {
+      if (verificationToken.trim()) secrets.verificationToken = verificationToken.trim();
+      if (encryptKey.trim()) secrets.encryptKey = encryptKey.trim();
+    }
     if (channel.type === "gchat" && verificationToken.trim()) secrets.verificationToken = verificationToken.trim();
     const res = await fetch("/api/channels", {
       method: "PATCH",
@@ -139,6 +143,19 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
           />
         </label>
       ) : null}
+      {channel.type === "lark" ? (
+        <label className="block">
+          Encrypt key
+          <input
+            type="password"
+            className="mt-1 h-9 w-full rounded-md border border-line px-3"
+            value={encryptKey}
+            onChange={(e) => setEncryptKey(e.target.value)}
+            placeholder={SAVED}
+            autoComplete="new-password"
+          />
+        </label>
+      ) : null}
       <label className="block">
         Forward URL (tap)
         <input className="mt-1 h-9 w-full rounded-md border border-line px-3" value={forwardUrl} onChange={(e) => setForwardUrl(e.target.value)} placeholder="https://bot.example.com/zalo" />
@@ -151,8 +168,8 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
       {channel.type === "lark" || channel.type === "gchat" ? (
         <p className="text-xs text-muted">
           {channel.type === "lark"
-            ? "Chưa cần app Lark. Token demo đã lưu — Gửi thử làm handshake url_verification rồi ghi một tin vào console."
-            : "Chưa cần app Google Chat. Token demo đã lưu — Gửi thử ghi một tin vào console."}
+            ? "Token demo vẫn dùng được cho Gửi thử. App thật: dán Verification Token (và Encrypt Key nếu Open Platform bật mã hóa) rồi trỏ request URL vào đường dẫn phía trên."
+            : "Token demo vẫn dùng được cho Gửi thử. App Google Chat thật gửi JWT — hook nhận cả token demo và JWT Google."}
         </p>
       ) : null}
       <div className="flex flex-wrap items-center gap-2">
