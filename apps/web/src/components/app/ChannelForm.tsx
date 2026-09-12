@@ -45,6 +45,30 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
     router.refresh();
   }
 
+  async function sendTest() {
+    setMsg("Đang gửi thử…");
+    const res = await fetch("/api/channels/test", {
+      method: "POST",
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ type: channel.type }),
+    });
+    const data = (await res.json().catch(() => ({}))) as {
+      error?: string;
+      sessionId?: string;
+      sessionUrl?: string;
+    };
+    if (!res.ok) {
+      setMsg(data.error || "Thử thất bại.");
+      return;
+    }
+    setMsg(data.sessionId ? `Thử OK · ${data.sessionId}` : "Thử OK.");
+    if (data.sessionUrl) {
+      window.open(data.sessionUrl, "_blank", "noopener,noreferrer");
+    }
+    router.refresh();
+  }
+
   return (
     <form onSubmit={save} className="max-w-xl space-y-3 rounded-md border border-line bg-white p-4 text-sm">
       <label className="flex items-center gap-2">
@@ -124,8 +148,19 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
         Bật forward (timeout 4s, 0 retry)
       </label>
       <p className="text-xs text-muted">Tắt forward không ảnh hưởng ingest. Signature sai → 401, không tạo lượt.</p>
-      <button className="h-9 rounded-md bg-ink px-4 text-white">Lưu</button>
-      {msg ? <span className="ml-2 text-muted">{msg}</span> : null}
+      <div className="flex flex-wrap items-center gap-2">
+        <button className="h-9 rounded-md bg-ink px-4 text-white">Lưu</button>
+        {["lark", "gchat", "zalo_oa", "zalo_bot", "fpt"].includes(channel.type) ? (
+          <button
+            type="button"
+            className="h-9 rounded-md border border-ink/20 px-4"
+            onClick={() => void sendTest()}
+          >
+            Gửi thử
+          </button>
+        ) : null}
+        {msg ? <span className="text-muted">{msg}</span> : null}
+      </div>
     </form>
   );
 }

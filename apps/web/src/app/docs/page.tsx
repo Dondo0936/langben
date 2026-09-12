@@ -66,7 +66,17 @@ await observe("hỗ-trợ-khách", () =>
         <p className="mt-2 text-sm text-muted">
           {vi ? "Demo OA secret:" : "Demo OA secret:"} <code>{DEMO_KEYS.zaloOaSecret}</code> · appId <code>{DEMO_KEYS.zaloAppId}</code>
         </p>
-        <h2 className="mt-10 text-xl font-semibold">4. OTLP</h2>
+        <h2 className="mt-10 text-xl font-semibold">4. {vi ? "Lark / Google Chat (chưa cần app)" : "Lark / Google Chat (no app yet)"}</h2>
+        <p className="mt-2 text-sm text-muted">
+          {vi
+            ? "Chưa có Zalo OA cũng chưa cần app Lark/Google. Token demo đã nằm trên Kênh. node scripts/lark-fixture.mjs và node scripts/gchat-fixture.mjs — hoặc nút Gửi thử trên trang kênh."
+            : "No Zalo OA and no Lark/Google app required. Demo tokens are already on Channels. node scripts/lark-fixture.mjs and node scripts/gchat-fixture.mjs — or Gửi thử on the channel page."}
+        </p>
+        <pre className="mt-3 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-[12px] text-highlight">
+{`node scripts/lark-fixture.mjs    # session lark:ou_fixture
+node scripts/gchat-fixture.mjs   # session gchat:users_fixture`}
+        </pre>
+        <h2 className="mt-10 text-xl font-semibold">5. OTLP</h2>
         <p className="mt-2 text-sm text-muted">
           {vi
             ? "Dùng OTLP trên console (:3000), hoặc POST /otlp/v1/traces trên :43173 khi LANGFUSE_* được set."

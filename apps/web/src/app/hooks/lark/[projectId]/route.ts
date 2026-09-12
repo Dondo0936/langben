@@ -63,5 +63,5 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     output: { text: event?.message?.content },
     traceName: "lark · im.message.receive_v1",
   });
-  return NextResponse.json({ ok: true, traceId: recorded.trace.id });
+  return NextResponse.json({ ok: true, traceId: recorded.trace.id, sessionId: recorded.sessionId });
 }

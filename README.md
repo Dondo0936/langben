@@ -61,6 +61,19 @@ node scripts/zalo-fixture.mjs
 
 Invalid MAC → **401** and no turn. Valid MAC → session `zalo_oa:user_fixture` on **Sessions** in the console.
 
+### Lark / Google Chat fixtures (no developer app)
+
+You do not need a Lark or Google Chat app to test those webhooks locally. Demo tokens are already on Kênh.
+
+```bash
+node scripts/lark-fixture.mjs    # url_verification + inbound → session lark:ou_fixture
+node scripts/gchat-fixture.mjs   # Bearer token + inbound → session gchat:users_fixture
+```
+
+Invalid token → **401**. In the console, Kênh → Lark or Google Chat → **Gửi thử** does the same thing.
+
+A real Lark/Google bot still needs their developer console and a public HTTPS URL. Do that when you have the app; the local fixtures cover ingest + overlay first.
+
 Marketing-only (no console):
 
 ```bash

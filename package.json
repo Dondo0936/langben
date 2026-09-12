@@ -15,7 +15,9 @@
     "down": "bash scripts/compose.sh down",
     "console:bootstrap": "bash scripts/bootstrap-langfuse.sh",
     "console:overlay": "bash scripts/apply-langfuse-overlay.sh",
-    "console:seed": "node scripts/seed-langfuse-zalo.mjs"
+    "console:seed": "node scripts/seed-langfuse-zalo.mjs",
+    "console:lark": "node scripts/lark-fixture.mjs",
+    "console:gchat": "node scripts/gchat-fixture.mjs"
   },
   "engines": {
     "node": ">=20"

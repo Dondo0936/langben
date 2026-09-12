@@ -36,6 +36,9 @@ export const DEMO_KEYS = {
   zaloAppId: "1234567890",
   zaloOaSecret: "demo-oa-secret",
   zaloBotToken: "demo-bot-token",
+  larkToken: "demo-lark-token",
+  gchatToken: "demo-gchat-token",
+  fptToken: "demo-fpt-token",
 };
 
 export function seedStore(): StoreShape {
@@ -639,7 +642,7 @@ export function seedStore(): StoreShape {
         enabled: true,
         forwardUrl: null,
         forwardEnabled: false,
-        secrets: { webhookToken: "demo-fpt-token" },
+        secrets: { webhookToken: DEMO_KEYS.fptToken },
         webhookPath: `/hooks/fpt/${PROJECT}`,
         lastEventAt: "2026-09-09T13:40:00.000Z",
         lastError: null,
@@ -667,7 +670,7 @@ export function seedStore(): StoreShape {
         enabled: true,
         forwardUrl: null,
         forwardEnabled: false,
-        secrets: { verificationToken: "demo-lark-token" },
+        secrets: { verificationToken: DEMO_KEYS.larkToken },
         webhookPath: `/hooks/lark/${PROJECT}`,
         lastEventAt: "2026-09-09T08:02:10.000Z",
         lastError: null,
@@ -681,7 +684,7 @@ export function seedStore(): StoreShape {
         enabled: true,
         forwardUrl: null,
         forwardEnabled: false,
-        secrets: { verificationToken: "demo-gchat-token" },
+        secrets: { verificationToken: DEMO_KEYS.gchatToken },
         webhookPath: `/hooks/google-chat/${PROJECT}`,
         lastEventAt: "2026-09-09T07:30:00.000Z",
         lastError: null,
