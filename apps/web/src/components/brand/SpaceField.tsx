@@ -116,7 +116,7 @@ void main() {
   float vig = smoothstep(1.45, 0.12, length(p));
   g *= vig;
   g = clamp(g, 0.0, 1.0);
-  float grain = (hash(uv * uRes + t * 40.0) - 0.5) * 0.06;
+  float grain = (hash(uv * uRes + t * 40.0) - 0.5) * 0.03;
   gl_FragColor = vec4(vec3(g + grain), 1.0);
 }
 `;
@@ -192,11 +192,11 @@ type Star = { x: number; y: number; r: number; ph: number; sp: number };
 type Spark = { x: number; y: number; vx: number; vy: number; life: number };
 
 function fitCanvas(canvas: HTMLCanvasElement) {
-  const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
   const cssW = Math.max(2, canvas.clientWidth);
   const cssH = Math.max(2, canvas.clientHeight);
-  const w = Math.min(1600, Math.floor(cssW * dpr));
-  const h = Math.min(900, Math.floor(cssH * dpr));
+  const w = Math.min(1920, Math.floor(cssW * dpr));
+  const h = Math.min(1080, Math.floor(cssH * dpr));
   if (canvas.width !== w || canvas.height !== h) {
     canvas.width = w;
     canvas.height = h;
