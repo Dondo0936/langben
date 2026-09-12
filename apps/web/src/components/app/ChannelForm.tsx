@@ -148,6 +148,13 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
         Bật forward (timeout 4s, 0 retry)
       </label>
       <p className="text-xs text-muted">Tắt forward không ảnh hưởng ingest. Signature sai → 401, không tạo lượt.</p>
+      {channel.type === "lark" || channel.type === "gchat" ? (
+        <p className="text-xs text-muted">
+          {channel.type === "lark"
+            ? "Chưa cần app Lark. Token demo đã lưu — Gửi thử làm handshake url_verification rồi ghi một tin vào console."
+            : "Chưa cần app Google Chat. Token demo đã lưu — Gửi thử ghi một tin vào console."}
+        </p>
+      ) : null}
       <div className="flex flex-wrap items-center gap-2">
         <button className="h-9 rounded-md bg-ink px-4 text-white">Lưu</button>
         {["lark", "gchat", "zalo_oa", "zalo_bot", "fpt"].includes(channel.type) ? (

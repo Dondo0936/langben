@@ -169,9 +169,9 @@ function turnText(o: Observation) {
   const input = o.input as Record<string, unknown> | null;
   const output = o.output as Record<string, unknown> | null;
   const nested = input?.message as { text?: string } | undefined;
+  if (typeof output?.text === "string") return output.text;
   if (typeof input?.text === "string") return input.text;
   if (typeof nested?.text === "string") return nested.text;
-  if (typeof output?.text === "string") return output.text;
   const intent = output && typeof output.intent === "string" ? `intent = ${output.intent}` : null;
   if (intent) return intent;
   return previewJson(o.output ?? o.input, 180);

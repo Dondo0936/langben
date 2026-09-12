@@ -16,8 +16,12 @@ function textOf(value: unknown): string {
   if (typeof value === "object") {
     const rec = value as Record<string, unknown>;
     if (typeof rec.text === "string") return rec.text;
-    const msg = rec.message as { text?: string } | undefined;
+    const msg = rec.message as { text?: string; content?: unknown } | undefined;
     if (typeof msg?.text === "string") return msg.text;
+    if (typeof msg?.content === "string") return textOf(msg.content);
+    const event = rec.event as { message?: { text?: string; content?: unknown } } | undefined;
+    if (typeof event?.message?.text === "string") return event.message.text;
+    if (typeof event?.message?.content === "string") return textOf(event.message.content);
     if (typeof rec.intent === "string") {
       const conf = rec.confidence != null ? ` · ${rec.confidence}` : "";
       return `intent = ${rec.intent}${conf}`;
@@ -30,6 +34,17 @@ function textOf(value: unknown): string {
     }
   }
   return String(value);
+}
+
+function turnDisplay(output: unknown, input: unknown): string {
+  const out = output && typeof output === "object" ? (output as Record<string, unknown>) : null;
+  const hasSpeech =
+    out &&
+    (typeof out.text === "string" ||
+      typeof out.intent === "string" ||
+      (out.message && typeof out.message === "object"));
+  if (hasSpeech) return textOf(output) || textOf(input);
+  return textOf(input) || textOf(output);
 }
 
 function who(name: string | null | undefined, type: string | null | undefined) {
@@ -85,7 +100,7 @@ function ObservationLine({
     projectId,
     verbosity: "truncated",
   });
-  const text = textOf(obs.data?.output) || textOf(obs.data?.input);
+  const text = turnDisplay(obs.data?.output, obs.data?.input);
   return <Bubble id={observationId} label={who(name, type)} name={name} text={text} />;
 }
 
@@ -118,7 +133,7 @@ function TraceTurns({
             id={o.id}
             label={who(o.name, o.type)}
             name={o.name}
-            text={textOf(o.output) || textOf(o.input)}
+            text={turnDisplay(o.output, o.input)}
           />
         ))}
       </>

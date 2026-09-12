@@ -19,7 +19,13 @@ async function post(label, body, headers = {}) {
   });
   const text = await res.text();
   console.log(label, res.status, text);
-  return { status: res.status, text };
+  let parsed = null;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    /* keep raw */
+  }
+  return { status: res.status, text, parsed };
 }
 
 const challenge = await post("challenge", {
@@ -27,7 +33,10 @@ const challenge = await post("challenge", {
   token,
   challenge: "vet-lark-challenge",
 });
-if (challenge.status !== 200) process.exit(1);
+if (challenge.status !== 200 || challenge.parsed?.challenge !== "vet-lark-challenge") {
+  console.error("expected 200 { challenge } for Lark url_verification");
+  process.exit(1);
+}
 
 const bad = await post("invalid", {
   type: "url_verification",
@@ -42,13 +51,21 @@ if (bad.status !== 401) {
 const msg = await post(
   "message",
   {
+    schema: "2.0",
+    header: { event_type: "im.message.receive_v1" },
     event: {
-      sender: { sender_id: "ou_fixture" },
-      message: { content: "xin chào từ Lark fixture" },
+      sender: { sender_id: { open_id: "ou_fixture" }, sender_type: "user" },
+      message: {
+        message_type: "text",
+        content: JSON.stringify({ text: "xin chào từ Lark fixture" }),
+      },
     },
   },
   { authorization: `Bearer ${token}` },
 );
-if (msg.status !== 200) process.exit(1);
+if (msg.status !== 200 || msg.parsed?.sessionId !== "lark:ou_fixture") {
+  console.error("expected 200 session lark:ou_fixture");
+  process.exit(1);
+}
 
 console.log(`Session lark:ou_fixture → http://localhost:3000/project/${projectId}/sessions/lark%3Aou_fixture`);

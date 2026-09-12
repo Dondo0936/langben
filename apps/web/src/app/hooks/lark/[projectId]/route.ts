@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getChannel, getProject } from "@/lib/store";
 import { bearerToken, hasSharedWebhookSecret, recordChannelEvent, tokenMatches } from "@/lib/hooks";
 import { safeEqualHex, sha256Hex } from "@/lib/crypto";
+import { larkInbound } from "@/lib/messenger-inbound";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -50,17 +51,16 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 
-  const event = payload.event as { sender?: { sender_id?: string }; message?: { content?: string } } | undefined;
-  const userId = String(event?.sender?.sender_id ?? "unknown");
+  const inbound = larkInbound(payload);
   const recorded = await recordChannelEvent({
     projectId,
     channel: "lark",
     channelType: "lark",
-    userId,
+    userId: inbound.userId,
     name: "lark.inbound",
     type: "channel.inbound",
     input: payload,
-    output: { text: event?.message?.content },
+    output: { text: inbound.text },
     traceName: "lark · im.message.receive_v1",
   });
   return NextResponse.json({ ok: true, traceId: recorded.trace.id, sessionId: recorded.sessionId });

@@ -36,8 +36,8 @@ export default async function ChannelsPage({
       <h1 className="mb-1 text-lg font-semibold">{vi ? "Kênh" : "Channels"}</h1>
       <p className="mb-4 text-sm text-muted">
         {vi
-          ? "Webhook URL — dán vào Zalo OA. Secret kênh lưu ở Vết, không phải project settings Langfuse."
-          : "Webhook URLs — paste into Zalo OA. Channel secrets stay in Vết, not Langfuse project settings."}
+          ? "Webhook URL — dán vào OA khi có. Lark / Google Chat: chưa cần app, mở kênh rồi Gửi thử. Secret kênh lưu ở Vết, không phải project settings Langfuse."
+          : "Webhook URLs — paste into the OA when you have one. Lark / Google Chat: no app yet — open the channel and Gửi thử. Channel secrets stay in Vết, not Langfuse project settings."}
       </p>
       <div className="grid gap-3 md:grid-cols-2">
         {channels.map((ch) => (

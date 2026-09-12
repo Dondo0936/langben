@@ -18,14 +18,19 @@ async function post(label, body, headers = {}) {
   });
   const text = await res.text();
   console.log(label, res.status, text);
-  return { status: res.status, text };
+  let parsed = null;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    /* keep raw */
+  }
+  return { status: res.status, text, parsed };
 }
 
 const payload = {
-  chat: {
-    user: { name: "users/fixture" },
-    space: { name: "spaces/vet_demo" },
-  },
+  type: "MESSAGE",
+  user: { name: "users/fixture" },
+  space: { name: "spaces/vet_demo", type: "DM" },
   message: { text: "xin chào từ Google Chat fixture" },
 };
 
@@ -36,7 +41,10 @@ if (bad.status !== 401) {
 }
 
 const ok = await post("message", payload, { authorization: `Bearer ${token}` });
-if (ok.status !== 200) process.exit(1);
+if (ok.status !== 200 || ok.parsed?.sessionId !== "gchat:users_fixture") {
+  console.error("expected 200 session gchat:users_fixture");
+  process.exit(1);
+}
 
 console.log(
   `Session gchat:users_fixture → http://localhost:3000/project/${projectId}/sessions/gchat%3Ausers_fixture`,

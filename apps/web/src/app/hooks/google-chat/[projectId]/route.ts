@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getChannel, getProject } from "@/lib/store";
 import { bearerToken, recordChannelEvent, tokenMatches } from "@/lib/hooks";
+import { gchatInbound } from "@/lib/messenger-inbound";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -17,17 +18,16 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
   const payload = (await req.json().catch(() => ({}))) as Record<string, unknown>;
-  const chat = payload.chat as { user?: { name?: string }; space?: { name?: string } } | undefined;
-  const userId = String(chat?.user?.name ?? "unknown");
+  const inbound = gchatInbound(payload);
   const recorded = await recordChannelEvent({
     projectId,
     channel: "gchat",
     channelType: "gchat",
-    userId,
+    userId: inbound.userId,
     name: "googlechat.inbound",
     type: "channel.inbound",
     input: payload,
-    output: { space: chat?.space?.name },
+    output: { text: inbound.text, space: inbound.space },
     metadata: { note: "Google Chat channel — not Vertex AI" },
     traceName: "google-chat · message",
   });
