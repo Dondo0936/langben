@@ -19,6 +19,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@vet/schema", "@vet/sdk"],
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
   async headers() {
     return [
       { source: "/", headers: securityHeaders },

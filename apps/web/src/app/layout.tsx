@@ -36,6 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={lang} className={`${sans.variable} ${mono.variable}`}>
       <body className="min-h-screen font-sans antialiased">
+        <div className="space-stars" aria-hidden />
         <SiteFx />
         <div className="site-shell">{children}</div>
       </body>
