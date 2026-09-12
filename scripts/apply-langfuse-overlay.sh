@@ -14,8 +14,8 @@ fi
 
 mkdir -p "$DEST"
 if command -v rsync >/dev/null 2>&1; then
-  rsync -a --delete --exclude .git "$VENDOR/" "$DEST/"
-  rsync -a "$OVERLAY/" "$DEST/"
+  rsync -a --checksum --delete --exclude .git "$VENDOR/" "$DEST/"
+  rsync -a --checksum "$OVERLAY/" "$DEST/"
 else
   rm -rf "$DEST"
   cp -R "$VENDOR" "$DEST"

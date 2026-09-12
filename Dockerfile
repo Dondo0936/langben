@@ -4,7 +4,12 @@ COPY package.json package-lock.json ./
 COPY apps/web/package.json apps/web/package.json
 COPY packages/schema/package.json packages/schema/package.json
 COPY packages/sdk-js/package.json packages/sdk-js/package.json
-RUN npm ci
+# npm ci skips nested optional natives (npm/cli#4828). Install the musl
+# binaries Alpine needs for Tailwind 4 / lightningcss during `next build`.
+RUN npm ci \
+ && npm install --no-save --no-package-lock -w web \
+      @tailwindcss/oxide-linux-x64-musl@4.3.3 \
+      lightningcss-linux-x64-musl@1.32.0
 
 FROM deps AS build
 COPY package.json ./
