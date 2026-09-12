@@ -29,7 +29,7 @@ if docker info >/dev/null 2>&1; then
   exec docker compose "${ARGS[@]}" "$@"
 fi
 if command -v sudo >/dev/null 2>&1 && sudo docker info >/dev/null 2>&1; then
-  exec sudo --preserve-env=COMPOSE_PROJECT_NAME,COMPOSE_BAKE,DOCKER_BUILDKIT \
+  exec sudo --preserve-env=COMPOSE_PROJECT_NAME,COMPOSE_BAKE,DOCKER_BUILDKIT,VET_PUBLIC_URL \
     env -u COMPOSE_FILE \
     docker compose "${ARGS[@]}" "$@"
 fi
