@@ -33,10 +33,8 @@ void main() {
   vec2 aspect = vec2(uRes.x / max(uRes.y, 1.0), 1.0);
   vec2 p = (vUv - uMouse) * aspect;
   float d = length(p);
-  float splat = exp(-d * d * 90.0) * uForce;
+  float splat = exp(-d * d * 220.0) * uForce * 0.35;
   dens += splat;
-  float mark = texture2D(uMark, vec2(vUv.x, 1.0 - vUv.y)).r;
-  dens += mark * uEmit * (0.7 + 0.3 * sin(uTime * 0.8 + vUv.x * 8.0));
   dens = clamp(dens, 0.0, 1.0);
   vel = (vel + uDelta * splat * 14.0) * 0.975;
   vel = clamp(vel, vec2(-1.0), vec2(1.0));
@@ -85,30 +83,36 @@ void main() {
   float t = uTime * (1.0 - uReduce * 0.85);
   float n1 = fbm(p * 1.35 + vec2(t * 0.04, -t * 0.03));
   float n2 = fbm(p * 2.6 - vec2(t * 0.05, t * 0.02) + n1);
-  float nebula = pow(smoothstep(0.22, 0.78, n2), 1.35) * 0.22 + n1 * 0.07;
+  float nebula = pow(smoothstep(0.28, 0.82, n2), 1.6) * 0.10 + n1 * 0.03;
 
   float stars = 0.0;
-  vec2 sp = uv * vec2(90.0, 56.0);
-  float h = hash(floor(sp));
-  float tw = 0.45 + 0.55 * sin(t * (1.6 + h * 4.0) + h * 20.0);
-  stars += step(0.965, h) * tw;
-  float h2 = hash(floor(uv * vec2(42.0, 26.0) + 17.0));
-  stars += step(0.985, h2) * 1.2;
+  vec2 sp = uv * vec2(220.0, 140.0);
+  vec2 si = floor(sp);
+  vec2 sf = fract(sp) - 0.5;
+  float h = hash(si);
+  float tw = 0.4 + 0.6 * sin(t * (1.6 + h * 4.0) + h * 20.0);
+  stars += step(0.978, h) * tw * (1.0 - smoothstep(0.0, 0.07, length(sf)));
+  vec2 sp2 = uv * vec2(70.0, 44.0) + 17.0;
+  float h2 = hash(floor(sp2));
+  vec2 sf2 = fract(sp2) - 0.5;
+  stars += step(0.992, h2) * 0.9 * (1.0 - smoothstep(0.0, 0.05, length(sf2)));
 
   vec4 trail = texture2D(uTrail, uv);
   float smoke = trail.a;
   vec2 texel = 1.0 / uRes;
-  smoke += texture2D(uTrail, uv + vec2(texel.x * 3.0, 0.0)).a * 0.45;
-  smoke += texture2D(uTrail, uv - vec2(texel.x * 3.0, 0.0)).a * 0.45;
-  smoke += texture2D(uTrail, uv + vec2(0.0, texel.y * 3.0)).a * 0.45;
-  smoke += texture2D(uTrail, uv - vec2(0.0, texel.y * 3.0)).a * 0.45;
-  smoke = pow(clamp(smoke * 0.4, 0.0, 1.0), 0.85);
+  smoke += texture2D(uTrail, uv + vec2(texel.x * 2.0, 0.0)).a * 0.5;
+  smoke += texture2D(uTrail, uv - vec2(texel.x * 2.0, 0.0)).a * 0.5;
+  smoke += texture2D(uTrail, uv + vec2(0.0, texel.y * 2.0)).a * 0.5;
+  smoke += texture2D(uTrail, uv - vec2(0.0, texel.y * 2.0)).a * 0.5;
+  smoke += texture2D(uTrail, uv + texel * 3.0).a * 0.28;
+  smoke += texture2D(uTrail, uv - texel * 3.0).a * 0.28;
+  smoke = pow(clamp(smoke * 0.22, 0.0, 1.0), 0.95);
 
   float mark = texture2D(uMark, vec2(uv.x, 1.0 - uv.y)).r;
-  float markGlow = mark * (0.12 + 0.06 * n2);
+  float markGlow = mark * (0.045 + 0.025 * n2);
   vec2 mp = (uv - uMouse) * aspect;
-  float cursor = exp(-dot(mp, mp) * 14.0) * 0.08;
-  float g = nebula + stars * 0.28 + smoke * 0.55 + markGlow + cursor;
+  float cursor = exp(-dot(mp, mp) * 28.0) * 0.03;
+  float g = nebula + stars * 0.85 + smoke * 0.42 + markGlow + cursor;
   float vig = smoothstep(1.45, 0.12, length(p));
   g *= vig;
   g = clamp(g, 0.0, 1.0);
@@ -263,9 +267,8 @@ function run2d(canvas: HTMLCanvasElement, reduce: boolean, overlay = false) {
       ctx.globalAlpha = 1;
     }
 
-    if (!reduce && force > 0.02) {
-      const n = overlay ? 3 : 6;
-      for (let i = 0; i < n; i++) {
+    if (!reduce && !overlay && force > 0.02) {
+      for (let i = 0; i < 4; i++) {
         sparks.push({
           x: mx,
           y: my,
@@ -295,11 +298,11 @@ function run2d(canvas: HTMLCanvasElement, reduce: boolean, overlay = false) {
     }
     ctx.globalAlpha = 1;
 
-    const glow = ctx.createRadialGradient(mx, my, 0, mx, my, overlay ? 90 : 140);
-    glow.addColorStop(0, overlay ? "rgba(240,240,250,0.05)" : "rgba(240,240,250,0.10)");
+    const glowR = overlay ? 48 : 90;
+    const glow = ctx.createRadialGradient(mx, my, 0, mx, my, glowR);
+    glow.addColorStop(0, overlay ? "rgba(240,240,250,0.03)" : "rgba(240,240,250,0.07)");
     glow.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = glow;
-    const glowR = overlay ? 90 : 140;
     ctx.fillRect(mx - glowR, my - glowR, glowR * 2, glowR * 2);
 
     if (!overlay) {
@@ -339,7 +342,7 @@ function runWebgl(canvas: HTMLCanvasElement, reduce: boolean) {
   gl.bindBuffer(gl.ARRAY_BUFFER, quad);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
 
-  const mouse = { x: 0.5, y: 0.5, dx: 0, dy: 0, force: 0.04 };
+  const mouse = { x: 0.5, y: 0.5, dx: 0, dy: 0, force: 0.015 };
   const loc = { x: 0.5, y: 0.5 };
   const onMove = (e: PointerEvent) => {
     const r = canvas.getBoundingClientRect();
@@ -351,7 +354,7 @@ function runWebgl(canvas: HTMLCanvasElement, reduce: boolean) {
     loc.y = y;
     mouse.x = x;
     mouse.y = y;
-    mouse.force = Math.min(1.6, mouse.force + 0.55);
+    mouse.force = Math.min(1.1, mouse.force + 0.28);
   };
   window.addEventListener("pointermove", onMove, { passive: true });
 
@@ -391,8 +394,8 @@ function runWebgl(canvas: HTMLCanvasElement, reduce: boolean) {
   const frame = (now: number) => {
     if (!alive) return;
     const { w, h } = fitCanvas(canvas);
-    const tw = Math.max(32, Math.floor(w * 0.65));
-    const th = Math.max(32, Math.floor(h * 0.65));
+    const tw = Math.max(32, Math.floor(w * 0.9));
+    const th = Math.max(32, Math.floor(h * 0.9));
     if (ping.w !== tw || ping.h !== th) {
       ping = makeTarget(gl, tw, th);
       pong = makeTarget(gl, tw, th);
@@ -413,8 +416,8 @@ function runWebgl(canvas: HTMLCanvasElement, reduce: boolean) {
     gl.uniform2f(u.tMouse, mouse.x, mouse.y);
     gl.uniform2f(u.tDelta, mouse.dx, mouse.dy);
     gl.uniform2f(u.tRes, dst.w, dst.h);
-    gl.uniform1f(u.tDecay, reduce ? 0.9 : 0.968);
-    gl.uniform1f(u.tForce, Math.max(0.12, mouse.force));
+    gl.uniform1f(u.tDecay, reduce ? 0.88 : 0.94);
+    gl.uniform1f(u.tForce, Math.max(0.02, mouse.force));
     gl.uniform1f(u.tTime, t);
     gl.uniform1f(u.tEmit, reduce ? 0.004 : 0.007);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
