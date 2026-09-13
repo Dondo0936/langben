@@ -9,6 +9,11 @@ const composeSnippet = `git submodule update --init --recursive
 cp .env.console.example .env
 bash scripts/up.sh`;
 
+const tunnelSnippet = `cloudflared tunnel --url http://localhost:43173
+# copy the https://<subdomain>.trycloudflare.com origin into .env:
+# VET_PUBLIC_URL=https://<subdomain>.trycloudflare.com
+bash scripts/compose.sh up -d marketing`;
+
 const envSnippet = `NEXTAUTH_URL=http://localhost:3000
 VET_PUBLIC_URL=http://localhost:43173
 LANGFUSE_INIT_USER_EMAIL=demo@vet.dev
@@ -55,8 +60,28 @@ export default async function SelfHostPage() {
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{envSnippet}</pre>
         <p className="mt-3 text-sm text-muted">
           {vi
-            ? "File đầy đủ là .env.console.example. Copy thành .env rồi sửa. Compose đã đặt VET_DEPLOYMENT=self-host cho marketing. Đặt tunnel vào .env, đừng export VET_PUBLIC_URL trong shell. Tunnel chết thì fixture và webhook OA/Bot gãy. Gửi thử trên Kênh gọi loopback :43173, không đi ra tunnel. Zalo Bot: dán Secret Token (không phải Bot Token) và URL https:// đầy đủ."
-            : "The full file is .env.console.example. Copy it to .env and edit. Compose already sets VET_DEPLOYMENT=self-host on marketing. Put a tunnel in .env. Do not export VET_PUBLIC_URL in the shell. A dead tunnel breaks fixtures and live OA/Bot webhooks. Gửi thử on Channels posts to loopback :43173 and does not use the tunnel. Zalo Bot: paste Secret Token (not Bot Token) and a full https:// webhook URL."}
+            ? "File đầy đủ là .env.console.example. Copy thành .env rồi sửa. Compose đã đặt VET_DEPLOYMENT=self-host cho marketing. Đặt tunnel vào .env, đừng export VET_PUBLIC_URL trong shell. Tunnel chết thì fixture và webhook OA/Bot gãy. Gửi thử trên Kênh gọi loopback :43173, không đi ra tunnel. Zalo Bot: dán Secret Token (không phải Bot Token) và URL https:// đầy đủ. Chi tiết tunnel nằm ở mục Cloudflare Tunnel bên dưới."
+            : "The full file is .env.console.example. Copy it to .env and edit. Compose already sets VET_DEPLOYMENT=self-host on marketing. Put a tunnel in .env. Do not export VET_PUBLIC_URL in the shell. A dead tunnel breaks fixtures and live OA/Bot webhooks. Gửi thử on Channels posts to loopback :43173 and does not use the tunnel. Zalo Bot: paste Secret Token (not Bot Token) and a full https:// webhook URL. Tunnel steps are in Cloudflare Tunnel below."}
+        </p>
+
+        <h2 id="https-tunnel" className="mt-10 scroll-mt-24 text-xl font-semibold">
+          {vi ? "Cloudflare Tunnel (không phải kênh)" : "Cloudflare Tunnel (not a channel)"}
+        </h2>
+        <p className="mt-2 text-sm text-muted">
+          {vi
+            ? "Zalo không gọi được http://localhost:43173. Cloudflare Tunnel chỉ mở một URL https công khai tới Docker trên máy bạn. Đây không phải kênh Vết. Site Vercel là marketing; hook và console vẫn chạy trên compose."
+            : "Zalo cannot POST to http://localhost:43173. Cloudflare Tunnel only publishes an https URL to Docker on your machine. It is not a Vết channel. The Vercel site is marketing; hooks and the console still run on compose."}
+        </p>
+        <p className="mt-2 text-sm text-muted">
+          {vi
+            ? "Cài cloudflared: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation/ . ngrok http 43173 cũng được."
+            : "Install cloudflared: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation/ . ngrok http 43173 also works."}
+        </p>
+        <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{tunnelSnippet}</pre>
+        <p className="mt-3 text-sm text-muted">
+          {vi
+            ? "Quick tunnel đổi hostname mỗi lần chạy. Đừng export VET_PUBLIC_URL trong shell; ghi vào .env rồi recreate marketing. Sao chép webhook đầy đủ trên Kênh (https://.../hooks/zalo/bot/prj-vet-demo). Gửi thử không cần tunnel."
+            : "A quick tunnel changes hostname every run. Do not export VET_PUBLIC_URL in the shell; write it in .env then recreate marketing. Copy the full webhook on Channels (https://.../hooks/zalo/bot/prj-vet-demo). Gửi thử does not need the tunnel."}
         </p>
 
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Dev laptop, không Docker" : "Laptop, no Docker"}</h2>

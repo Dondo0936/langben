@@ -28,7 +28,24 @@ bash scripts/up.sh
 
 `scripts/up.sh` applies the Vết overlay, builds `vet-console:local`, and starts marketing + Langfuse. The first build compiles the console overlay and takes several minutes. Later runs are faster if the images still exist. Equivalent after overlay: `bash scripts/compose.sh up --build`. Do not rely on `COMPOSE_FILE` in `.env`; the script passes `-f` flags and unsets `COMPOSE_FILE`. If `docker` needs root, the script uses `sudo`.
 
-Put a public tunnel in `.env` as `VET_PUBLIC_URL`. Do not export it in the shell. `compose.sh` drops a leftover shell value so `.env` wins. A dead tunnel breaks live OA webhooks and the fixture scripts. **Gửi thử** on Kênh posts to loopback `:43173` and does not use the tunnel.
+Put a public tunnel in `.env` as `VET_PUBLIC_URL`. Do not export it in the shell. `compose.sh` drops a leftover shell value so `.env` wins. A dead tunnel breaks live OA/Bot webhooks and the fixture scripts. **Gửi thử** on Kênh posts to loopback `:43173` and does not use the tunnel.
+
+### Public HTTPS for live Zalo (Cloudflare Tunnel)
+
+This is not a Vết channel. Zalo cannot POST to `localhost:43173`. The Vercel marketing site is not this Docker backend. Cloudflare Tunnel (or ngrok) publishes https to compose on your machine.
+
+```bash
+# https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation/
+cloudflared tunnel --url http://localhost:43173
+```
+
+Put the printed `https://<subdomain>.trycloudflare.com` origin in `.env` as `VET_PUBLIC_URL`, then:
+
+```bash
+bash scripts/compose.sh up -d marketing
+```
+
+A quick tunnel URL changes when the process restarts. Copy the full webhook from Kênh (`https://<tunnel>/hooks/zalo/bot/prj-vet-demo`). Path-only values are rejected. Gửi thử still works without a tunnel.
 
 | Surface | URL |
 |---|---|
@@ -60,7 +77,7 @@ Invalid MAC → **401** and no turn. Valid MAC → session `zalo_oa:user_fixture
 This is not the Chatbot tab inside OA admin (that tab is paid). Create a bot at [bot.zapps.me](https://bot.zapps.me).
 
 1. On Kênh → Zalo Bot, paste **Secret Token** (not Bot Token) and Lưu.
-2. Put a public HTTPS origin in `.env` as `VET_PUBLIC_URL` (cloudflared/ngrok to `:43173`), then `bash scripts/compose.sh up -d marketing`.
+2. Open a Cloudflare Tunnel to `:43173` (see **Public HTTPS for live Zalo** above), put the origin in `.env` as `VET_PUBLIC_URL`, then `bash scripts/compose.sh up -d marketing`.
 3. Copy the full URL `https://<tunnel>/hooks/zalo/bot/prj-vet-demo` into Webhook URL. Zalo rejects a path without `https://`.
 4. Lưu thay đổi on bot.zapps.me, then message the bot. Session `zalo_bot:<user id>` appears in the console.
 

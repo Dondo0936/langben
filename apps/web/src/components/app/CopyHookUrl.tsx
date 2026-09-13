@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export function CopyHookUrl({ url }: { url: string }) {
   const [copied, setCopied] = useState(false);
@@ -22,8 +23,11 @@ export function CopyHookUrl({ url }: { url: string }) {
       </p>
       {https ? null : (
         <p className="mt-1 text-xs text-muted">
-          Zalo Bot chỉ nhận URL https://. Chạy tunnel (cloudflared hoặc ngrok) tới :43173, đặt VET_PUBLIC_URL
-          trong .env, rồi sao chép lại.
+          Zalo Bot chỉ nhận URL https://.{" "}
+          <Link href="/self-host#https-tunnel" className="text-ink underline-offset-4 hover:underline">
+            Cloudflare Tunnel
+          </Link>{" "}
+          tới :43173, đặt VET_PUBLIC_URL trong .env, rồi sao chép lại.
         </p>
       )}
     </div>
