@@ -66,12 +66,12 @@ export const t = {
     title: { vi: "Tạo org trên instance này", en: "Create an org on this instance" },
     selfHostTitle: { vi: "Tạo org trên instance này", en: "Create an org on this instance" },
     hobbyBlurb: {
-      vi: "MIT tự vận hành — không giới hạn đơn vị, bạn trả infra.",
-      en: "MIT self-host — unlimited units, you pay infra.",
+      vi: "MIT tự vận hành. Không giới hạn đơn vị, bạn trả infra.",
+      en: "MIT self-host. Unlimited units, you pay infra.",
     },
     selfHostBlurb: {
-      vi: "MIT tự vận hành — không giới hạn đơn vị, bạn trả infra.",
-      en: "MIT self-host — unlimited units, you pay infra.",
+      vi: "MIT tự vận hành. Không giới hạn đơn vị, bạn trả infra.",
+      en: "MIT self-host. Unlimited units, you pay infra.",
     },
     orgName: { vi: "Tên tổ chức", en: "Organization name" },
     minChars: { vi: "Tối thiểu 8 ký tự", en: "Minimum 8 characters" },

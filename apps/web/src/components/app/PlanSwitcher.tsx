@@ -24,8 +24,8 @@ export function PlanSwitcher({
       <div className="text-sm text-muted">
         <p>
           {vi
-            ? "Instance tự vận hành — MIT, không giới hạn đơn vị."
-            : "Self-hosted instance — MIT, unlimited units."}
+            ? "Instance tự vận hành. MIT, không giới hạn đơn vị."
+            : "Self-hosted instance. MIT, unlimited units."}
         </p>
         <p className="mt-2">
           <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">

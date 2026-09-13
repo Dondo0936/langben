@@ -18,7 +18,7 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
         <Link href="/" className="flex items-center gap-2">
           <Wordmark />
         </Link>
-        <nav className="hidden items-center gap-5 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-2 lg:flex">
+        <nav className="hidden items-center gap-5 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-2 md:flex">
           {items.map((item) => (
             <Link key={item.href} href={item.href} className="hover:text-ink">
               {item.label}
@@ -30,7 +30,7 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
         </nav>
         <div className="flex items-center gap-2">
           <LangToggle lang={lang} />
-          <Link href={consoleSignInUrl()} className="hidden text-[11px] uppercase tracking-[0.14em] xl:inline">
+          <Link href={consoleSignInUrl()} className="text-[11px] uppercase tracking-[0.14em]">
             {tr(lang, t.nav.login)}
           </Link>
           <Link href="/self-host" className="btn-solid !min-h-0 whitespace-nowrap px-3 py-1.5 text-[11px]">
@@ -38,6 +38,16 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
           </Link>
         </div>
       </div>
+      <nav className="flex flex-wrap gap-x-4 gap-y-2 border-t border-white/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-2 md:hidden">
+        {items.map((item) => (
+          <Link key={item.href} href={item.href} className="hover:text-ink">
+            {item.label}
+          </Link>
+        ))}
+        <Link href="/open-source" className="hover:text-ink">
+          {tr(lang, t.nav.openSource)}
+        </Link>
+      </nav>
     </header>
   );
 }

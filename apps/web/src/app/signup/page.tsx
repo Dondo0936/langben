@@ -43,7 +43,7 @@ export default async function SignupPage() {
         {!isCloud() ? (
           <p className="mt-4 text-center text-xs text-muted">
             <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">{tr(lang, t.nav.unitsToolkit)}</Link>
-            {vi ? " — đơn vị không phải token, và instance này không đếm." : " — a unit is not a token, and this instance does not meter them."}
+            {vi ? ". Đơn vị không phải token, và instance này không đếm." : ". A unit is not a token, and this instance does not meter them."}
           </p>
         ) : null}
       </div>

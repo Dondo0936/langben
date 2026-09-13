@@ -15,7 +15,7 @@ export default async function ChangelogPage() {
         <article className="mt-8">
           <p className="text-sm text-muted">12 Sep 2026 · v0.3.1</p>
           <h2 className="mt-1 text-xl font-semibold">
-            {vi ? "Ẩn gói hosted — chỉ tự vận hành" : "Hide hosted plans — self-host only"}
+            {vi ? "Ẩn gói hosted. Chỉ tự vận hành." : "Hide hosted plans. Self-host only."}
           </h2>
           <ul className="mt-3 list-disc pl-5 text-sm text-muted">
             <li>{vi ? "Marketing: không còn Hobby / Core / Pro / Enterprise hay “sắp có”" : "Marketing: no Hobby / Core / Pro / Enterprise or coming-soon hosted plans"}</li>

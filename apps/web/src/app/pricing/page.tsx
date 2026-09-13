@@ -20,8 +20,8 @@ export default async function PricingPage() {
         </h1>
         <p className="mt-3 max-w-2xl text-muted">
           {vi
-            ? "MIT — toàn bộ tính năng sản phẩm, không giới hạn đơn vị. Docker Compose trên máy bạn."
-            : "MIT — all product features, unlimited units. Docker Compose on your machines."}
+            ? "MIT. Toàn bộ tính năng sản phẩm, không giới hạn đơn vị. Docker Compose trên máy bạn."
+            : "MIT. All product features, unlimited units. Docker Compose on your machines."}
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/self-host" className="btn-solid">
@@ -36,7 +36,7 @@ export default async function PricingPage() {
           <h2 className="text-xl font-semibold">{vi ? "Mã nguồn mở" : "Open Source"}</h2>
           <p className="mt-1 text-3xl font-semibold">{vi ? "Miễn phí" : "Free"}</p>
           <ul className="mt-4 space-y-2 text-sm text-muted">
-            <li>{vi ? "MIT — toàn bộ tính năng sản phẩm, không giới hạn đơn vị" : "MIT — all product features, unlimited units"}</li>
+            <li>{vi ? "MIT. Toàn bộ tính năng sản phẩm, không giới hạn đơn vị" : "MIT. All product features, unlimited units"}</li>
             <li>Docker Compose / Kubernetes</li>
             <li>{vi ? "Hỗ trợ cộng đồng GitHub" : "GitHub community support"}</li>
             <li>{vi ? "Dữ liệu ở infra của bạn" : "Data on your infrastructure"}</li>

@@ -20,7 +20,7 @@ export default async function SecurityPage() {
           </li>
           <li>
             {vi
-              ? "Bí mật webhook kênh được lưu để xác thực chữ ký; API console không trả secret. Payload lưu như nhận được — chưa redact PII, chưa xóa audio Viettel. Hãy giảm PII phía bot trước khi gửi."
+              ? "Bí mật webhook kênh được lưu để xác thực chữ ký; API console không trả secret. Payload lưu như nhận được. Chưa redact PII, chưa xóa audio Viettel. Hãy giảm PII phía bot trước khi gửi."
               : "Channel webhook secrets are stored for signature verification and are not returned by the console API. Payloads are stored as received; this build does not redact phone/email/address or drop Viettel audio. Minimize PII at the bot."}
           </li>
           <li>
@@ -30,7 +30,7 @@ export default async function SecurityPage() {
           </li>
           <li>
             {vi
-              ? "Production bắt buộc VET_SESSION_SECRET. Đặt biến này — đừng để placeholder."
+              ? "Production bắt buộc VET_SESSION_SECRET. Đặt biến này. Đừng để placeholder."
               : "Production requires VET_SESSION_SECRET. Set it; do not leave the placeholder."}
           </li>
         </ul>

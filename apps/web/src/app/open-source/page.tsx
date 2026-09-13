@@ -17,8 +17,8 @@ export default async function OpenSourcePage() {
         </h1>
         <p className="mt-4 text-muted">
           {vi
-            ? "Vết là MIT. Bạn chạy docker compose trên infra của mình — không giới hạn đơn vị."
-            : "Vết is MIT. You run docker compose on your infra — unlimited units."}
+            ? "Vết là MIT. Bạn chạy docker compose trên infra của mình. Không giới hạn đơn vị."
+            : "Vết is MIT. You run docker compose on your infra. Unlimited units."}
         </p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full text-left text-sm">

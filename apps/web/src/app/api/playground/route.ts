@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error:
-          "Chưa có ANTHROPIC_API_KEY. Playground vẫn ghi vết mẫu — thêm khóa vào môi trường để gọi model thật.",
+          "Chưa có ANTHROPIC_API_KEY. Playground vẫn ghi vết mẫu. Thêm khóa vào môi trường để gọi model thật.",
         degraded: true,
       },
       { status: 503 },

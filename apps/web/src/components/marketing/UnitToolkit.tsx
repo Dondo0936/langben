@@ -34,8 +34,8 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
       </h2>
       <p className="mt-2 max-w-2xl text-sm text-muted">
         {vi
-          ? "Một đơn vị = một vết, hoặc một quan sát, hoặc một điểm đánh giá. Token LLM (input/output) chỉ dùng ước chi phí model — không phải đơn vị. Tự vận hành không đếm đơn vị."
-          : "One unit = one trace, or one observation, or one score. LLM tokens (input/output) only estimate model cost — they are not units. Self-host does not meter them."}
+          ? "Một đơn vị = một vết, hoặc một quan sát, hoặc một điểm đánh giá. Token LLM (input/output) chỉ dùng ước chi phí model, không phải đơn vị. Tự vận hành không đếm đơn vị."
+          : "One unit = one trace, or one observation, or one score. LLM tokens (input/output) only estimate model cost, not units. Self-host does not meter them."}
       </p>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -70,8 +70,8 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
         <h3 className="font-medium">{vi ? "Ví dụ có sẵn: Zalo «hủy đơn»" : "Shipped example: Zalo “cancel order”"}</h3>
         <p className="mt-1 text-sm text-muted">
           {vi
-            ? "1 vết + inbound + FPT NLU + Anthropic generation + outbound = 5 đơn vị. Generation mang 450 token — vẫn chỉ 1 quan sát."
-            : "1 trace + inbound + FPT NLU + Anthropic generation + outbound = 5 units. The generation carries 450 tokens — still 1 observation."}
+            ? "1 vết + inbound + FPT NLU + Anthropic generation + outbound = 5 đơn vị. Generation mang 450 token, vẫn chỉ 1 quan sát."
+            : "1 trace + inbound + FPT NLU + Anthropic generation + outbound = 5 units. The generation carries 450 tokens, still 1 observation."}
         </p>
         <p className="mt-2 font-mono text-xs text-ink-2">1 + 4 + 0 scores = 5 {vi ? "đơn vị" : "units"}</p>
       </div>
