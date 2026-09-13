@@ -157,7 +157,7 @@ export default async function LandingPage() {
         <section className="border-t border-white/10 py-16">
           <div className="mx-auto max-w-6xl px-4 text-center">
             <h2 className="text-3xl font-semibold">
-              {vi ? "Tự host tonight." : "Self-host tonight."}
+              Self host
             </h2>
             <div className="mt-6 flex justify-center gap-3">
               <Link href="/self-host" className="btn-solid">

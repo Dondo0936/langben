@@ -4,7 +4,7 @@ import { UnitToolkit } from "@/components/marketing/UnitToolkit";
 import { getLang } from "@/lib/get-lang";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Đơn vị — bộ công cụ" };
+export const metadata = { title: "Đơn vị" };
 
 export default async function UnitsToolkitPage() {
   const lang = await getLang();
