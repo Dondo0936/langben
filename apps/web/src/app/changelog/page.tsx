@@ -13,6 +13,24 @@ export default async function ChangelogPage() {
       <main className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-4xl font-semibold tracking-tight">{vi ? "Nhật ký" : "Changelog"}</h1>
         <article className="mt-8">
+          <p className="text-sm text-muted">13 Sep 2026 · v0.3.2</p>
+          <h2 className="mt-1 text-xl font-semibold">
+            {vi ? "Sidebar console tiếng Việt" : "Vietnamese console sidebar"}
+          </h2>
+          <ul className="mt-3 list-disc pl-5 text-sm text-muted">
+            <li>
+              {vi
+                ? "Menu Langfuse dùng cùng tiếng Việt với marketing. Kênh và Lộ trình không còn lệch ngôn ngữ."
+                : "Langfuse nav uses the same Vietnamese as marketing. Kênh and Lộ trình are no longer the only Vietnamese items."}
+            </li>
+            <li>
+              {vi
+                ? "Ẩn Book a call của Langfuse Cloud trên bản tự vận hành."
+                : "Hide Langfuse Cloud Book a call on self-host."}
+            </li>
+          </ul>
+        </article>
+        <article className="mt-8">
           <p className="text-sm text-muted">12 Sep 2026 · v0.3.1</p>
           <h2 className="mt-1 text-xl font-semibold">
             {vi ? "Ẩn gói hosted. Chỉ tự vận hành." : "Hide hosted plans. Self-host only."}

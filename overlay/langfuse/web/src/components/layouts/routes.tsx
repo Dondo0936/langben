@@ -44,9 +44,9 @@ export enum RouteSection {
 }
 
 export enum RouteGroup {
-  Observability = "Observability",
-  PromptManagement = "Prompt Management",
-  Evaluation = "Evaluation",
+  Observability = "Quan sát",
+  PromptManagement = "Prompt",
+  Evaluation = "Đánh giá",
 }
 
 export type Route = {
@@ -81,40 +81,40 @@ export type Route = {
 
 export const ROUTES: Route[] = [
   {
-    title: "Go to...",
+    title: "Đi tới...",
     pathname: "", // Empty pathname since this is a dropdown
     icon: Search,
     menuNode: <CommandMenuTrigger />,
     section: RouteSection.Main,
   },
   {
-    title: "Organizations",
+    title: "Tổ chức",
     pathname: "/",
     icon: Grid2X2,
     show: ({ organization }) => organization === undefined,
     section: RouteSection.Main,
   },
   {
-    title: "Projects",
+    title: "Dự án",
     pathname: "/organization/[organizationId]",
     icon: Grid2X2,
     section: RouteSection.Main,
   },
   {
-    title: "Home",
+    title: "Tổng quan",
     pathname: `/project/[projectId]`,
     icon: Home,
     section: RouteSection.Main,
   },
   {
-    title: "Dashboards",
+    title: "Bảng điều khiển",
     pathname: `/project/[projectId]/dashboards`,
     icon: LayoutDashboard,
     productModule: "dashboards",
     section: RouteSection.Main,
   },
   {
-    title: "Tracing",
+    title: "Vết",
     icon: ListTree,
     productModule: "tracing",
     group: RouteGroup.Observability,
@@ -122,7 +122,7 @@ export const ROUTES: Route[] = [
     pathname: `/project/[projectId]/traces`,
   },
   {
-    title: "Sessions",
+    title: "Phiên",
     icon: Clock,
     productModule: "tracing",
     group: RouteGroup.Observability,
@@ -144,7 +144,7 @@ export const ROUTES: Route[] = [
     pathname: `/project/[projectId]/lo-trinh`,
   },
   {
-    title: "Users",
+    title: "Người dùng",
     pathname: `/project/[projectId]/users`,
     icon: UsersIcon,
     productModule: "tracing",
@@ -152,7 +152,7 @@ export const ROUTES: Route[] = [
     section: RouteSection.Main,
   },
   {
-    title: "Alerts",
+    title: "Cảnh báo",
     pathname: "/project/[projectId]/alerts",
     icon: BellRing,
     projectRbacScopes: ["alerts:read"],
@@ -161,7 +161,7 @@ export const ROUTES: Route[] = [
     section: RouteSection.Main,
   },
   {
-    title: "Prompts",
+    title: "Prompt",
     pathname: "/project/[projectId]/prompts",
     icon: FileJson,
     projectRbacScopes: ["prompts:read"],
@@ -178,14 +178,14 @@ export const ROUTES: Route[] = [
     section: RouteSection.Main,
   },
   {
-    title: "Scores",
+    title: "Điểm",
     pathname: `/project/[projectId]/scores`,
     group: RouteGroup.Evaluation,
     section: RouteSection.Main,
     icon: SquarePercent,
   },
   {
-    title: "Evaluators",
+    title: "Bộ đánh giá",
     icon: Lightbulb,
     productModule: "evaluation",
     projectRbacScopes: ["evaluator:read", "evaluationRule:read"],
@@ -195,7 +195,7 @@ export const ROUTES: Route[] = [
     legacyPathname: `/project/[projectId]/evals/legacy`,
   },
   {
-    title: "Human Annotation",
+    title: "Gán nhãn",
     pathname: `/project/[projectId]/annotation-queues`,
     projectRbacScopes: ["annotationQueues:read"],
     group: RouteGroup.Evaluation,
@@ -203,7 +203,7 @@ export const ROUTES: Route[] = [
     icon: ClipboardPen,
   },
   {
-    title: "Datasets",
+    title: "Tập dữ liệu",
     pathname: `/project/[projectId]/datasets`,
     icon: Database,
     productModule: "datasets",
@@ -212,7 +212,7 @@ export const ROUTES: Route[] = [
     section: RouteSection.Main,
   },
   {
-    title: "Experiments",
+    title: "Thí nghiệm",
     pathname: `/project/[projectId]/experiments`,
     icon: Beaker,
     featureFlag: "experimentsV4Enabled",
@@ -222,7 +222,7 @@ export const ROUTES: Route[] = [
   {
     // Keep Action required first in the secondary nav so it is not sandwiched
     // between regular items like Upgrade Plan and Settings.
-    title: "Update",
+    title: "Cần xử lý",
     pathname: "",
     section: RouteSection.Secondary,
     show: ({ projectId, v4UpgradeUiAvailable }) =>
@@ -230,7 +230,7 @@ export const ROUTES: Route[] = [
     menuNode: <V4MigrationNavItem />,
   },
   {
-    title: "Cloud Status",
+    title: "Tình trạng Cloud",
     section: RouteSection.Secondary,
     pathname: "",
     show: ({ isLangfuseCloud, hasActiveCloudIncident }) =>
@@ -238,7 +238,7 @@ export const ROUTES: Route[] = [
     menuNode: <CloudStatusMenu />,
   },
   {
-    title: "V4 Preview",
+    title: "Xem trước V4",
     pathname: "",
     section: RouteSection.Secondary,
     featureFlag: "v4BetaToggleVisible",
@@ -248,7 +248,7 @@ export const ROUTES: Route[] = [
     menuNode: <V4SidebarToggle />,
   },
   {
-    title: "Upgrade Plan",
+    title: "Nâng cấp gói",
     icon: Sparkle,
     pathname: "/project/[projectId]/settings/billing",
     section: RouteSection.Secondary,
@@ -257,7 +257,7 @@ export const ROUTES: Route[] = [
     show: ({ organization }) => organization?.plan === "cloud:hobby",
   },
   {
-    title: "Upgrade Plan",
+    title: "Nâng cấp gói",
     icon: Sparkle,
     pathname: "/organization/[organizationId]/settings/billing",
     section: RouteSection.Secondary,
@@ -266,25 +266,26 @@ export const ROUTES: Route[] = [
     show: ({ organization }) => organization?.plan === "cloud:hobby",
   },
   {
-    title: "Settings",
+    title: "Cài đặt",
     pathname: "/project/[projectId]/settings",
     icon: Settings,
     section: RouteSection.Secondary,
   },
   {
-    title: "Settings",
+    title: "Cài đặt",
     pathname: "/organization/[organizationId]/settings",
     icon: Settings,
     section: RouteSection.Secondary,
   },
   {
-    title: "Book a call",
+    title: "Đặt lịch",
     section: RouteSection.Secondary,
     pathname: "",
+    show: () => false,
     menuNode: <BookACallButton />,
   },
   {
-    title: "Support",
+    title: "Hỗ trợ",
     icon: LifeBuoy,
     section: RouteSection.Secondary,
     pathname: "", // Empty pathname since this is a dropdown
@@ -307,7 +308,7 @@ function CommandMenuTrigger() {
       className="whitespace-nowrap"
     >
       <Search className="h-4 w-4" />
-      Go to...
+      Đi tới...
       <span className="ml-auto hidden md:inline-flex">
         <KeyboardShortcut keys={["Mod", "K"]} />
       </span>
