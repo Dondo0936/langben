@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 export function ConsoleFrame({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -162,8 +162,18 @@ function ioFor(id: string, vi: boolean): IoCopy {
   return vi ? entry.vi : entry.en;
 }
 
-export function TraceInspector({ vi, selectedHit }: { vi: boolean; selectedHit?: string }) {
-  const selected = TREE.find((node) => node.hit === selectedHit) ?? TREE.find((node) => node.id === "anthropic") ?? TREE[0];
+export function TraceInspector({
+  vi,
+  selectedHit,
+  onSelectHit,
+}: {
+  vi: boolean;
+  selectedHit?: string;
+  onSelectHit?: (hit: string) => void;
+}) {
+  const [internalHit, setInternalHit] = useState(selectedHit ?? "n-anthropic");
+  const currentHit = onSelectHit ? (selectedHit ?? "n-anthropic") : internalHit;
+  const selected = TREE.find((node) => node.hit === currentHit) ?? TREE.find((node) => node.id === "anthropic") ?? TREE[0];
   const io = ioFor(selected.id, vi);
   return (
     <ConsoleFrame title={vi ? "Vết · zalo-oa · RAG hoàn tiền" : "Trace · zalo-oa · refund RAG"}>
@@ -176,19 +186,22 @@ export function TraceInspector({ vi, selectedHit }: { vi: boolean; selectedHit?:
             {TREE.map((node) => {
               const active = node.id === selected.id;
               return (
-                <li
-                  key={node.id}
-                  data-hit={node.hit}
-                  style={{ paddingLeft: 12 + node.depth * 16 }}
-                  className={`flex items-baseline justify-between gap-2 py-1.5 pr-3 ${
-                    active ? "bg-white/[0.09] text-ink" : "text-white/75"
-                  }`}
-                >
-                  <span>
-                    <span className="mr-2 text-[9px] uppercase tracking-[0.12em] text-white/35">{node.kind}</span>
-                    {node.name}
-                  </span>
-                  <span className="shrink-0 text-[10px] text-white/40">{node.meta}</span>
+                <li key={node.id}>
+                  <button
+                    type="button"
+                    data-hit={node.hit}
+                    onClick={() => (onSelectHit ? onSelectHit(node.hit) : setInternalHit(node.hit))}
+                    style={{ paddingLeft: 12 + node.depth * 16 }}
+                    className={`flex w-full items-baseline justify-between gap-2 border-0 py-1.5 pr-3 text-left hover:bg-white/[0.06] ${
+                      active ? "bg-white/[0.09] text-ink" : "bg-transparent text-white/75"
+                    }`}
+                  >
+                    <span>
+                      <span className="mr-2 text-[9px] uppercase tracking-[0.12em] text-white/35">{node.kind}</span>
+                      {node.name}
+                    </span>
+                    <span className="shrink-0 text-[10px] text-white/40">{node.meta}</span>
+                  </button>
                 </li>
               );
             })}
@@ -236,7 +249,15 @@ export function ReplayView({ vi }: { vi: boolean }) {
   );
 }
 
-export function ChannelsView({ vi, highlight }: { vi: boolean; highlight?: string }) {
+export function ChannelsView({
+  vi,
+  highlight,
+  onSelect,
+}: {
+  vi: boolean;
+  highlight?: string;
+  onSelect?: (name: string) => void;
+}) {
   const rows = [
     ["Zalo OA", "webhook", vi ? "14:02 · RAG hoàn tiền" : "14:02 · refund RAG", "OK"],
     ["FPT.AI Conversation", "NLU", "cancel_order · 0.93", "OK"],
@@ -261,10 +282,22 @@ export function ChannelsView({ vi, highlight }: { vi: boolean; highlight?: strin
             {rows.map((row) => (
               <tr
                 key={row[0]}
-                data-hit={row[0] === "Zalo OA" ? "row-zalo" : undefined}
+                data-hit={row[0] === "Zalo OA" ? "row-zalo" : `ch-${row[0]}`}
+                onClick={onSelect ? () => onSelect(row[0]) : undefined}
+                onKeyDown={
+                  onSelect
+                    ? (event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          onSelect(row[0]);
+                        }
+                      }
+                    : undefined
+                }
+                tabIndex={onSelect ? 0 : undefined}
                 className={`border-b border-white/10 text-white/80 last:border-0 ${
                   highlight === row[0] ? "bg-white/[0.08]" : ""
-                }`}
+                } ${onSelect ? "cursor-pointer hover:bg-white/[0.06]" : ""}`}
               >
                 {row.map((cell, index) => (
                   <td key={`${row[0]}-${index}`} className="px-3 py-2">
@@ -280,7 +313,15 @@ export function ChannelsView({ vi, highlight }: { vi: boolean; highlight?: strin
   );
 }
 
-export function RoutesView({ vi }: { vi: boolean }) {
+export function RoutesView({
+  vi,
+  selectedHit,
+  onSelect,
+}: {
+  vi: boolean;
+  selectedHit?: string;
+  onSelect?: (hit: string) => void;
+}) {
   const routes = [
     {
       name: "zalo-oa → chunk → embed → retrieve → tools → llm → zalo-reply",
@@ -292,36 +333,64 @@ export function RoutesView({ vi }: { vi: boolean }) {
       name: "zalo-oa → viettel-asr → nlu → tts → zalo-reply",
       steps: ["zalo.inbound", "speech.asr", "nlu", "speech.tts", "zalo.outbound"],
       meta: vi ? "41 vết · 0 lỗi" : "41 traces · 0 errors",
+      hit: "route-voice",
     },
     {
       name: "lark → claude → lark",
       steps: ["lark.inbound", "generation", "lark.outbound"],
       meta: vi ? "19 vết · 1 lỗi" : "19 traces · 1 error",
+      hit: "route-lark",
     },
   ];
   return (
     <ConsoleFrame title={vi ? "Lộ trình · demo-bot" : "Routes · demo-bot"}>
       <div className="space-y-3 p-3">
-        {routes.map((route) => (
-          <div key={route.name} data-hit={route.hit} className="border border-white/10 bg-white/[0.03] p-3">
-            <div className="text-sm font-medium">{route.name}</div>
-            <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
-              {route.steps.map((step, index) => (
-                <span key={`${route.name}-${step}`} className="flex items-center gap-2">
-                  <span className="rounded-md bg-white/10 px-2 py-1 font-mono text-white/80">{step}</span>
-                  {index < route.steps.length - 1 ? <span className="text-white/30">→</span> : null}
-                </span>
-              ))}
+        {routes.map((route) => {
+          const active = selectedHit === route.hit;
+          const className = `block w-full border p-3 text-left ${
+            active ? "border-white/30 bg-white/[0.08]" : "border-white/10 bg-white/[0.03]"
+          } ${onSelect ? "cursor-pointer hover:bg-white/[0.06]" : ""}`;
+          const body = (
+            <>
+              <div className="text-sm font-medium">{route.name}</div>
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
+                {route.steps.map((step, index) => (
+                  <span key={`${route.name}-${step}`} className="flex items-center gap-2">
+                    <span className="rounded-md bg-white/10 px-2 py-1 font-mono text-white/80">{step}</span>
+                    {index < route.steps.length - 1 ? <span className="text-white/30">→</span> : null}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-2 text-[12px] text-white/45">{route.meta}</p>
+            </>
+          );
+          if (onSelect) {
+            return (
+              <button type="button" key={route.name} data-hit={route.hit} onClick={() => onSelect(route.hit)} className={className}>
+                {body}
+              </button>
+            );
+          }
+          return (
+            <div key={route.name} data-hit={route.hit} className={className}>
+              {body}
             </div>
-            <p className="mt-2 text-[12px] text-white/45">{route.meta}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </ConsoleFrame>
   );
 }
 
-export function TracesView({ vi, highlight }: { vi: boolean; highlight?: string }) {
+export function TracesView({
+  vi,
+  highlight,
+  onSelect,
+}: {
+  vi: boolean;
+  highlight?: string;
+  onSelect?: (name: string) => void;
+}) {
   const rows = [
     [vi ? "zalo-oa · RAG hoàn tiền" : "zalo-oa · refund RAG", "4.1s", "5.6k tok", "$0.013", "OK"],
     ["lark · VPN timeout", "2.1s", "610 tok", "$0.0031", "OK"],
@@ -345,10 +414,22 @@ export function TracesView({ vi, highlight }: { vi: boolean; highlight?: string 
             {rows.map((row, rowIndex) => (
               <tr
                 key={row[0]}
-                data-hit={rowIndex === 0 ? "row-trace" : undefined}
+                data-hit={rowIndex === 0 ? "row-trace" : `row-${rowIndex}`}
+                onClick={onSelect ? () => onSelect(row[0]) : undefined}
+                onKeyDown={
+                  onSelect
+                    ? (event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          onSelect(row[0]);
+                        }
+                      }
+                    : undefined
+                }
+                tabIndex={onSelect ? 0 : undefined}
                 className={`border-b border-white/10 text-white/80 last:border-0 ${
                   highlight === row[0] ? "bg-white/[0.08]" : ""
-                }`}
+                } ${onSelect ? "cursor-pointer hover:bg-white/[0.06]" : ""}`}
               >
                 {row.map((cell, index) => (
                   <td key={`${row[0]}-${index}`} className="px-3 py-2 font-mono text-[12px] sm:text-sm">
@@ -364,7 +445,15 @@ export function TracesView({ vi, highlight }: { vi: boolean; highlight?: string 
   );
 }
 
-export function LlmsView({ vi }: { vi: boolean }) {
+export function LlmsView({
+  vi,
+  highlight,
+  onSelect,
+}: {
+  vi: boolean;
+  highlight?: string;
+  onSelect?: (name: string) => void;
+}) {
   const rows = [
     ["OpenAI", "gpt-4o / embeddings", "us", vi ? "tools + embed" : "tools + embed"],
     ["Anthropic", "claude-sonnet", "us", "generation"],
@@ -389,8 +478,22 @@ export function LlmsView({ vi }: { vi: boolean }) {
             {rows.map((row) => (
               <tr
                 key={row[0]}
-                data-hit={row[0] === "Google Chat" ? "row-gchat" : row[0] === "OpenAI" ? "row-openai" : undefined}
-                className="border-b border-white/10 text-white/80 last:border-0"
+                data-hit={row[0] === "Google Chat" ? "row-gchat" : row[0] === "OpenAI" ? "row-openai" : `llm-${row[0]}`}
+                onClick={onSelect ? () => onSelect(row[0]) : undefined}
+                onKeyDown={
+                  onSelect
+                    ? (event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          onSelect(row[0]);
+                        }
+                      }
+                    : undefined
+                }
+                tabIndex={onSelect ? 0 : undefined}
+                className={`border-b border-white/10 text-white/80 last:border-0 ${
+                  highlight === row[0] ? "bg-white/[0.08]" : ""
+                } ${onSelect ? "cursor-pointer hover:bg-white/[0.06]" : ""}`}
               >
                 {row.map((cell, index) => (
                   <td key={`${row[0]}-${index}`} className="px-3 py-2">

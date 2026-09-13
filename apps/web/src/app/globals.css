@@ -221,8 +221,8 @@ a {
   pointer-events: none;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.7));
   transition:
-    left 0.72s cubic-bezier(0.22, 1, 0.36, 1),
-    top 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+    left 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    top 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .tour-cursor.is-click::after {
