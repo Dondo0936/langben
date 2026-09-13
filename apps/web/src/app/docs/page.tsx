@@ -224,15 +224,14 @@ export default async function DocsPage() {
         </section>
 
         <p className="mt-16 text-sm text-muted">
-          {vi ? "Giấy phép MIT. Bạn trả infra. " : "MIT license. You pay infra. "}
+          {vi ? "Giấy phép MIT. Bạn trả infra." : "MIT license. You pay infra."}{" "}
           <Link href="/pricing" className="text-ink underline-offset-4 hover:underline">
             {vi ? "Giá tự vận hành" : "Self-host pricing"}
           </Link>
-          {vi ? ". " : ". "}
+          {" · "}
           <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">
             {vi ? "Đơn vị là gì" : "What a unit is"}
           </Link>
-          .
         </p>
       </main>
       <MarketingFooter lang={lang} />
