@@ -14,4 +14,5 @@ if [[ ! -f "$ROOT/.env" ]]; then
 fi
 
 bash "$ROOT/scripts/apply-langfuse-overlay.sh" "$ROOT/.build/langfuse"
+echo "Starting Compose. Marketing http://localhost:43173  Console http://localhost:3000  Login demo@vet.dev / demodemo"
 exec bash "$ROOT/scripts/compose.sh" up --build "$@"

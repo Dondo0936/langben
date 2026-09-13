@@ -26,7 +26,9 @@ cp .env.console.example .env
 bash scripts/up.sh
 ```
 
-`scripts/up.sh` applies the Vết overlay, builds `vet-console:local`, and starts marketing + Langfuse. Equivalent: `COMPOSE_FILE` from `.env` + `docker compose up --build` after `bash scripts/apply-langfuse-overlay.sh`.
+`scripts/up.sh` applies the Vết overlay, builds `vet-console:local`, and starts marketing + Langfuse. The first build compiles the console overlay and takes several minutes. Later runs are faster if the images still exist. Equivalent after overlay: `bash scripts/compose.sh up --build`. Do not rely on `COMPOSE_FILE` in `.env`; the script passes `-f` flags and unsets `COMPOSE_FILE`. If `docker` needs root, the script uses `sudo`.
+
+Put a public tunnel in `.env` as `VET_PUBLIC_URL`. Do not export it in the shell. `compose.sh` drops a leftover shell value so `.env` wins. A dead tunnel breaks live OA webhooks and the fixture scripts. **Gửi thử** on Kênh posts to loopback `:43173` and does not use the tunnel.
 
 | Surface | URL |
 |---|---|
@@ -46,6 +48,8 @@ node scripts/seed-langfuse-zalo.mjs
 ### Zalo OA fixture (signature verify → Langfuse traces)
 
 ```bash
+# Uses VET_PUBLIC_URL if set, else http://localhost:43173
+unset VET_PUBLIC_URL
 node scripts/zalo-fixture.mjs
 ```
 
@@ -56,6 +60,7 @@ Invalid MAC → **401** and no turn. Valid MAC → session `zalo_oa:user_fixture
 You do not need a Lark or Google Chat app to test those webhooks locally. Demo tokens are already on Kênh.
 
 ```bash
+unset VET_PUBLIC_URL
 node scripts/lark-fixture.mjs    # url_verification + inbound → session lark:ou_fixture
 node scripts/gchat-fixture.mjs   # Bearer token + inbound → session gchat:users_fixture
 ```

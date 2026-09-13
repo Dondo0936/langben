@@ -117,8 +117,8 @@ export default async function DocsPage() {
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">
           {vi
-            ? "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Trang public này là marketing. Console chạy trên infra của bạn sau docker compose."
-            : "From the Zalo message to the reply, you see each step the agent takes. This public site is marketing. The console runs on your infra after docker compose."}
+            ? "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Sau docker compose: marketing :43173, console :3000."
+            : "From the Zalo message to the reply, you see each step the agent takes. After docker compose: marketing :43173, console :3000."}
         </p>
 
         <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -159,8 +159,8 @@ export default async function DocsPage() {
           </h2>
           <p className="mt-3 max-w-2xl text-muted">
             {vi
-              ? "scripts/up.sh gắn overlay Vết, build console, rồi docker compose up. Chi tiết biến môi trường nằm ở trang Tự vận hành."
-              : "scripts/up.sh applies the Vết overlay, builds the console, then runs docker compose up. Environment variables live on the Self-host page."}
+              ? "scripts/up.sh gắn overlay Vết, build console, rồi docker compose up. Lần đầu mất vài phút. Chi tiết biến môi trường nằm ở trang Tự vận hành."
+              : "scripts/up.sh applies the Vết overlay, builds the console, then runs docker compose up. The first run takes a few minutes. Environment variables live on the Self-host page."}
           </p>
           <pre className="panel mt-4 overflow-x-auto p-4 font-mono text-[12px]">{composeSnippet}</pre>
           <p className="mt-3 text-sm text-muted">

@@ -9,10 +9,12 @@ const composeSnippet = `git submodule update --init --recursive
 cp .env.console.example .env
 bash scripts/up.sh`;
 
-const envSnippet = `VET_DEPLOYMENT=self-host
-VET_DATA_DIR=/data
-VET_PUBLIC_URL=https://vet.internal
-VET_SESSION_SECRET=...`;
+const envSnippet = `NEXTAUTH_URL=http://localhost:3000
+VET_PUBLIC_URL=http://localhost:43173
+LANGFUSE_INIT_USER_EMAIL=demo@vet.dev
+LANGFUSE_INIT_USER_PASSWORD=demodemo
+LANGFUSE_INIT_PROJECT_PUBLIC_KEY=pk-lf-vet-demo
+LANGFUSE_INIT_PROJECT_SECRET_KEY=sk-lf-vet-demo`;
 
 export default async function SelfHostPage() {
   const lang = await getLang();
@@ -27,15 +29,15 @@ export default async function SelfHostPage() {
         </h1>
         <p className="mt-4 text-muted">
           {vi
-            ? "Chạy overlay Vết trên Langfuse OSS. Dữ liệu ở infra của bạn. Đặt VET_DEPLOYMENT=self-host. Trang Vercel chỉ là marketing. Console không chạy trên URL public này."
-            : "Run the Vết overlay on Langfuse OSS. Data stays on your infra. Set VET_DEPLOYMENT=self-host. The Vercel site is marketing only. The console does not run on this public URL."}
+            ? "Chạy overlay Vết trên Langfuse OSS. Dữ liệu ở infra của bạn. Một lệnh là docker compose: marketing :43173 và console :3000 trên máy bạn."
+            : "Run the Vết overlay on Langfuse OSS. Data stays on your infra. One command is docker compose: marketing :43173 and the console :3000 on your machine."}
         </p>
 
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Một lệnh" : "One command"}</h2>
         <p className="mt-2 text-sm text-muted">
           {vi
-            ? "scripts/up.sh gắn overlay, build vet-console:local, rồi docker compose up."
-            : "scripts/up.sh applies the overlay, builds vet-console:local, then runs docker compose up."}
+            ? "scripts/up.sh gắn overlay, build vet-console:local, rồi docker compose up. Lần đầu mất vài phút vì compile overlay console."
+            : "scripts/up.sh applies the overlay, builds vet-console:local, then runs docker compose up. The first run takes a few minutes while the console overlay compiles."}
         </p>
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{composeSnippet}</pre>
         <p className="mt-3 text-sm text-muted">
@@ -53,8 +55,8 @@ export default async function SelfHostPage() {
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{envSnippet}</pre>
         <p className="mt-3 text-sm text-muted">
           {vi
-            ? "Production bắt buộc VET_SESSION_SECRET. Đừng để placeholder."
-            : "Production requires VET_SESSION_SECRET. Do not leave the placeholder."}
+            ? "File đầy đủ là .env.console.example. Copy thành .env rồi sửa. Compose đã đặt VET_DEPLOYMENT=self-host cho marketing. Đặt tunnel vào .env, đừng export VET_PUBLIC_URL trong shell. Tunnel chết thì fixture và webhook OA gãy. Gửi thử trên Kênh gọi loopback :43173, không đi ra tunnel."
+            : "The full file is .env.console.example. Copy it to .env and edit. Compose already sets VET_DEPLOYMENT=self-host on marketing. Put a tunnel in .env. Do not export VET_PUBLIC_URL in the shell. A dead tunnel breaks fixtures and live OA webhooks. Gửi thử on Channels posts to loopback :43173 and does not use the tunnel."}
         </p>
 
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Dev laptop, không Docker" : "Laptop, no Docker"}</h2>

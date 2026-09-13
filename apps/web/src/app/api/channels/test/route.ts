@@ -24,11 +24,23 @@ export async function POST(req: NextRequest) {
 
   const steps: Array<{ label: string; status: number; body: unknown }> = [];
   for (const call of calls) {
-    const res = await fetch(call.url, {
-      method: "POST",
-      headers: call.headers,
-      body: call.body,
-    });
+    let res: Response;
+    try {
+      res = await fetch(call.url, {
+        method: "POST",
+        headers: call.headers,
+        body: call.body,
+      });
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : String(err);
+      return NextResponse.json(
+        {
+          error: `Test ${call.label} could not reach ${call.url}. ${reason}`,
+          steps,
+        },
+        { status: 502 },
+      );
+    }
     const text = await res.text();
     let parsed: unknown = text;
     try {

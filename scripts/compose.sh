@@ -29,8 +29,10 @@ if docker info >/dev/null 2>&1; then
   exec docker compose "${ARGS[@]}" "$@"
 fi
 if command -v sudo >/dev/null 2>&1 && sudo docker info >/dev/null 2>&1; then
-  exec sudo --preserve-env=COMPOSE_PROJECT_NAME,COMPOSE_BAKE,DOCKER_BUILDKIT,VET_PUBLIC_URL \
-    env -u COMPOSE_FILE \
+  # Do not preserve a leftover VET_PUBLIC_URL from the shell. sudo + interpolation
+  # would override .env and point hooks at a dead tunnel. Put the URL in .env.
+  exec sudo --preserve-env=COMPOSE_PROJECT_NAME,COMPOSE_BAKE,DOCKER_BUILDKIT \
+    env -u COMPOSE_FILE -u VET_PUBLIC_URL \
     docker compose "${ARGS[@]}" "$@"
 fi
 echo "docker is not available" >&2

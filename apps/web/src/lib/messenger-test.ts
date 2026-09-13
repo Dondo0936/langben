@@ -7,12 +7,9 @@ export function canSendChannelTest(type: string): type is ChannelType {
   return TESTABLE.has(type as ChannelType);
 }
 
-export function hookOrigin() {
-  return (
-    process.env.VET_HOOK_ORIGIN ||
-    process.env.VET_PUBLIC_URL ||
-    "http://127.0.0.1:43173"
-  ).replace(/\/$/, "");
+/** Gửi thử posts to this process. Loopback so a dead tunnel URL cannot break local tests. */
+export function testHookOrigin() {
+  return (process.env.VET_HOOK_ORIGIN || "http://127.0.0.1:43173").replace(/\/$/, "");
 }
 
 export type HookCall = {
@@ -23,7 +20,7 @@ export type HookCall = {
 };
 
 export function buildChannelTestCalls(ch: ChannelConfig, projectId: string): HookCall[] {
-  const url = `${hookOrigin()}${ch.webhookPath}`;
+  const url = `${testHookOrigin()}${ch.webhookPath}`;
   const stamp = Date.now();
   if (ch.type === "lark") {
     const token = String(ch.secrets.verificationToken ?? ch.secrets.webhookToken ?? "").trim();
