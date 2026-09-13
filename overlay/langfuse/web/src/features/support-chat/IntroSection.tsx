@@ -72,8 +72,8 @@ export function IntroSection(_props: { onStartForm: () => void }) {
               <LifeBuoy className="h-4 w-4" /> Hỗ trợ cộng đồng
             </div>
             <p className="text-muted-foreground text-sm">
-              Vết tự vận hành không có Ask AI hay Community Hours của Langfuse
-              Cloud. Hỏi trên GitHub của Langfuse OSS.
+              Vết tự vận hành không có chat hỗ trợ hosted. Hỏi trên GitHub của
+              Langfuse OSS.
             </p>
             <Button variant="outline" asChild>
               <a
