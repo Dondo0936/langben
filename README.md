@@ -89,6 +89,8 @@ LICENSE · NOTICE
 
 ## SDKs
 
+`@vet/sdk` is `packages/sdk-js` in this repo. It is not published to npm yet. After clone, import the workspace package.
+
 ```ts
 import Anthropic from "@anthropic-ai/sdk"
 import { wrapAnthropic, observe } from "@vet/sdk"
@@ -104,7 +106,7 @@ await observe("hỗ-trợ-khách", () =>
 { publicKey, secretKey, baseUrl, sessionId, userId, tags: ["zalo"] })
 ```
 
-Never send `ANTHROPIC_API_KEY` (or AWS/GCP/Azure secrets) to Vết — only traces.
+Never send `ANTHROPIC_API_KEY` (or AWS/GCP/Azure secrets) to Vết. Send traces only.
 
 OTLP: Langfuse public OTLP on the console. Homemade `POST /otlp/v1/traces` on :43173 still dual-writes when `LANGFUSE_*` keys are set.
 

@@ -2,7 +2,6 @@
 
 import { useId, useRef, useState, type KeyboardEvent } from "react";
 import Link from "next/link";
-import { consoleSignInUrl } from "@/lib/console-target";
 import type { Lang } from "@/lib/types";
 import { ChannelsView, LlmsView, ReplayView, RoutesView, TracesView } from "./console-mocks";
 
@@ -40,14 +39,14 @@ const MODULES: { id: ModuleId; vi: Copy; en: Copy }[] = [
       eyebrow: "Console",
       title: "Kênh",
       blurb: "Zalo OA, FPT.AI, Viettel, Lark, Google Chat, .NET",
-      body: "Kết nối webhook Zalo OA, FPT.AI Conversation, Viettel ASR/TTS, Lark, Google Chat và Teams.",
+      body: "Webhook Zalo OA, FPT.AI, Lark, Google Chat. Viettel ASR/TTS đi trên cây Zalo. Teams ghi span qua SDK hoặc OTLP.",
       cta: "Mở console",
     },
     en: {
       eyebrow: "Console",
       title: "Channels",
       blurb: "Zalo OA, FPT.AI, Viettel, Lark, Google Chat, .NET",
-      body: "Wire Zalo OA webhooks, FPT.AI Conversation, Viettel ASR/TTS, Lark, Google Chat, and Teams.",
+      body: "Webhooks for Zalo OA, FPT.AI, Lark, and Google Chat. Viettel ASR/TTS rides the Zalo tree. Teams uses the SDK or OTLP.",
       cta: "Open console",
     },
   },
@@ -104,7 +103,7 @@ const MODULES: { id: ModuleId; vi: Copy; en: Copy }[] = [
   },
 ];
 
-export function ProductPreview({ lang }: { lang: Lang }) {
+export function ProductPreview({ lang, demoHref }: { lang: Lang; demoHref: string }) {
   const [active, setActive] = useState(0);
   const baseId = useId();
   const tabsRef = useRef<Array<HTMLButtonElement | null>>([]);
@@ -143,7 +142,7 @@ export function ProductPreview({ lang }: { lang: Lang }) {
               <h3 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">{copy.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/65">{copy.body}</p>
             </div>
-            <Link href={consoleSignInUrl()} className="btn-solid !min-h-0 px-4 py-2">
+            <Link href={demoHref} className="btn-solid !min-h-0 px-4 py-2">
               {copy.cta}
             </Link>
           </div>

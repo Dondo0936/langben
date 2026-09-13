@@ -4,7 +4,7 @@ import { PlatformTour } from "@/components/marketing/PlatformTour";
 import { ProductPreview } from "@/components/marketing/ProductPreview";
 import { getLang } from "@/lib/get-lang";
 import { t, tr } from "@/lib/i18n";
-import { consoleSignInUrl } from "@/lib/console-target";
+import { marketingDemoHref } from "@/lib/console-target";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +31,7 @@ export default async function LandingPage() {
             <Link href="/self-host" className="btn-solid">
               {vi ? "Tự vận hành (Docker)" : "Self-host (Docker)"}
             </Link>
-            <Link href={consoleSignInUrl()} className="btn-ghost">
+            <Link href={marketingDemoHref()} className="btn-ghost">
               {tr(lang, t.nav.demo)}
             </Link>
             <Link href="/docs" className="btn-ghost">
@@ -56,7 +56,7 @@ export default async function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-10" id="module">
-          <ProductPreview lang={lang} />
+          <ProductPreview lang={lang} demoHref={marketingDemoHref()} />
         </section>
 
         <section className="border-y border-white/10 py-16">

@@ -16,7 +16,14 @@ const mono = IBM_Plex_Mono({
   variable: "--font-ibm-mono",
 });
 
+const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:43173";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Vết · Quan sát mọi bước đi của Agent",
     template: "%s · Vết",
@@ -24,6 +31,13 @@ export const metadata: Metadata = {
   description:
     "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Tự vận hành trên infra của bạn (MIT).",
   icons: { icon: "/logo.svg" },
+  openGraph: {
+    title: "Vết · Quan sát mọi bước đi của Agent",
+    description:
+      "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Tự vận hành trên infra của bạn (MIT).",
+    locale: "vi_VN",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {

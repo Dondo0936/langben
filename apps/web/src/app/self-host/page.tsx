@@ -27,8 +27,8 @@ export default async function SelfHostPage() {
         </h1>
         <p className="mt-4 text-muted">
           {vi
-            ? "Chạy overlay Vết trên Langfuse OSS. Dữ liệu ở infra của bạn. Đặt VET_DEPLOYMENT=self-host."
-            : "Run the Vết overlay on Langfuse OSS. Data stays on your infra. Set VET_DEPLOYMENT=self-host."}
+            ? "Chạy overlay Vết trên Langfuse OSS. Dữ liệu ở infra của bạn. Đặt VET_DEPLOYMENT=self-host. Trang Vercel chỉ là marketing. Console không chạy trên URL public này."
+            : "Run the Vết overlay on Langfuse OSS. Data stays on your infra. Set VET_DEPLOYMENT=self-host. The Vercel site is marketing only. The console does not run on this public URL."}
         </p>
 
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Một lệnh" : "One command"}</h2>
@@ -40,8 +40,13 @@ export default async function SelfHostPage() {
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{composeSnippet}</pre>
         <p className="mt-3 text-sm text-muted">
           {vi
-            ? "Marketing http://localhost:43173. Console http://localhost:3000. Tài khoản local: demo@vet.dev / demodemo."
-            : "Marketing http://localhost:43173. Console http://localhost:3000. Local login: demo@vet.dev / demodemo."}
+            ? "Marketing http://localhost:43173. Console http://localhost:3000. Tài khoản local: demo@vet.dev / demodemo. Khóa ingest Langfuse: pk-lf-vet-demo / sk-lf-vet-demo."
+            : "Marketing http://localhost:43173. Console http://localhost:3000. Local login: demo@vet.dev / demodemo. Langfuse ingest keys: pk-lf-vet-demo / sk-lf-vet-demo."}
+        </p>
+        <p className="mt-3 text-sm text-muted">
+          {vi
+            ? "Compose giới hạn log json-file 20MB mỗi service. ClickHouse in nhiều stdout. Không giới hạn thì đĩa đầy."
+            : "Compose caps json-file logs at 20MB per service. ClickHouse prints a lot of stdout. Without a cap the disk fills up."}
         </p>
 
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Biến môi trường" : "Environment"}</h2>

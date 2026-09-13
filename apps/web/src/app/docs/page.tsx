@@ -9,9 +9,9 @@ const sdkSnippet = `import Anthropic from "@anthropic-ai/sdk"
 import { wrapAnthropic, observe } from "@vet/sdk"
 
 const vet = {
-  publicKey: process.env.VET_PUBLIC_KEY,
-  secretKey: process.env.VET_SECRET_KEY,
-  baseUrl: process.env.VET_HOST, // http://localhost:3000
+  publicKey: "pk-lf-vet-demo",
+  secretKey: "sk-lf-vet-demo",
+  baseUrl: "http://localhost:3000",
 }
 
 const client = wrapAnthropic(new Anthropic(), vet)
@@ -30,9 +30,9 @@ await observe(
 const fptSnippet = `import { wrapFptGetAnswer } from "@vet/sdk"
 
 const getAnswer = wrapFptGetAnswer(fetch, {
-  publicKey: process.env.VET_PUBLIC_KEY,
-  secretKey: process.env.VET_SECRET_KEY,
-  baseUrl: process.env.VET_HOST,
+  publicKey: "pk-lf-vet-demo",
+  secretKey: "sk-lf-vet-demo",
+  baseUrl: "http://localhost:3000",
 })
 
 await getAnswer({
@@ -90,8 +90,8 @@ export default async function DocsPage() {
     {
       k: vi ? "Kênh" : "Channels",
       v: vi
-        ? "Webhook Zalo OA, FPT.AI, Viettel ASR/TTS, Lark, Google Chat, Teams."
-        : "Zalo OA, FPT.AI, Viettel ASR/TTS, Lark, Google Chat, Teams webhooks.",
+        ? "Webhook Zalo OA, FPT.AI, Lark, Google Chat. Viettel ASR/TTS đi trên cây Zalo. Teams ghi span qua SDK hoặc OTLP."
+        : "Webhooks for Zalo OA, FPT.AI, Lark, Google Chat. Viettel ASR/TTS rides the Zalo tree. Teams uses the SDK or OTLP.",
     },
     {
       k: vi ? "Lộ trình" : "Routes",
@@ -117,8 +117,8 @@ export default async function DocsPage() {
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">
           {vi
-            ? "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Chạy trên infra của bạn."
-            : "From the Zalo message to the reply, you see each step the agent takes. Run it on your infra."}
+            ? "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Trang public này là marketing. Console chạy trên infra của bạn sau docker compose."
+            : "From the Zalo message to the reply, you see each step the agent takes. This public site is marketing. The console runs on your infra after docker compose."}
         </p>
 
         <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -179,13 +179,13 @@ export default async function DocsPage() {
           </h2>
           <p className="mt-3 max-w-2xl text-muted">
             {vi
-              ? "Lấy public key và secret key trong console. Trỏ baseUrl về instance của bạn. Đừng gửi khóa OpenAI, Anthropic, AWS, GCP hay Azure vào Vết. Chỉ gửi trace."
-              : "Copy the public and secret keys from the console. Point baseUrl at your instance. Do not send OpenAI, Anthropic, AWS, GCP, or Azure keys to Vết. Send traces only."}
+              ? "Local demo dùng khóa Langfuse pk-lf-vet-demo / sk-lf-vet-demo. Trỏ baseUrl về http://localhost:3000. Production: copy key trong console của bạn. Đừng gửi khóa OpenAI, Anthropic, AWS, GCP hay Azure vào Vết. Chỉ gửi trace."
+              : "The local demo uses Langfuse keys pk-lf-vet-demo / sk-lf-vet-demo. Point baseUrl at http://localhost:3000. In production, copy keys from your console. Do not send OpenAI, Anthropic, AWS, GCP, or Azure keys to Vết. Send traces only."}
           </p>
           <p className="mt-3 max-w-2xl text-sm text-muted">
             {vi
-              ? "Console nói API Langfuse. @vet/sdk bọc Anthropic và FPT.AI. SDK Langfuse cũng trỏ được vào cùng baseUrl."
-              : "The console speaks the Langfuse API. @vet/sdk wraps Anthropic and FPT.AI. A Langfuse SDK can use the same baseUrl."}
+              ? "@vet/sdk nằm trong packages/sdk-js của repo này. Chưa phát hành trên npm. Console nói API Langfuse, nên SDK Langfuse cũng trỏ được vào cùng baseUrl."
+              : "@vet/sdk lives in packages/sdk-js in this repo. It is not on npm yet. The console speaks the Langfuse API, so a Langfuse SDK can use the same baseUrl."}
           </p>
           <pre className="panel mt-4 overflow-x-auto p-4 font-mono text-[12px]">{sdkSnippet}</pre>
           <p className="mt-6 text-sm font-medium">{vi ? "FPT.AI Conversation" : "FPT.AI Conversation"}</p>
@@ -209,8 +209,8 @@ export default async function DocsPage() {
           <pre className="panel mt-4 overflow-x-auto p-4 font-mono text-[12px]">{zaloSnippet}</pre>
           <p className="mt-3 text-sm text-muted">
             {vi
-              ? "Thử local không cần app Zalo, Lark hay Google: nút Gửi thử trên trang Kênh, hoặc node scripts/zalo-fixture.mjs, lark-fixture.mjs, gchat-fixture.mjs."
-              : "Try locally without a Zalo, Lark, or Google app: Gửi thử on the Channels page, or node scripts/zalo-fixture.mjs, lark-fixture.mjs, gchat-fixture.mjs."}
+              ? "Thử local không cần app Zalo, Lark hay Google: nút Gửi thử trên trang Kênh (inbound), hoặc node scripts/zalo-fixture.mjs, lark-fixture.mjs, gchat-fixture.mjs. Teams không có webhook tin nhắn như Zalo."
+              : "Try locally without a Zalo, Lark, or Google app: Gửi thử on the Channels page (inbound), or node scripts/zalo-fixture.mjs, lark-fixture.mjs, gchat-fixture.mjs. Teams has no messenger webhook like Zalo."}
           </p>
         </section>
 

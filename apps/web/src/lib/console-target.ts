@@ -1,9 +1,20 @@
+function hostedOnVercel() {
+  return Boolean(process.env.VERCEL || process.env.NEXT_PUBLIC_VERCEL_ENV);
+}
+
 /** Public URL of the Langfuse OSS console (port 3000 locally). */
 export function consoleOrigin() {
   const fromEnv = process.env.NEXT_PUBLIC_VET_CONSOLE_URL || process.env.VET_CONSOLE_URL;
   if (fromEnv) return fromEnv.replace(/\/$/, "");
-  if (process.env.VERCEL) return "";
+  if (hostedOnVercel()) return "";
   return "http://localhost:3000";
+}
+
+/** Homepage tour when this deployment does not host a console. */
+export function marketingDemoHref() {
+  const origin = consoleOrigin();
+  if (!origin) return "/#san-pham";
+  return `${origin}/traces`;
 }
 
 export function consoleProjectId() {
