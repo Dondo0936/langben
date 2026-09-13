@@ -23,8 +23,8 @@ export default async function LandingPage() {
           </h1>
           <p className="rise rise-d2 mt-6 max-w-2xl text-lg text-muted">
             {vi
-              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam là Zalo → FPT / Viettel → LLM → TTS → trả lời. Vết ghi cả lộ trình đó. MIT — tự host miễn phí trên infra của bạn."
-              : "Langfuse sees messages.create. A Vietnamese production bot is Zalo → FPT / Viettel → LLM → TTS → reply. Vết traces that whole route. MIT — self-host for free on your infra."}
+              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam đi từ Zalo qua FPT hoặc Viettel, rồi LLM, TTS, rồi trả lời. Vết ghi cả lộ trình đó. Giấy phép MIT, tự host miễn phí trên infra của bạn."
+              : "Langfuse sees messages.create. A Vietnamese production bot goes from Zalo through FPT or Viettel, then the LLM, TTS, and the reply. Vết traces that whole route. MIT license, self-host for free on your infra."}
           </p>
           <div className="rise rise-d3 mt-10 flex flex-wrap gap-3">
             <Link href="/self-host" className="btn-solid">
@@ -54,37 +54,7 @@ export default async function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-10" id="san-pham">
-          <ProductPreview />
-        </section>
-
-        <section className="mx-auto max-w-6xl px-4 py-16">
-          <div className="grid gap-px bg-white/10 md:grid-cols-3">
-          {[
-            {
-              k: vi ? "Hội thoại kênh" : "Channel replay",
-              v: vi
-                ? "Mở phiên Zalo: tin khách, intent FPT, lần sinh, TTS, tin bot — một cây, không phải log rời."
-                : "Open a Zalo session: user text, FPT intent, generation, TTS, bot reply — one tree, not scattered logs.",
-            },
-            {
-              k: vi ? "Kênh Việt Nam" : "Vietnamese channels",
-              v: vi
-                ? "Zalo OA/Bot (tap webhook), FPT.AI Conversation, Viettel ASR/TTS/NLP, Lark, Google Chat, .NET/Teams."
-                : "Zalo OA/Bot (webhook tap), FPT.AI Conversation, Viettel ASR/TTS/NLP, Lark, Google Chat, .NET/Teams.",
-            },
-            {
-              k: vi ? "LLM hyperscaler" : "Hyperscaler LLMs",
-              v: vi
-                ? "Anthropic, FPT Factory, Bedrock, Vertex, Foundry — generation gắn provider + region, tách biệt kênh Chat/Teams."
-                : "Anthropic, FPT Factory, Bedrock, Vertex, Foundry — generations tagged with provider + region, not mixed up with Chat/Teams.",
-            },
-          ].map((c) => (
-            <div key={c.k} className="bg-black/70 p-6">
-              <h2 className="text-lg font-semibold tracking-tight">{c.k}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{c.v}</p>
-            </div>
-          ))}
-          </div>
+          <ProductPreview lang={lang} />
         </section>
 
         <section className="border-y border-white/10 py-16">
@@ -162,13 +132,13 @@ export default async function LandingPage() {
           <dl className="mt-6 space-y-6 text-sm">
             {(vi
               ? [
-                  ["Vết khác gì một bản Langfuse dán sticker?", "Langfuse thấy lần gọi LLM. Vết thấy Zalo vào, FPT NLU, TTS Viettel, tin ra — cùng một phiên. UI tiếng Việt gốc, không dịch trình duyệt."],
+                  ["Vết khác gì một bản Langfuse dán sticker?", "Langfuse thấy lần gọi LLM. Vết thấy Zalo vào, FPT NLU, TTS Viettel và tin ra trong cùng một phiên. UI tiếng Việt gốc, không dịch trình duyệt."],
                   ["Tự host có thật sự miễn phí?", "Có. MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra."],
                   ["Đơn vị (unit) là gì?", "Không phải token. Mỗi vết, quan sát, và điểm đánh giá là một đơn vị. Tự vận hành không đếm. Xem /docs/units."],
                   ["Vertex khác Google Chat chứ?", "Có. Vertex/Foundry/Bedrock là lớp mô hình. Google Chat và Teams là kênh. Tách menu: Kết nối LLM vs Kênh."],
                 ]
               : [
-                  ["Is this a Langfuse reskin?", "Langfuse sees the LLM call. Vết sees Zalo in, FPT NLU, Viettel TTS, the reply — one session. Native Vietnamese chrome."],
+                  ["Is this a Langfuse reskin?", "Langfuse sees the LLM call. Vết sees Zalo in, FPT NLU, Viettel TTS and the reply in the same session. Native Vietnamese chrome."],
                   ["Is self-hosting actually free?", "Yes. MIT, docker compose up, unlimited units. You pay infra."],
                   ["What is a unit?", "Not a token. Each trace, observation, and score is one unit. Self-host does not meter them. See /docs/units."],
                   ["Vertex vs Google Chat?", "Vertex/Foundry/Bedrock are model layers. Google Chat and Teams are channels. Separate nav."],
