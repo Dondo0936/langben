@@ -55,8 +55,8 @@ export default async function SelfHostPage() {
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{envSnippet}</pre>
         <p className="mt-3 text-sm text-muted">
           {vi
-            ? "File đầy đủ là .env.console.example. Copy thành .env rồi sửa. Compose đã đặt VET_DEPLOYMENT=self-host cho marketing. Đặt tunnel vào .env, đừng export VET_PUBLIC_URL trong shell. Tunnel chết thì fixture và webhook OA gãy. Gửi thử trên Kênh gọi loopback :43173, không đi ra tunnel."
-            : "The full file is .env.console.example. Copy it to .env and edit. Compose already sets VET_DEPLOYMENT=self-host on marketing. Put a tunnel in .env. Do not export VET_PUBLIC_URL in the shell. A dead tunnel breaks fixtures and live OA webhooks. Gửi thử on Channels posts to loopback :43173 and does not use the tunnel."}
+            ? "File đầy đủ là .env.console.example. Copy thành .env rồi sửa. Compose đã đặt VET_DEPLOYMENT=self-host cho marketing. Đặt tunnel vào .env, đừng export VET_PUBLIC_URL trong shell. Tunnel chết thì fixture và webhook OA/Bot gãy. Gửi thử trên Kênh gọi loopback :43173, không đi ra tunnel. Zalo Bot: dán Secret Token (không phải Bot Token) và URL https:// đầy đủ."
+            : "The full file is .env.console.example. Copy it to .env and edit. Compose already sets VET_DEPLOYMENT=self-host on marketing. Put a tunnel in .env. Do not export VET_PUBLIC_URL in the shell. A dead tunnel breaks fixtures and live OA/Bot webhooks. Gửi thử on Channels posts to loopback :43173 and does not use the tunnel. Zalo Bot: paste Secret Token (not Bot Token) and a full https:// webhook URL."}
         </p>
 
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Dev laptop, không Docker" : "Laptop, no Docker"}</h2>

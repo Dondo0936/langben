@@ -99,7 +99,7 @@ export function buildChannelTestCalls(ch: ChannelConfig, projectId: string): Hoo
     ];
   }
   if (ch.type === "zalo_bot") {
-    const token = String(ch.secrets.botToken ?? "").trim();
+    const token = String(ch.secrets.botToken ?? ch.secrets.webhookToken ?? "").trim();
     return [
       {
         url,

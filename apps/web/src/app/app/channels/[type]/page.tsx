@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChannelForm } from "@/components/app/ChannelForm";
 import { ChannelShell } from "@/components/app/ChannelShell";
+import { CopyHookUrl } from "@/components/app/CopyHookUrl";
 import { getLang } from "@/lib/get-lang";
 import { requireChannelConsole } from "@/lib/console";
 import { getChannel } from "@/lib/store";
@@ -32,10 +33,7 @@ export default async function ChannelDetailPage({
       </Link>
       <h1 className="mb-1 mt-1 text-lg font-semibold">{channel.name}</h1>
       {channel.webhookPath ? (
-        <p className="mb-4 font-mono text-xs text-muted">
-          {publicUrl()}
-          {channel.webhookPath}
-        </p>
+        <CopyHookUrl url={`${publicUrl()}${channel.webhookPath}`} />
       ) : (
         <p className="mb-4 text-sm text-muted">
           {vi ? "Kênh này đi SDK / OTLP, không phải webhook messenger." : "This channel is SDK / OTLP, not a messenger webhook."}

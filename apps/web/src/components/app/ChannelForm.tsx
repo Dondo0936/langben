@@ -21,6 +21,7 @@ function signatureHint(type: ChannelType) {
   if (type === "gchat") return "Bearer token sai thì webhook trả 401, không tạo lượt.";
   if (type === "fpt" || type === "viettel") return "HMAC sai thì webhook trả 401, không tạo lượt.";
   if (type === "msteams") return "Kênh này đi SDK, không kiểm chữ ký webhook messenger.";
+  if (type === "zalo_bot") return "Secret Token sai thì webhook trả 401, không tạo lượt.";
   return "Chữ ký OA-MAC sai thì webhook trả 401, không tạo lượt.";
 }
 
@@ -123,17 +124,24 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
         </>
       ) : null}
       {channel.type === "zalo_bot" ? (
-        <label className="block">
-          Bot token
-          <input
-            type="password"
-            className="mt-1 h-9 w-full rounded-md border border-line px-3"
-            value={botToken}
-            onChange={(e) => setBotToken(e.target.value)}
-            placeholder={SAVED}
-            autoComplete="new-password"
-          />
-        </label>
+        <>
+          <label className="block">
+            Secret Token
+            <input
+              type="password"
+              className="mt-1 h-9 w-full rounded-md border border-line px-3"
+              value={botToken}
+              onChange={(e) => setBotToken(e.target.value)}
+              placeholder={SAVED}
+              autoComplete="new-password"
+            />
+          </label>
+          <p className="text-xs text-muted">
+            Dán Secret Token trên bot.zapps.me (8-256 ký tự). Không dán Bot Token. Zalo gửi header
+            X-Bot-Api-Secret-Token. Webhook URL phải là https://.../hooks/zalo/bot/prj-vet-demo, không chỉ
+            đường dẫn.
+          </p>
+        </>
       ) : null}
       {channel.type === "fpt" ? (
         <label className="block">

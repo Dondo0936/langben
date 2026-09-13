@@ -55,6 +55,20 @@ node scripts/zalo-fixture.mjs
 
 Invalid MAC → **401** and no turn. Valid MAC → session `zalo_oa:user_fixture` on **Sessions** in the console.
 
+### Zalo Bot (bot.zapps.me, no OA package)
+
+This is not the Chatbot tab inside OA admin (that tab is paid). Create a bot at [bot.zapps.me](https://bot.zapps.me).
+
+1. On Kênh → Zalo Bot, paste **Secret Token** (not Bot Token) and Lưu.
+2. Put a public HTTPS origin in `.env` as `VET_PUBLIC_URL` (cloudflared/ngrok to `:43173`), then `bash scripts/compose.sh up -d marketing`.
+3. Copy the full URL `https://<tunnel>/hooks/zalo/bot/prj-vet-demo` into Webhook URL. Zalo rejects a path without `https://`.
+4. Lưu thay đổi on bot.zapps.me, then message the bot. Session `zalo_bot:<user id>` appears in the console.
+
+```bash
+unset VET_PUBLIC_URL
+node scripts/zalo-bot-fixture.mjs
+```
+
 ### Lark / Google Chat fixtures (no developer app)
 
 You do not need a Lark or Google Chat app to test those webhooks locally. Demo tokens are already on Kênh.
