@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import type { Lang } from "@/lib/types";
-import { ChannelsView, LlmsView, RoutesView, TraceInspector, TracesView } from "./console-mocks";
+import { ChannelsView, LlmsView, RoutesView, TraceInspector, TracesView, traceHitFromName, traceTreeFromHit } from "./console-mocks";
 
 type Scene = "traces" | "tree" | "channels" | "routes" | "llms";
 
@@ -44,6 +44,12 @@ const CAPTIONS: Record<string, { vi: string; en: string }> = {
     en: "Anthropic sonnet: retrieved chunks plus CRM, then the OA reply.",
   },
   "n-out": { vi: "Tin Zalo ra, quote tin khách.", en: "Zalo outbound, quoting the customer." },
+  "l-in": { vi: "Tin Lark vào. Stand-up lúc mấy.", en: "Lark inbound. What time is stand-up." },
+  "l-gen": { vi: "Claude trả lời giờ stand-up trên #eng.", en: "Claude answers the stand-up time in #eng." },
+  "l-out": { vi: "Tin Lark ra, quote tin nội bộ.", en: "Lark outbound, quoting the internal DM." },
+  "g-in": { vi: "Tin Google Chat vào. Reset mật khẩu VPN.", en: "Google Chat inbound. Reset the VPN password." },
+  "g-gen": { vi: "gpt-4o trả link reset VPN. Không dùng Vertex.", en: "gpt-4o returns the VPN reset link. Not Vertex." },
+  "g-out": { vi: "Tin Google Chat ra trong space hỗ trợ.", en: "Google Chat outbound in the support space." },
   "route-zalo": {
     vi: "Lộ trình: inbound, chunk, embed, retrieve, tools, generation, outbound.",
     en: "Route: inbound, chunk, embed, retrieve, tools, generation, outbound.",
@@ -53,6 +59,7 @@ const CAPTIONS: Record<string, { vi: string; en: string }> = {
     en: "Voice route: Zalo, Viettel ASR, NLU, TTS, then the reply.",
   },
   "route-lark": { vi: "Lộ trình Lark vào, Claude, Lark ra.", en: "Lark in, Claude, Lark out." },
+  "route-gchat": { vi: "Lộ trình Google Chat vào, gpt-4o, Google Chat ra.", en: "Google Chat in, gpt-4o, Google Chat out." },
   "row-zalo": { vi: "Webhook Zalo OA. Lượt hoàn tiền vừa vào.", en: "Zalo OA webhook. The refund turn just landed." },
   "row-openai": { vi: "OpenAI: chat completions và embeddings.", en: "OpenAI: chat completions and embeddings." },
   "row-gchat": { vi: "Google Chat là kênh, không phải model.", en: "Google Chat is a channel, not a model." },
@@ -82,7 +89,13 @@ const STEPS: Step[] = [
   { scene: "tree", hit: "n-tool", ms: 1300, caption: CAPTIONS["n-tool"] },
   { scene: "tree", hit: "n-openai", ms: 1400, caption: CAPTIONS["n-openai"] },
   { scene: "tree", hit: "n-anthropic", ms: 1400, caption: CAPTIONS["n-anthropic"] },
+  { scene: "tree", hit: "l-in", ms: 1200, caption: CAPTIONS["l-in"] },
+  { scene: "tree", hit: "l-out", ms: 1100, caption: CAPTIONS["l-out"] },
+  { scene: "tree", hit: "g-in", ms: 1200, caption: CAPTIONS["g-in"] },
+  { scene: "tree", hit: "g-out", ms: 1100, caption: CAPTIONS["g-out"] },
   { scene: "routes", hit: "route-zalo", ms: 1300, caption: CAPTIONS["route-zalo"] },
+  { scene: "routes", hit: "route-lark", ms: 1100, caption: CAPTIONS["route-lark"] },
+  { scene: "routes", hit: "route-gchat", ms: 1100, caption: CAPTIONS["route-gchat"] },
 ];
 
 function localizeHighlight(value: string | undefined, vi: boolean) {
@@ -157,7 +170,13 @@ export function PlatformTour({ lang }: { lang: Lang }) {
   const selectScene = useCallback(
     (id: Scene) => {
       const nextHit =
-        id === "tree" ? (hit.startsWith("n-") ? hit : "n-chunk") : id === "routes" ? "route-zalo" : `nav-${id}`;
+        id === "tree"
+          ? hit.startsWith("n-") || hit.startsWith("l-") || hit.startsWith("g-")
+            ? hit
+            : "n-chunk"
+          : id === "routes"
+            ? "route-zalo"
+            : `nav-${id}`;
       takeOver({
         scene: id,
         hit: nextHit,
@@ -290,11 +309,16 @@ export function PlatformTour({ lang }: { lang: Lang }) {
               <TracesView
                 vi={vi}
                 highlight={highlight}
-                onSelect={(name) => takeOver({ scene: "tree", hit: "n-in", highlight: name })}
+                onSelect={(name) => takeOver({ scene: "tree", hit: traceHitFromName(name), highlight: name })}
               />
             ) : null}
             {scene === "tree" ? (
-              <TraceInspector vi={vi} selectedHit={hit.startsWith("n-") ? hit : "n-chunk"} onSelectHit={(next) => takeOver({ scene: "tree", hit: next })} />
+              <TraceInspector
+                vi={vi}
+                selectedHit={hit}
+                treeId={traceTreeFromHit(hit)}
+                onSelectHit={(next) => takeOver({ scene: "tree", hit: next })}
+              />
             ) : null}
             {scene === "channels" ? (
               <ChannelsView

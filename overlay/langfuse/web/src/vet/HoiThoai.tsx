@@ -1,30 +1,38 @@
 import { api } from "@/src/utils/api";
 
-function textOf(value: unknown): string {
-  if (value == null) return "";
+function textOf(value: unknown, depth = 0): string {
+  if (value == null || depth > 6) return "";
   if (typeof value === "string") {
     const trimmed = value.trim();
-    if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+    if ((trimmed.startsWith("{") || trimmed.startsWith("[")) && trimmed.length < 8000) {
       try {
-        return textOf(JSON.parse(trimmed));
+        return textOf(JSON.parse(trimmed), depth + 1);
       } catch {
         return value.length > 240 ? `${value.slice(0, 240)}…` : value;
       }
     }
     return value;
   }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = textOf(item, depth + 1);
+      if (found) return found;
+    }
+    return "";
+  }
   if (typeof value === "object") {
     const rec = value as Record<string, unknown>;
-    if (typeof rec.text === "string") return rec.text;
-    const msg = rec.message as { text?: string; content?: unknown } | undefined;
-    if (typeof msg?.text === "string") return msg.text;
-    if (typeof msg?.content === "string") return textOf(msg.content);
-    const event = rec.event as { message?: { text?: string; content?: unknown } } | undefined;
-    if (typeof event?.message?.text === "string") return event.message.text;
-    if (typeof event?.message?.content === "string") return textOf(event.message.content);
+    if (typeof rec.text === "string" && rec.text.trim()) return rec.text;
+    if (typeof rec.content === "string" && rec.content.trim()) return rec.content;
     if (typeof rec.intent === "string") {
       const conf = rec.confidence != null ? ` · ${rec.confidence}` : "";
       return `intent = ${rec.intent}${conf}`;
+    }
+    for (const key of ["message", "event", "payload", "body", "data", "output", "input"]) {
+      if (key in rec) {
+        const found = textOf(rec[key], depth + 1);
+        if (found) return found;
+      }
     }
     try {
       const s = JSON.stringify(value);

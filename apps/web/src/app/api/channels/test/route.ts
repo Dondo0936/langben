@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireChannelApi } from "@/lib/console";
 import { getChannel } from "@/lib/store";
+import { consoleProjectId } from "@/lib/console-target";
 import { buildChannelTestCalls, canSendChannelTest } from "@/lib/messenger-test";
 
 export const dynamic = "force-dynamic";
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
     traceId: last && typeof last === "object" ? last.traceId : undefined,
     sessionId,
     sessionUrl: sessionId
-      ? `${consoleBase}/project/${auth.project.id}/sessions/${encodeURIComponent(sessionId)}`
+      ? `${consoleBase}/project/${consoleProjectId()}/sessions/${encodeURIComponent(sessionId)}`
       : undefined,
   });
 }

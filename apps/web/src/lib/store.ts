@@ -14,6 +14,9 @@ import type {
 } from "./types";
 import { seedStore } from "./seed";
 
+const DEMO_PROJECT_ID = "prj-vet-demo";
+const LEGACY_DEMO_PROJECT_ID = "prj_demo";
+
 const DATA_DIR = process.env.VET_DATA_DIR
   ? path.resolve(process.env.VET_DATA_DIR)
   : path.join(process.cwd(), "data");
@@ -38,6 +41,133 @@ function persist(next: StoreShape) {
   renameSync(tmp, DATA_FILE);
 }
 
+function rewriteProjectId(store: StoreShape, from: string, to: string) {
+  const project = store.projects.find((item) => item.id === from);
+  if (!project || store.projects.some((item) => item.id === to)) return false;
+  project.id = to;
+  const collections = [
+    store.traces,
+    store.observations,
+    store.sessions,
+    store.scores,
+    store.prompts,
+    store.channels,
+    store.routes,
+    store.connections,
+  ];
+  for (const rows of collections) {
+    for (const row of rows) {
+      if (row.projectId === from) row.projectId = to;
+    }
+  }
+  for (const channel of store.channels) {
+    if (channel.webhookPath?.includes(from)) {
+      channel.webhookPath = channel.webhookPath.split(from).join(to);
+    }
+  }
+  return true;
+}
+
+function patchMessengerRoutes(store: StoreShape) {
+  let dirty = false;
+  for (const route of store.routes) {
+    if (route.id === "rt_lark") {
+      const next = ["lark.inbound", "generation", "lark.outbound"];
+      if (route.steps.join(">") !== next.join(">") || route.name !== "lark → claude → lark") {
+        route.name = "lark → claude → lark";
+        route.steps = next;
+        dirty = true;
+      }
+    }
+    if (route.id === "rt_gchat") {
+      const next = ["googlechat.inbound", "generation", "googlechat.outbound"];
+      if (route.steps.join(">") !== next.join(">") || route.name !== "google-chat → generation → google-chat") {
+        route.name = "google-chat → generation → google-chat";
+        route.steps = next;
+        dirty = true;
+      }
+    }
+  }
+  return dirty;
+}
+
+function stubObs(partial: Partial<Observation> & Pick<Observation, "id" | "traceId" | "type" | "name" | "startTime">): Observation {
+  return {
+    projectId: DEMO_PROJECT_ID,
+    parentId: null,
+    usage: null,
+    model: null,
+    provider: null,
+    region: null,
+    metadata: {},
+    status: "ok",
+    input: null,
+    output: null,
+    endTime: null,
+    ...partial,
+  };
+}
+
+function ensureMessengerOutboundObs(store: StoreShape) {
+  const have = new Set(store.observations.map((item) => item.id));
+  const extras: Observation[] = [];
+  if (store.traces.some((trace) => trace.id === "tr_lark_dm") && !have.has("obs_lark_out")) {
+    extras.push(
+      stubObs({
+        id: "obs_lark_out",
+        traceId: "tr_lark_dm",
+        parentId: have.has("obs_lark_gen") ? "obs_lark_gen" : "obs_lark_in",
+        type: "channel.outbound",
+        name: "lark.outbound",
+        startTime: "2026-09-09T08:02:11.900Z",
+        endTime: "2026-09-09T08:02:12.020Z",
+        input: { text: "Stand-up 9:15 hàng ngày trên channel #eng." },
+        output: { message_id: "om_2" },
+      }),
+    );
+  }
+  if (store.traces.some((trace) => trace.id === "tr_gchat")) {
+    if (!have.has("obs_gchat_gen")) {
+      extras.push(
+        stubObs({
+          id: "obs_gchat_gen",
+          traceId: "tr_gchat",
+          parentId: "obs_gchat_in",
+          type: "generation",
+          name: "openai.chat.completions",
+          startTime: "2026-09-09T07:30:00.100Z",
+          endTime: "2026-09-09T07:30:01.000Z",
+          model: "gpt-4o",
+          provider: "openai",
+          input: { messages: [{ role: "user", content: "reset mật khẩu VPN" }] },
+          output: { text: "Gửi link reset VPN nội bộ. Không dùng credential Vertex." },
+          usage: { inputTokens: 80, outputTokens: 24, estimatedCostUsd: 0.0003 },
+        }),
+      );
+    }
+    if (!have.has("obs_gchat_out")) {
+      extras.push(
+        stubObs({
+          id: "obs_gchat_out",
+          traceId: "tr_gchat",
+          parentId: have.has("obs_gchat_gen") || extras.some((item) => item.id === "obs_gchat_gen")
+            ? "obs_gchat_gen"
+            : "obs_gchat_in",
+          type: "channel.outbound",
+          name: "googlechat.outbound",
+          startTime: "2026-09-09T07:30:01.050Z",
+          endTime: "2026-09-09T07:30:01.120Z",
+          input: { text: "Gửi link reset VPN nội bộ. Không dùng credential Vertex." },
+          output: { message_id: "2" },
+        }),
+      );
+    }
+  }
+  if (!extras.length) return false;
+  store.observations.push(...extras);
+  return true;
+}
+
 function normalizeStore(raw: StoreShape): StoreShape {
   if (!Array.isArray(raw.projects) || !Array.isArray(raw.users) || !Array.isArray(raw.orgs)) {
     throw new Error("corrupt store");
@@ -46,6 +176,10 @@ function normalizeStore(raw: StoreShape): StoreShape {
   for (const user of raw.users) {
     if (typeof user.sessionEpoch !== "number") user.sessionEpoch = 0;
   }
+  const migrated = rewriteProjectId(raw, LEGACY_DEMO_PROJECT_ID, DEMO_PROJECT_ID);
+  const routesPatched = patchMessengerRoutes(raw);
+  const obsPatched = ensureMessengerOutboundObs(raw);
+  if (migrated || routesPatched || obsPatched) persist(raw);
   return raw;
 }
 
@@ -80,7 +214,13 @@ export function listProjects() {
 }
 
 export function getProject(id: string) {
-  return loadStore().projects.find((p) => p.id === id) ?? null;
+  const store = loadStore();
+  const exact = store.projects.find((p) => p.id === id);
+  if (exact) return exact;
+  if (id === DEMO_PROJECT_ID || id === LEGACY_DEMO_PROJECT_ID) {
+    return store.projects.find((p) => p.id === DEMO_PROJECT_ID || p.id === LEGACY_DEMO_PROJECT_ID) ?? null;
+  }
+  return null;
 }
 
 export function getProjectForOrg(orgId: string) {

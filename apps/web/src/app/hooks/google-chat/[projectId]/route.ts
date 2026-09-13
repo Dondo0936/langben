@@ -41,7 +41,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     type: "channel.inbound",
     input: payload,
     output: { text: inbound.text, space: inbound.space },
-    metadata: { note: "Google Chat channel — not Vertex AI" },
+    metadata: { note: "Google Chat channel, not Vertex AI" },
     traceName: "google-chat · message",
   });
   return NextResponse.json({ ok: true, traceId: recorded.trace.id, sessionId: recorded.sessionId });

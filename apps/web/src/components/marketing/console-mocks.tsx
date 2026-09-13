@@ -23,7 +23,9 @@ type TreeNode = {
 
 type IoCopy = { input: string; output: string };
 
-const TREE: TreeNode[] = [
+export type TraceTreeId = "zalo-rag" | "lark" | "gchat";
+
+const ZALO_TREE: TreeNode[] = [
   { id: "in", hit: "n-in", depth: 0, kind: "SPAN", name: "zalo.inbound", meta: "12ms" },
   { id: "rag", hit: "n-rag", depth: 0, kind: "SPAN", name: "rag.pipeline", meta: "1.12s" },
   { id: "chunk", hit: "n-chunk", depth: 1, kind: "SPAN", name: "docs.chunk", meta: "84ms · 12 chunks" },
@@ -36,6 +38,52 @@ const TREE: TreeNode[] = [
   { id: "anthropic", hit: "n-anthropic", depth: 0, kind: "GENERATION", name: "anthropic.messages.create", meta: "sonnet · 1.5s" },
   { id: "out", hit: "n-out", depth: 0, kind: "SPAN", name: "zalo.outbound", meta: "40ms" },
 ];
+
+const LARK_TREE: TreeNode[] = [
+  { id: "lin", hit: "l-in", depth: 0, kind: "SPAN", name: "lark.inbound", meta: "40ms" },
+  { id: "lgen", hit: "l-gen", depth: 0, kind: "GENERATION", name: "anthropic.messages.create", meta: "sonnet · 1.7s" },
+  { id: "lout", hit: "l-out", depth: 0, kind: "SPAN", name: "lark.outbound", meta: "28ms" },
+];
+
+const GCHAT_TREE: TreeNode[] = [
+  { id: "gin", hit: "g-in", depth: 0, kind: "SPAN", name: "googlechat.inbound", meta: "30ms" },
+  { id: "ggen", hit: "g-gen", depth: 0, kind: "GENERATION", name: "openai.chat.completions", meta: "gpt-4o · 0.9s" },
+  { id: "gout", hit: "g-out", depth: 0, kind: "SPAN", name: "googlechat.outbound", meta: "22ms" },
+];
+
+const TREES: Record<TraceTreeId, { titleVi: string; titleEn: string; nodes: TreeNode[]; fallbackId: string }> = {
+  "zalo-rag": {
+    titleVi: "Vết · zalo-oa · RAG hoàn tiền",
+    titleEn: "Trace · zalo-oa · refund RAG",
+    nodes: ZALO_TREE,
+    fallbackId: "anthropic",
+  },
+  lark: {
+    titleVi: "Vết · lark · DM nội bộ",
+    titleEn: "Trace · lark · internal DM",
+    nodes: LARK_TREE,
+    fallbackId: "lin",
+  },
+  gchat: {
+    titleVi: "Vết · google-chat · VPN",
+    titleEn: "Trace · google-chat · VPN",
+    nodes: GCHAT_TREE,
+    fallbackId: "gin",
+  },
+};
+
+export function traceTreeFromHit(hit?: string): TraceTreeId {
+  if (hit?.startsWith("l-")) return "lark";
+  if (hit?.startsWith("g-")) return "gchat";
+  return "zalo-rag";
+}
+
+export function traceHitFromName(name: string) {
+  const lower = name.toLowerCase();
+  if (lower.includes("lark")) return "l-in";
+  if (lower.includes("gchat") || lower.includes("google-chat") || lower.includes("google chat")) return "g-in";
+  return "n-in";
+}
 
 function ioFor(id: string, vi: boolean): IoCopy {
   const table: Record<string, { vi: IoCopy; en: IoCopy }> = {
@@ -157,6 +205,66 @@ function ioFor(id: string, vi: boolean): IoCopy {
         output: "msg_id=m_1004 · delivered",
       },
     },
+    lin: {
+      vi: {
+        input: "event=im.message.receive_v1\ntext=stand-up lúc mấy?",
+        output: "ou_88aa · om_1",
+      },
+      en: {
+        input: "event=im.message.receive_v1\ntext=what time is stand-up?",
+        output: "ou_88aa · om_1",
+      },
+    },
+    lgen: {
+      vi: {
+        input: "anthropic.messages.create\nmodel=claude-sonnet-4-5\nuser=stand-up lúc mấy?",
+        output: "Stand-up 9:15 hàng ngày trên channel #eng.",
+      },
+      en: {
+        input: "anthropic.messages.create\nmodel=claude-sonnet-4-5\nuser=what time is stand-up?",
+        output: "Stand-up is 9:15 daily in #eng.",
+      },
+    },
+    lout: {
+      vi: {
+        input: "im.message.reply · quote om_1",
+        output: "message_id=om_2 · delivered",
+      },
+      en: {
+        input: "im.message.reply · quote om_1",
+        output: "message_id=om_2 · delivered",
+      },
+    },
+    gin: {
+      vi: {
+        input: "event=MESSAGE\ntext=reset mật khẩu VPN\nspace=spaces/abc",
+        output: "users/113 · message 1",
+      },
+      en: {
+        input: "event=MESSAGE\ntext=reset VPN password\nspace=spaces/abc",
+        output: "users/113 · message 1",
+      },
+    },
+    ggen: {
+      vi: {
+        input: "openai.chat.completions\nmodel=gpt-4o\nuser=reset mật khẩu VPN",
+        output: "Gửi link reset VPN nội bộ. Không dùng credential Vertex.",
+      },
+      en: {
+        input: "openai.chat.completions\nmodel=gpt-4o\nuser=reset VPN password",
+        output: "Send the internal VPN reset link. Do not use Vertex credentials.",
+      },
+    },
+    gout: {
+      vi: {
+        input: "spaces.messages.create · quote message 1",
+        output: "message_id=2 · delivered",
+      },
+      en: {
+        input: "spaces.messages.create · quote message 1",
+        output: "message_id=2 · delivered",
+      },
+    },
   };
   const entry = table[id] ?? table.in;
   return vi ? entry.vi : entry.en;
@@ -166,24 +274,30 @@ export function TraceInspector({
   vi,
   selectedHit,
   onSelectHit,
+  treeId,
 }: {
   vi: boolean;
   selectedHit?: string;
   onSelectHit?: (hit: string) => void;
+  treeId?: TraceTreeId;
 }) {
-  const [internalHit, setInternalHit] = useState(selectedHit ?? "n-anthropic");
-  const currentHit = onSelectHit ? (selectedHit ?? "n-anthropic") : internalHit;
-  const selected = TREE.find((node) => node.hit === currentHit) ?? TREE.find((node) => node.id === "anthropic") ?? TREE[0];
+  const tree = TREES[treeId ?? traceTreeFromHit(selectedHit)];
+  const [internalHit, setInternalHit] = useState(selectedHit ?? tree.nodes[0]?.hit);
+  const currentHit = onSelectHit ? selectedHit : internalHit;
+  const selected =
+    tree.nodes.find((node) => node.hit === currentHit) ??
+    tree.nodes.find((node) => node.id === tree.fallbackId) ??
+    tree.nodes[0];
   const io = ioFor(selected.id, vi);
   return (
-    <ConsoleFrame title={vi ? "Vết · zalo-oa · RAG hoàn tiền" : "Trace · zalo-oa · refund RAG"}>
+    <ConsoleFrame title={vi ? tree.titleVi : tree.titleEn}>
       <div className="grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <div className="border-b border-white/10 md:border-b-0 md:border-r">
           <div className="border-b border-white/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-white/40">
             {vi ? "Cây quan sát" : "Observation tree"}
           </div>
           <ol className="max-h-[22rem] overflow-auto py-1 font-mono text-[11px]">
-            {TREE.map((node) => {
+            {tree.nodes.map((node) => {
               const active = node.id === selected.id;
               return (
                 <li key={node.id}>
@@ -262,9 +376,9 @@ export function ChannelsView({
     ["Zalo OA", "webhook", vi ? "14:02 · RAG hoàn tiền" : "14:02 · refund RAG", "OK"],
     ["FPT.AI Conversation", "NLU", "cancel_order · 0.93", "OK"],
     ["Viettel ASR/TTS", vi ? "giọng" : "voice", "tts · 1.1s", "OK"],
-    ["Lark", "webhook", "VPN timeout", "OK"],
-    ["Google Chat", "webhook", "INC-442", "OK"],
-    [".NET / Teams", "SDK", vi ? "chưa có sự kiện" : "no events yet", vi ? "chờ" : "idle"],
+    ["Lark", "webhook", vi ? "stand-up #eng" : "stand-up #eng", "OK"],
+    ["Google Chat", "webhook", vi ? "reset VPN" : "reset VPN", "OK"],
+    [".NET / Teams", "SDK", "INC-442", "OK"],
   ];
   return (
     <ConsoleFrame title={vi ? "Kênh · demo-bot" : "Channels · demo-bot"}>
@@ -341,6 +455,12 @@ export function RoutesView({
       meta: vi ? "19 vết · 1 lỗi" : "19 traces · 1 error",
       hit: "route-lark",
     },
+    {
+      name: "google-chat → gpt-4o → google-chat",
+      steps: ["googlechat.inbound", "generation", "googlechat.outbound"],
+      meta: vi ? "11 vết · 0 lỗi" : "11 traces · 0 errors",
+      hit: "route-gchat",
+    },
   ];
   return (
     <ConsoleFrame title={vi ? "Lộ trình · demo-bot" : "Routes · demo-bot"}>
@@ -393,8 +513,8 @@ export function TracesView({
 }) {
   const rows = [
     [vi ? "zalo-oa · RAG hoàn tiền" : "zalo-oa · refund RAG", "4.1s", "5.6k tok", "$0.013", "OK"],
-    ["lark · VPN timeout", "2.1s", "610 tok", "$0.0031", "OK"],
-    ["gchat · INC-442", "0.9s", "280 tok", "$0.0009", "OK"],
+    [vi ? "lark · DM nội bộ" : "lark · internal DM", "1.7s", "142 tok", "$0.0004", "OK"],
+    [vi ? "google-chat · VPN" : "google-chat · VPN", "0.9s", "280 tok", "$0.0009", "OK"],
     [vi ? "zalo-oa · đổi địa chỉ" : "zalo-oa · change address", "3.4s", "890 tok", "$0.0044", vi ? "lỗi" : "error"],
   ];
   return (

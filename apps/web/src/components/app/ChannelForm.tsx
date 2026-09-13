@@ -2,9 +2,27 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { ChannelConfig } from "@/lib/types";
+import type { ChannelConfig, ChannelType } from "@/lib/types";
 
-const SAVED = "đã lưu — nhập lại để đổi";
+const SAVED = "đã lưu. Nhập lại để đổi.";
+
+const FORWARD_PLACEHOLDER: Partial<Record<ChannelType, string>> = {
+  zalo_oa: "https://bot.example.com/zalo",
+  zalo_bot: "https://bot.example.com/zalo",
+  lark: "https://bot.example.com/lark",
+  gchat: "https://bot.example.com/google-chat",
+  fpt: "https://bot.example.com/fpt",
+  viettel: "https://bot.example.com/viettel",
+  msteams: "https://bot.example.com/teams",
+};
+
+function signatureHint(type: ChannelType) {
+  if (type === "lark") return "Verification token sai thì webhook trả 401, không tạo lượt.";
+  if (type === "gchat") return "Bearer token sai thì webhook trả 401, không tạo lượt.";
+  if (type === "fpt" || type === "viettel") return "HMAC sai thì webhook trả 401, không tạo lượt.";
+  if (type === "msteams") return "Kênh này đi SDK, không kiểm chữ ký webhook messenger.";
+  return "Chữ ký OA-MAC sai thì webhook trả 401, không tạo lượt.";
+}
 
 export function ChannelForm({ channel }: { channel: ChannelConfig }) {
   const router = useRouter();
@@ -158,18 +176,23 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
       ) : null}
       <label className="block">
         Forward URL (tap)
-        <input className="mt-1 h-9 w-full rounded-md border border-line px-3" value={forwardUrl} onChange={(e) => setForwardUrl(e.target.value)} placeholder="https://bot.example.com/zalo" />
+        <input
+          className="mt-1 h-9 w-full rounded-md border border-line px-3"
+          value={forwardUrl}
+          onChange={(e) => setForwardUrl(e.target.value)}
+          placeholder={FORWARD_PLACEHOLDER[channel.type] ?? "https://bot.example.com/hook"}
+        />
       </label>
       <label className="flex items-center gap-2">
         <input type="checkbox" checked={forwardEnabled} onChange={(e) => setForwardEnabled(e.target.checked)} />
         Bật forward (timeout 4s, 0 retry)
       </label>
-      <p className="text-xs text-muted">Tắt forward không ảnh hưởng ingest. Signature sai → 401, không tạo lượt.</p>
+      <p className="text-xs text-muted">Tắt forward không ảnh hưởng ingest. {signatureHint(channel.type)}</p>
       {channel.type === "lark" || channel.type === "gchat" ? (
         <p className="text-xs text-muted">
           {channel.type === "lark"
             ? "Token demo vẫn dùng được cho Gửi thử. App thật: dán Verification Token (và Encrypt Key nếu Open Platform bật mã hóa) rồi trỏ request URL vào đường dẫn phía trên."
-            : "Token demo vẫn dùng được cho Gửi thử. App Google Chat thật gửi JWT — hook nhận cả token demo và JWT Google."}
+            : "Token demo vẫn dùng được cho Gửi thử. App Google Chat thật gửi JWT. Hook nhận cả token demo và JWT Google."}
         </p>
       ) : null}
       <div className="flex flex-wrap items-center gap-2">

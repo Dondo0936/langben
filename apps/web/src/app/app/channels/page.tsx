@@ -36,8 +36,8 @@ export default async function ChannelsPage({
       <h1 className="mb-1 text-lg font-semibold">{vi ? "Kênh" : "Channels"}</h1>
       <p className="mb-4 text-sm text-muted">
         {vi
-          ? "Webhook URL — dán vào OA khi có. Lark / Google Chat: chưa cần app, mở kênh rồi Gửi thử. Secret kênh lưu ở Vết, không phải project settings Langfuse."
-          : "Webhook URLs — paste into the OA when you have one. Lark / Google Chat: no app yet — open the channel and Gửi thử. Channel secrets stay in Vết, not Langfuse project settings."}
+          ? "Webhook URL: dán vào OA khi có. Lark / Google Chat: chưa cần app, mở kênh rồi Gửi thử. Secret kênh lưu ở Vết, không phải project settings Langfuse."
+          : "Webhook URLs: paste into the OA when you have one. Lark / Google Chat: no app yet. Open the channel and Gửi thử. Channel secrets stay in Vết, not Langfuse project settings."}
       </p>
       <div className="grid gap-3 md:grid-cols-2">
         {channels.map((ch) => (
@@ -53,10 +53,10 @@ export default async function ChannelsPage({
               </span>
             </div>
             <p className="mt-2 font-mono text-[11px] text-muted">
-              {ch.webhookPath ? `${base}${ch.webhookPath}` : vi ? "SDK / OTLP — không webhook" : "SDK / OTLP — no webhook"}
+              {ch.webhookPath ? `${base}${ch.webhookPath}` : vi ? "SDK / OTLP, không webhook" : "SDK / OTLP, no webhook"}
             </p>
             <p className="mt-2 text-xs text-muted">
-              {vi ? "Sự kiện cuối" : "Last event"}: {ch.lastEventAt ? formatTime(ch.lastEventAt, lang) : "—"}
+              {vi ? "Sự kiện cuối" : "Last event"}: {ch.lastEventAt ? formatTime(ch.lastEventAt, lang) : vi ? "chưa có" : "none"}
               {ch.signatureFailures ? ` · ${ch.signatureFailures} MAC lỗi` : ""}
             </p>
           </Link>
