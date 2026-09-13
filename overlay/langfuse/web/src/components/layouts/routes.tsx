@@ -45,7 +45,7 @@ export enum RouteSection {
 
 export enum RouteGroup {
   Observability = "Quan sát",
-  PromptManagement = "Prompt",
+  PromptManagement = "Quản lý prompt",
   Evaluation = "Đánh giá",
 }
 
