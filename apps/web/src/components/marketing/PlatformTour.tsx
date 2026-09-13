@@ -234,7 +234,7 @@ export function PlatformTour({ lang }: { lang: Lang }) {
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent px-5 pb-5 pt-16">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/85 to-transparent px-5 pb-5 pt-16 md:left-[168px]">
           <p className="max-w-xl text-sm text-white/80">{vi ? step.caption.vi : step.caption.en}</p>
         </div>
 
