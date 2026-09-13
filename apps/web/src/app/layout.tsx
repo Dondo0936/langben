@@ -18,11 +18,11 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Vết · Quan sát LLM cho bot Việt Nam",
+    default: "Vết · Quan sát mọi bước đi của Agent",
     template: "%s · Vết",
   },
   description:
-    "Nền tảng observability mã nguồn mở cho bot Zalo, FPT.AI, Viettel, Lark, Google Chat và .NET. Tự vận hành trên infra của bạn (MIT).",
+    "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Tự vận hành trên infra của bạn (MIT).",
   icons: { icon: "/logo.svg" },
 };
 

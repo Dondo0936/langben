@@ -24,8 +24,8 @@ export default async function LandingPage() {
           </h1>
           <p className="rise rise-d2 mt-6 max-w-2xl text-lg text-muted">
             {vi
-              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam đi từ Zalo qua chunk, retrieval, tool call, rồi OpenAI hoặc Anthropic, rồi trả lời. Vết ghi cả lộ trình đó. Giấy phép MIT, tự host miễn phí trên infra của bạn."
-              : "Langfuse sees messages.create. A Vietnamese production bot goes from Zalo through chunking, retrieval, tool calls, then OpenAI or Anthropic, then the reply. Vết traces that whole route. MIT license, self-host for free on your infra."}
+              ? "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Kênh, kiến thức, tool và model hiện đúng thứ tự nó chạy."
+              : "From the Zalo message to the reply, you see each step the agent takes. Channel, knowledge, tools, and the model appear in the order they ran."}
           </p>
           <div className="rise rise-d3 mt-10 flex flex-wrap gap-3">
             <Link href="/self-host" className="btn-solid">
@@ -41,9 +41,6 @@ export default async function LandingPage() {
               {vi ? "Đơn vị là gì?" : "What is a unit?"} →
             </Link>
           </div>
-          <p className="rise rise-d3 mt-4 text-sm text-muted">
-            {vi ? "OSS không giới hạn đơn vị. Bạn trả infra." : "OSS has unlimited units. You pay infra."}
-          </p>
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-8">

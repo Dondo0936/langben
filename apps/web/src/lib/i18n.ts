@@ -7,8 +7,8 @@ export function langFromCookie(cookie: string): Lang {
 export const t = {
   brand: { vi: "Vết", en: "Vết" },
   tagline: {
-    vi: "Quan sát LLM cùng kênh Zalo, RAG và tool call",
-    en: "LLM observability plus Zalo, RAG, and tool calls",
+    vi: "Quan sát mọi bước đi của Agent",
+    en: "Watch every step the agent takes",
   },
   nav: {
     product: { vi: "Sản phẩm", en: "Product" },
