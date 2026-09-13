@@ -8,7 +8,7 @@ import { consoleSignInUrl } from "@/lib/console-target";
 
 export const dynamic = "force-dynamic";
 
-const logos = ["Zalo OA", "FPT.AI", "Viettel", "Lark", "Google Chat", ".NET", "Anthropic", "Bedrock", "Vertex", "Foundry"];
+const logos = ["Zalo OA", "FPT.AI", "Viettel", "Lark", "Google Chat", ".NET", "OpenAI", "Anthropic", "Bedrock", "Vertex", "Foundry"];
 
 export default async function LandingPage() {
   const lang = await getLang();
@@ -24,8 +24,8 @@ export default async function LandingPage() {
           </h1>
           <p className="rise rise-d2 mt-6 max-w-2xl text-lg text-muted">
             {vi
-              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam đi từ Zalo qua FPT hoặc Viettel, rồi LLM, TTS, rồi trả lời. Vết ghi cả lộ trình đó. Giấy phép MIT, tự host miễn phí trên infra của bạn."
-              : "Langfuse sees messages.create. A Vietnamese production bot goes from Zalo through FPT or Viettel, then the LLM, TTS, and the reply. Vết traces that whole route. MIT license, self-host for free on your infra."}
+              ? "Langfuse nhìn thấy messages.create. Bot production Việt Nam đi từ Zalo qua chunk, retrieval, tool call, rồi OpenAI hoặc Anthropic, rồi trả lời. Vết ghi cả lộ trình đó. Giấy phép MIT, tự host miễn phí trên infra của bạn."
+              : "Langfuse sees messages.create. A Vietnamese production bot goes from Zalo through chunking, retrieval, tool calls, then OpenAI or Anthropic, then the reply. Vết traces that whole route. MIT license, self-host for free on your infra."}
           </p>
           <div className="rise rise-d3 mt-10 flex flex-wrap gap-3">
             <Link href="/self-host" className="btn-solid">

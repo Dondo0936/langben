@@ -12,58 +12,233 @@ export function ConsoleFrame({ title, children }: { title: string; children: Rea
   );
 }
 
+type TreeNode = {
+  id: string;
+  hit: string;
+  depth: number;
+  kind: string;
+  name: string;
+  meta: string;
+};
+
+type IoCopy = { input: string; output: string };
+
+const TREE: TreeNode[] = [
+  { id: "in", hit: "n-in", depth: 0, kind: "SPAN", name: "zalo.inbound", meta: "12ms" },
+  { id: "rag", hit: "n-rag", depth: 0, kind: "SPAN", name: "rag.pipeline", meta: "1.12s" },
+  { id: "chunk", hit: "n-chunk", depth: 1, kind: "SPAN", name: "docs.chunk", meta: "84ms · 12 chunks" },
+  { id: "embed", hit: "n-embed", depth: 1, kind: "GENERATION", name: "openai.embeddings", meta: "text-embedding-3-small" },
+  { id: "index", hit: "n-index", depth: 1, kind: "SPAN", name: "vector.upsert", meta: "95ms · 12 vectors" },
+  { id: "retr", hit: "n-retr", depth: 1, kind: "SPAN", name: "retriever.similarity", meta: "top_k=6" },
+  { id: "tool", hit: "n-tool", depth: 0, kind: "TOOL", name: "crm.lookup_order", meta: "140ms" },
+  { id: "search", hit: "n-search", depth: 0, kind: "TOOL", name: "knowledge.search", meta: "3 hits" },
+  { id: "openai", hit: "n-openai", depth: 0, kind: "GENERATION", name: "openai.chat.completions", meta: "gpt-4o · 1.8s" },
+  { id: "anthropic", hit: "n-anthropic", depth: 0, kind: "GENERATION", name: "anthropic.messages.create", meta: "sonnet · 1.5s" },
+  { id: "out", hit: "n-out", depth: 0, kind: "SPAN", name: "zalo.outbound", meta: "40ms" },
+];
+
+function ioFor(id: string, vi: boolean): IoCopy {
+  const table: Record<string, { vi: IoCopy; en: IoCopy }> = {
+    in: {
+      vi: {
+        input: "event=user_send_text\ntext=Chính sách hoàn tiền đơn DH-88421?",
+        output: "user_847712 · msg m_1001",
+      },
+      en: {
+        input: "event=user_send_text\ntext=Refund policy for order DH-88421?",
+        output: "user_847712 · msg m_1001",
+      },
+    },
+    chunk: {
+      vi: {
+        input: "docs/chinh-sach-hoan-tien.md · 18 240 chars · splitter=recursive · size=512 · overlap=64",
+        output: "12 chunks\nchunk[0] Hoàn tiền 1 đến 3 ngày với đơn paid\nchunk[3] Không hoàn phí vận chuyển",
+      },
+      en: {
+        input: "docs/refund-policy.md · 18,240 chars · splitter=recursive · size=512 · overlap=64",
+        output: "12 chunks\nchunk[0] Refund in 1 to 3 days when paid\nchunk[3] Shipping fee is non-refundable",
+      },
+    },
+    embed: {
+      vi: {
+        input: "openai.embeddings\nmodel=text-embedding-3-small\ninput=12 chunk texts",
+        output: "12 vectors × 1536 dim · 1 842 tokens · $0.00002",
+      },
+      en: {
+        input: "openai.embeddings\nmodel=text-embedding-3-small\ninput=12 chunk texts",
+        output: "12 vectors × 1536 dim · 1,842 tokens · $0.00002",
+      },
+    },
+    index: {
+      vi: {
+        input: "upsert namespace=oa-prod\nids=chunk_0..chunk_11\nmetadata={doc, route, lang=vi}",
+        output: "indexed=12 · upsert_ms=95",
+      },
+      en: {
+        input: "upsert namespace=oa-prod\nids=chunk_0..chunk_11\nmetadata={doc, route, lang=vi}",
+        output: "indexed=12 · upsert_ms=95",
+      },
+    },
+    retr: {
+      vi: {
+        input: "query=chính sách hoàn tiền DH-88421\ntop_k=6 · metric=cosine",
+        output: "chunk_0 0.91\nchunk_3 0.84\nchunk_7 0.79\nchunk_2 0.71",
+      },
+      en: {
+        input: "query=refund policy DH-88421\ntop_k=6 · metric=cosine",
+        output: "chunk_0 0.91\nchunk_3 0.84\nchunk_7 0.79\nchunk_2 0.71",
+      },
+    },
+    tool: {
+      vi: {
+        input: "crm.lookup_order\n{ \"order_id\": \"DH-88421\" }",
+        output: "{ \"status\": \"paid\", \"cancellable\": true, \"amount\": 1290000 }",
+      },
+      en: {
+        input: "crm.lookup_order\n{ \"order_id\": \"DH-88421\" }",
+        output: "{ \"status\": \"paid\", \"cancellable\": true, \"amount\": 1290000 }",
+      },
+    },
+    search: {
+      vi: {
+        input: "knowledge.search\nquery=hoàn tiền đơn paid\nfilters={doc:refund}",
+        output: "3 hits từ chính sách hoàn tiền.md",
+      },
+      en: {
+        input: "knowledge.search\nquery=refund paid order\nfilters={doc:refund}",
+        output: "3 hits from refund-policy.md",
+      },
+    },
+    openai: {
+      vi: {
+        input:
+          "openai.chat.completions\nmodel=gpt-4o\nmessages=[{role:system},{role:user}]\ntools=[crm.lookup_order, knowledge.search]",
+        output:
+          "tool_calls=[{name:crm.lookup_order, arguments:{order_id:DH-88421}}]\nusage in=1 204 out=86 · $0.0041",
+      },
+      en: {
+        input:
+          "openai.chat.completions\nmodel=gpt-4o\nmessages=[{role:system},{role:user}]\ntools=[crm.lookup_order, knowledge.search]",
+        output:
+          "tool_calls=[{name:crm.lookup_order, arguments:{order_id:DH-88421}}]\nusage in=1,204 out=86 · $0.0041",
+      },
+    },
+    anthropic: {
+      vi: {
+        input:
+          "anthropic.messages.create\nmodel=claude-sonnet-4-5\nsystem=Trả lời OA bằng tiếng Việt\nuser=retrieved chunks + CRM paid/cancellable",
+        output:
+          "Dạ đơn DH-88421 đã thanh toán, em hủy được ạ. Hoàn tiền trong 1 đến 3 ngày làm việc.\nusage in=2 410 out=64 · $0.0088",
+      },
+      en: {
+        input:
+          "anthropic.messages.create\nmodel=claude-sonnet-4-5\nsystem=Reply on OA in Vietnamese\nuser=retrieved chunks + CRM paid/cancellable",
+        output:
+          "Order DH-88421 is paid and can be cancelled. Refund in 1 to 3 business days.\nusage in=2,410 out=64 · $0.0088",
+      },
+    },
+    rag: {
+      vi: {
+        input: "rag.pipeline\nquery=Chính sách hoàn tiền đơn DH-88421?",
+        output: "chunk → embed → index → retrieve · 6 passages",
+      },
+      en: {
+        input: "rag.pipeline\nquery=Refund policy for order DH-88421?",
+        output: "chunk → embed → index → retrieve · 6 passages",
+      },
+    },
+    out: {
+      vi: {
+        input: "oa_send_text · quote m_1001",
+        output: "msg_id=m_1004 · delivered",
+      },
+      en: {
+        input: "oa_send_text · quote m_1001",
+        output: "msg_id=m_1004 · delivered",
+      },
+    },
+  };
+  const entry = table[id] ?? table.in;
+  return vi ? entry.vi : entry.en;
+}
+
+export function TraceInspector({ vi, selectedHit }: { vi: boolean; selectedHit?: string }) {
+  const selected = TREE.find((node) => node.hit === selectedHit) ?? TREE.find((node) => node.id === "anthropic") ?? TREE[0];
+  const io = ioFor(selected.id, vi);
+  return (
+    <ConsoleFrame title={vi ? "Vết · zalo-oa · RAG hoàn tiền" : "Trace · zalo-oa · refund RAG"}>
+      <div className="grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <div className="border-b border-white/10 md:border-b-0 md:border-r">
+          <div className="border-b border-white/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-white/40">
+            {vi ? "Cây quan sát" : "Observation tree"}
+          </div>
+          <ol className="max-h-[22rem] overflow-auto py-1 font-mono text-[11px]">
+            {TREE.map((node) => {
+              const active = node.id === selected.id;
+              return (
+                <li
+                  key={node.id}
+                  data-hit={node.hit}
+                  style={{ paddingLeft: 12 + node.depth * 16 }}
+                  className={`flex items-baseline justify-between gap-2 py-1.5 pr-3 ${
+                    active ? "bg-white/[0.09] text-ink" : "text-white/75"
+                  }`}
+                >
+                  <span>
+                    <span className="mr-2 text-[9px] uppercase tracking-[0.12em] text-white/35">{node.kind}</span>
+                    {node.name}
+                  </span>
+                  <span className="shrink-0 text-[10px] text-white/40">{node.meta}</span>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+        <div>
+          <div className="border-b border-white/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-white/40">
+            {vi ? "Input / output" : "Input / output"}
+          </div>
+          <div className="space-y-3 p-3 text-[12px] leading-relaxed">
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Input</div>
+              <pre className="mt-1 max-h-28 overflow-auto whitespace-pre-wrap border-0 bg-white/[0.04] p-2 text-[11px] text-white/80">
+                {io.input}
+              </pre>
+            </div>
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Output</div>
+              <pre className="mt-1 max-h-28 overflow-auto whitespace-pre-wrap border-0 bg-white/[0.04] p-2 text-[11px] text-white/80">
+                {io.output}
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ConsoleFrame>
+  );
+}
+
 export function ReplayView({ vi }: { vi: boolean }) {
   return (
-    <div className="grid gap-3 md:grid-cols-2">
+    <div className="grid gap-3 lg:grid-cols-[0.85fr_1.15fr]">
       <ConsoleFrame title="Langfuse">
         <div className="space-y-3 p-4 text-sm">
           <p className="text-[11px] uppercase tracking-[0.14em] text-white/40">generation · sonnet</p>
           <div className="bg-white/10 px-3 py-2">
             <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-white/40">messages.create</div>
-            <p className="text-white/80">Khách: hủy đơn. Intent=cancel_order. Hỏi mã đơn.</p>
+            <p className="text-white/80">Khách: Chính sách hoàn tiền đơn DH-88421?</p>
           </div>
-          <p className="font-mono text-[11px] text-white/45">450 tokens · $0.0018</p>
+          <p className="font-mono text-[11px] text-white/45">2 474 tokens · $0.0088</p>
         </div>
       </ConsoleFrame>
-      <ConsoleFrame title="Vết · Zalo · user_847712 · 14:02">
-        <SessionReplay vi={vi} />
-      </ConsoleFrame>
-    </div>
-  );
-}
-
-export function SessionReplay({ vi }: { vi: boolean }) {
-  return (
-    <div className="grid md:grid-cols-[1fr_160px]">
-      <div className="space-y-2 p-3 text-sm">
-        <Bubble who={vi ? "khách" : "user"} time="14:02:01" text="hủy đơn" />
-        <Bubble who="FPT" time="14:02:01" text="intent = cancel_order · 0.93" muted />
-        <Bubble
-          who="bot"
-          time="14:03:08"
-          text={vi ? "Dạ, anh/chị cho em xin mã đơn để hủy ạ?" : "Could you share the order id to cancel?"}
-        />
-      </div>
-      <div className="border-t border-white/10 p-3 font-mono text-[11px] text-white/70 md:border-l md:border-t-0">
-        <div className="mb-2 text-[10px] font-medium uppercase tracking-[0.14em] text-white/90">
-          {vi ? "Quan sát" : "Observations"}
-        </div>
-        <ol className="space-y-1.5">
-          <li data-hit="obs-inbound">channel.inbound</li>
-          <li className="pl-3" data-hit="obs-nlu">
-            nlu · fpt
-          </li>
-          <li className="pl-3">generation · sonnet</li>
-          <li>channel.outbound</li>
-        </ol>
-      </div>
+      <TraceInspector vi={vi} selectedHit="n-anthropic" />
     </div>
   );
 }
 
 export function ChannelsView({ vi, highlight }: { vi: boolean; highlight?: string }) {
   const rows = [
-    ["Zalo OA", "webhook", vi ? "14:02 · hủy đơn" : "14:02 · cancel order", "OK"],
+    ["Zalo OA", "webhook", vi ? "14:02 · RAG hoàn tiền" : "14:02 · refund RAG", "OK"],
     ["FPT.AI Conversation", "NLU", "cancel_order · 0.93", "OK"],
     ["Viettel ASR/TTS", vi ? "giọng" : "voice", "tts · 1.1s", "OK"],
     ["Lark", "webhook", "VPN timeout", "OK"],
@@ -108,8 +283,8 @@ export function ChannelsView({ vi, highlight }: { vi: boolean; highlight?: strin
 export function RoutesView({ vi }: { vi: boolean }) {
   const routes = [
     {
-      name: "zalo-oa → fpt-conversation → claude → zalo-reply",
-      steps: ["zalo.inbound", "fpt.nlu", "generation", "zalo.outbound"],
+      name: "zalo-oa → chunk → embed → retrieve → tools → llm → zalo-reply",
+      steps: ["zalo.inbound", "docs.chunk", "openai.embeddings", "retriever", "tools", "generation", "zalo.outbound"],
       meta: vi ? "128 vết · 2 lỗi" : "128 traces · 2 errors",
       hit: "route-zalo",
     },
@@ -128,15 +303,11 @@ export function RoutesView({ vi }: { vi: boolean }) {
     <ConsoleFrame title={vi ? "Lộ trình · demo-bot" : "Routes · demo-bot"}>
       <div className="space-y-3 p-3">
         {routes.map((route) => (
-          <div
-            key={route.name}
-            data-hit={route.hit}
-            className="border border-white/10 bg-white/[0.03] p-3"
-          >
+          <div key={route.name} data-hit={route.hit} className="border border-white/10 bg-white/[0.03] p-3">
             <div className="text-sm font-medium">{route.name}</div>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
               {route.steps.map((step, index) => (
-                <span key={step} className="flex items-center gap-2">
+                <span key={`${route.name}-${step}`} className="flex items-center gap-2">
                   <span className="rounded-md bg-white/10 px-2 py-1 font-mono text-white/80">{step}</span>
                   {index < route.steps.length - 1 ? <span className="text-white/30">→</span> : null}
                 </span>
@@ -152,7 +323,7 @@ export function RoutesView({ vi }: { vi: boolean }) {
 
 export function TracesView({ vi, highlight }: { vi: boolean; highlight?: string }) {
   const rows = [
-    [vi ? "zalo-oa · hủy đơn" : "zalo-oa · cancel order", "1.5s", "450 tok", "$0.0018", "OK"],
+    [vi ? "zalo-oa · RAG hoàn tiền" : "zalo-oa · refund RAG", "4.1s", "5.6k tok", "$0.013", "OK"],
     ["lark · VPN timeout", "2.1s", "610 tok", "$0.0031", "OK"],
     ["gchat · INC-442", "0.9s", "280 tok", "$0.0009", "OK"],
     [vi ? "zalo-oa · đổi địa chỉ" : "zalo-oa · change address", "3.4s", "890 tok", "$0.0044", vi ? "lỗi" : "error"],
@@ -195,11 +366,11 @@ export function TracesView({ vi, highlight }: { vi: boolean; highlight?: string 
 
 export function LlmsView({ vi }: { vi: boolean }) {
   const rows = [
+    ["OpenAI", "gpt-4o / embeddings", "us", vi ? "tools + embed" : "tools + embed"],
     ["Anthropic", "claude-sonnet", "us", "generation"],
     ["FPT Factory", "factory-llm", "vn", "generation"],
     ["Bedrock", "claude-sonnet", "ap-southeast-1", "generation"],
     ["Vertex", "gemini", "asia-southeast1", "generation"],
-    ["Foundry", "gpt-4o", "eastus", "generation"],
     ["Google Chat", vi ? "không phải model" : "not a model", "global", vi ? "kênh" : "channel"],
   ];
   return (
@@ -218,7 +389,7 @@ export function LlmsView({ vi }: { vi: boolean }) {
             {rows.map((row) => (
               <tr
                 key={row[0]}
-                data-hit={row[0] === "Google Chat" ? "row-gchat" : row[0] === "Anthropic" ? "row-anthropic" : undefined}
+                data-hit={row[0] === "Google Chat" ? "row-gchat" : row[0] === "OpenAI" ? "row-openai" : undefined}
                 className="border-b border-white/10 text-white/80 last:border-0"
               >
                 {row.map((cell, index) => (
@@ -232,27 +403,5 @@ export function LlmsView({ vi }: { vi: boolean }) {
         </table>
       </div>
     </ConsoleFrame>
-  );
-}
-
-export function Bubble({
-  who,
-  time,
-  text,
-  muted,
-}: {
-  who: string;
-  time: string;
-  text: string;
-  muted?: boolean;
-}) {
-  return (
-    <div className={`px-3 py-2 ${muted ? "bg-white/5 text-white/70" : "bg-white/10 text-white"}`}>
-      <div className="mb-1 flex gap-2 text-[10px] uppercase tracking-[0.14em] text-white/40">
-        <span>{who}</span>
-        <span>{time}</span>
-      </div>
-      {text}
-    </div>
   );
 }
