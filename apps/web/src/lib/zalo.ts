@@ -19,12 +19,22 @@ export function verifyZaloBotToken(header: string | null, expected: string) {
   return safeEqualHex(sha256Hex(header), sha256Hex(expected));
 }
 
+/** Live Bot Platform events use message.from / message.chat, not OA's sender.id. */
+export function zaloBotUserId(payload: Record<string, unknown>) {
+  const sender = payload.sender as { id?: string } | undefined;
+  const message = payload.message as
+    | { from?: { id?: string }; chat?: { id?: string } }
+    | undefined;
+  return String(
+    sender?.id ?? message?.from?.id ?? message?.chat?.id ?? payload.user_id ?? "unknown",
+  );
+}
+
 /** Zalo POSTs a probe when you save Webhook URL. Do not turn that into a session. */
 export function isZaloBotPing(payload: Record<string, unknown>) {
   const event = String(payload.event_name ?? payload.event ?? "").trim();
   if (/received|send/i.test(event)) return false;
-  const sender = payload.sender as { id?: string } | undefined;
-  if (sender?.id) return false;
+  if (zaloBotUserId(payload) !== "unknown") return false;
   if (payload.message) return false;
   return true;
 }

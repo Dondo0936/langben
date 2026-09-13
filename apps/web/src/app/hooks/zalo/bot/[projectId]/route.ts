@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getChannel, getProject } from "@/lib/store";
-import { isZaloBotPing } from "@/lib/zalo";
+import { isZaloBotPing, zaloBotUserId } from "@/lib/zalo";
 import { maybeForward, recordChannelEvent, tokenMatches } from "@/lib/hooks";
 
 export const runtime = "nodejs";
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     return NextResponse.json({ ok: true });
   }
   const event = String(payload.event_name ?? payload.event ?? "message.text.received");
-  const userId = String((payload.sender as { id?: string } | undefined)?.id ?? "unknown");
+  const userId = zaloBotUserId(payload);
   const recorded = await recordChannelEvent({
     projectId,
     channel: "zalo_bot",

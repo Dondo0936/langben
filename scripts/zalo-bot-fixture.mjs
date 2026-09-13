@@ -46,4 +46,19 @@ if (ok.status !== 200) {
   console.error("expected 200 for a valid Zalo Bot inbound");
   process.exit(1);
 }
+
+const live = await post("platform", { "X-Bot-Api-Secret-Token": token }, {
+  event_name: "message.text.received",
+  message: {
+    date: Date.now(),
+    chat: { chat_type: "PRIVATE", id: "user_bot_from" },
+    message_id: "m_bot_from",
+    from: { id: "user_bot_from", is_bot: false, display_name: "fixture" },
+    text: "shape that bot.zapps.me sends",
+  },
+});
+if (live.status !== 200 || !live.text.includes("zalo_bot:user_bot_from")) {
+  console.error("expected session zalo_bot:user_bot_from for Bot Platform payload");
+  process.exit(1);
+}
 console.log(`Session zalo_bot:user_bot_fixture → http://localhost:3000/project/${projectId}/sessions/zalo_bot%3Auser_bot_fixture`);
