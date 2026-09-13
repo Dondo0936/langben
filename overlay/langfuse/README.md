@@ -11,7 +11,7 @@ Do not commit a dirty submodule. MIT UI only — never copy `ee/`.
 - `useLayoutMetadata.ts` — document title `| Vết`
 - Onboarding splashes (Cảnh báo, Phiên, Người dùng, Prompt, Điểm, Dataset, gán nhãn, tracing setup)
 - Home chart titles + `NoDataOrLoading` + Home picker
-- `IntroSection.tsx` — Hỗ trợ drawer without Langfuse Cloud
+- `IntroSection.tsx` / `SupportDrawer.tsx` — Hỗ trợ drawer without Langfuse Cloud
 - `pages/project/[projectId]/channels.tsx` / `lo-trinh.tsx` — iframe marketing
 - `vet/HoiThoai.tsx` — session replay
 - Apply script also retitles `| Langfuse`, Home Filters / Env / time ranges, and drops V4 Book a call
