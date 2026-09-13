@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
+import { PlatformTour } from "@/components/marketing/PlatformTour";
 import { ProductPreview } from "@/components/marketing/ProductPreview";
 import { getLang } from "@/lib/get-lang";
 import { t, tr } from "@/lib/i18n";
@@ -54,6 +55,10 @@ export default async function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-10" id="san-pham">
+          <PlatformTour lang={lang} />
+        </section>
+
+        <section className="mx-auto max-w-6xl px-4 py-10" id="module">
           <ProductPreview lang={lang} />
         </section>
 

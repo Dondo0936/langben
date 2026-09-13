@@ -22,8 +22,7 @@ export default async function SelfHostPage() {
         </p>
         <h2 className="mt-10 text-xl font-semibold">Docker Compose</h2>
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">
-{`git clone --recurse-submodules https://origin.cursor.com/git/tiendat0936/langben.git
-cd langben
+{`git submodule update --init --recursive
 cp .env.console.example .env
 bash scripts/up.sh`}
         </pre>

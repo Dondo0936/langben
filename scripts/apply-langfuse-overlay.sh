@@ -69,7 +69,7 @@ if doc.is_file():
 css = dest / "web/src/styles/globals.css"
 if css.is_file():
     extra = """
-/* Vết overlay: SpaceXAI monochrome + Be Vietnam Pro. */
+/* Vết overlay: monochrome + Be Vietnam Pro. */
 html {
   font-family: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   color-scheme: dark;

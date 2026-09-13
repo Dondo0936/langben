@@ -18,7 +18,7 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Vết — Quan sát LLM cho bot Việt Nam",
+    default: "Vết · Quan sát LLM cho bot Việt Nam",
     template: "%s · Vết",
   },
   description:

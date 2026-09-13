@@ -29,7 +29,7 @@ export default async function ChangelogPage() {
           </h2>
           <ul className="mt-3 list-disc pl-5 text-sm text-muted">
             <li>{vi ? "Marketing và Kênh: canvas đen, chữ trắng, không accent màu" : "Marketing and Channels: black canvas, white type, no color accent"}</li>
-            <li>{vi ? "Nền WebGL (khói / sao / chuột) kiểu SpaceXAI; tôn trọng prefers-reduced-motion" : "SpaceXAI-style WebGL field (smoke / stars / cursor); respects prefers-reduced-motion"}</li>
+            <li>{vi ? "Nền WebGL khói, sao và chuột. Tôn trọng prefers-reduced-motion." : "WebGL field with smoke, stars, and cursor. Respects prefers-reduced-motion."}</li>
             <li>{vi ? "Console Langfuse ép dark + grayscale overlay" : "Langfuse console forced dark + grayscale overlay"}</li>
           </ul>
         </article>
