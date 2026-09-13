@@ -36,15 +36,19 @@ replacements = {
     "Enterprise SSO Required | Langfuse": "Enterprise SSO Required | Vết",
     "Langfuse on Hugging Face": "Vết on Hugging Face",
 }
-pages = dest / "web/src/pages"
+pages = dest / "web/src"
 if pages.is_dir():
-    for path in pages.rglob("*.tsx"):
-        if "/ee/" in str(path).replace("\\", "/"):
+    for path in pages.rglob("*"):
+        if path.suffix not in {".tsx", ".ts"}:
+            continue
+        rel = str(path).replace("\\", "/")
+        if "/ee/" in rel or "clienttest" in path.name or ".test." in path.name:
             continue
         text = path.read_text()
         orig = text
         for a, b in replacements.items():
             text = text.replace(a, b)
+        text = text.replace(" | Langfuse", " | Vết")
         if text != orig:
             path.write_text(text)
             print("retitled", path.relative_to(dest))
@@ -196,6 +200,72 @@ if ncfg.is_file():
     if text != orig:
         ncfg.write_text(text)
         print("csp", ncfg.relative_to(dest))
+
+def patch(rel, replacements):
+    path = dest / rel
+    if not path.is_file():
+        return
+    text = path.read_text()
+    orig = text
+    for a, b in replacements:
+        text = text.replace(a, b)
+    if text != orig:
+        path.write_text(text)
+        print("chrome", path.relative_to(dest))
+
+patch("web/src/features/filters/components/filter-builder.tsx", [
+    ('label = "Filters"', 'label = "Bộ lọc"'),
+])
+patch("packages/shared/src/utils/dateRanges.ts", [
+    ('label: "Past 5 min"', 'label: "5 phút qua"'),
+    ('label: "Past 30 min"', 'label: "30 phút qua"'),
+    ('label: "Past 1 hour"', 'label: "1 giờ qua"'),
+    ('label: "Past 3 hours"', 'label: "3 giờ qua"'),
+    ('label: "Past 6 hours"', 'label: "6 giờ qua"'),
+    ('label: "Past 1 day"', 'label: "1 ngày qua"'),
+    ('label: "Past 3 days"', 'label: "3 ngày qua"'),
+    ('label: "Past 7 days"', 'label: "7 ngày qua"'),
+    ('label: "Past 14 days"', 'label: "14 ngày qua"'),
+    ('label: "Past 30 days"', 'label: "30 ngày qua"'),
+    ('label: "Past 90 days"', 'label: "90 ngày qua"'),
+    ('label: "Past 1 year"', 'label: "1 năm qua"'),
+    ('label: "All time"', 'label: "Mọi lúc"'),
+    ('label: "Custom"', 'label: "Tùy chọn"'),
+])
+patch("web/src/pages/project/[projectId]/index.tsx", [
+    ('?? "Langfuse Home"', '?? "Trang chủ Vết"'),
+    ('title="Environment"', 'title="Môi trường"'),
+    ('label="Env"', 'label="Môi trường"'),
+    (
+        'title="Show this dashboard on Home for everyone in this project"',
+        'title="Hiện bảng này trên Tổng quan cho mọi người trong dự án"',
+    ),
+    ("Set default", "Đặt mặc định"),
+    (
+        'title="Edit this dashboard in Dashboards"',
+        'title="Sửa bảng này trong Bảng điều khiển"',
+    ),
+    (
+        "Edit this dashboard in Dashboards",
+        "Sửa bảng này trong Bảng điều khiển",
+    ),
+    ("Configure Tracing", "Cấu hình truy vết"),
+])
+patch("web/src/features/v4-migration/V4MigrationContent.tsx", [
+    (
+        '''          <span>·</span>
+          <a
+            href="https://cal.com/team/langfuse/v4-upgrade"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => capture("v4_migration:contact_book_call_clicked")}
+            className="underline"
+          >
+            Book a call
+          </a>''',
+        "",
+    ),
+])
 PY
 
 echo "Overlay applied → $DEST"

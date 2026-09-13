@@ -16,6 +16,10 @@ const FORWARD_PLACEHOLDER: Partial<Record<ChannelType, string>> = {
   msteams: "https://bot.example.com/teams",
 };
 
+function channelApi(path: string, projectId: string) {
+  return `${path}?project=${encodeURIComponent(projectId)}`;
+}
+
 function signatureHint(type: ChannelType) {
   if (type === "lark") return "Verification token sai thì webhook trả 401, không tạo lượt.";
   if (type === "gchat") return "Bearer token sai thì webhook trả 401, không tạo lượt.";
@@ -52,7 +56,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
       if (encryptKey.trim()) secrets.encryptKey = encryptKey.trim();
     }
     if (channel.type === "gchat" && verificationToken.trim()) secrets.verificationToken = verificationToken.trim();
-    const res = await fetch("/api/channels", {
+    const res = await fetch(channelApi("/api/channels", channel.projectId), {
       method: "PATCH",
       credentials: "include",
       headers: { "content-type": "application/json" },
@@ -70,7 +74,7 @@ export function ChannelForm({ channel }: { channel: ChannelConfig }) {
 
   async function sendTest() {
     setMsg("Đang gửi thử…");
-    const res = await fetch("/api/channels/test", {
+    const res = await fetch(channelApi("/api/channels/test", channel.projectId), {
       method: "POST",
       credentials: "include",
       headers: { "content-type": "application/json" },

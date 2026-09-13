@@ -15,17 +15,20 @@ export default async function ChannelDetailPage({
   searchParams,
 }: {
   params: Promise<{ type: string }>;
-  searchParams: Promise<{ embed?: string }>;
+  searchParams: Promise<{ embed?: string; project?: string }>;
 }) {
   const { type } = await params;
-  const { embed } = await searchParams;
+  const { embed, project: projectParam } = await searchParams;
   const embedded = embed === "1";
-  const { project } = await requireChannelConsole();
+  const { project } = await requireChannelConsole(projectParam);
   const channel = getChannel(project.id, type);
   if (!channel) notFound();
   const lang = await getLang();
   const vi = lang === "vi";
-  const back = embedded ? "/app/channels?embed=1" : "/app/channels";
+  const backQs = new URLSearchParams();
+  if (embedded) backQs.set("embed", "1");
+  if (project.id) backQs.set("project", project.id);
+  const back = `/app/channels${backQs.toString() ? `?${backQs.toString()}` : ""}`;
   return (
     <ChannelShell embed={embedded} title={channel.name}>
       <Link href={back} className="text-xs text-muted hover:text-ink">

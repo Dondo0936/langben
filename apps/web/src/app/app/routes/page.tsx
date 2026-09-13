@@ -8,12 +8,12 @@ export const dynamic = "force-dynamic";
 export default async function RoutesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ embed?: string }>;
+  searchParams: Promise<{ embed?: string; project?: string }>;
 }) {
   const lang = await getLang();
-  const { embed } = await searchParams;
+  const { embed, project: projectParam } = await searchParams;
   const embedded = embed === "1";
-  const { project } = await requireChannelConsole();
+  const { project } = await requireChannelConsole(projectParam);
   const routes = listRoutes(project.id);
   const traces = listTraces(project.id);
   const vi = lang === "vi";

@@ -28,6 +28,16 @@ export default async function ChangelogPage() {
                 ? "Ẩn Book a call của Langfuse Cloud trên bản tự vận hành."
                 : "Hide Langfuse Cloud Book a call on self-host."}
             </li>
+            <li>
+              {vi
+                ? "Tiêu đề trang, empty state và widget Home overlay tiếng Việt. Bảng và form Langfuse vẫn tiếng Anh."
+                : "Page titles, empty states, and Home widgets overlay Vietnamese. Langfuse tables and forms stay English."}
+            </li>
+            <li>
+              {vi
+                ? "Hỗ trợ tự vận hành bỏ Ask AI / Community Hours. Kênh iframe lưu đúng project trên URL."
+                : "Self-host support drops Ask AI / Community Hours. Channel iframe saves against the project on the URL."}
+            </li>
           </ul>
         </article>
         <article className="mt-8">

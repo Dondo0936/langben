@@ -21,16 +21,19 @@ const LABELS: Record<string, string> = {
 export default async function ChannelsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ embed?: string }>;
+  searchParams: Promise<{ embed?: string; project?: string }>;
 }) {
   const lang = await getLang();
-  const { embed } = await searchParams;
+  const { embed, project: projectParam } = await searchParams;
   const embedded = embed === "1";
-  const { project } = await requireChannelConsole();
+  const { project } = await requireChannelConsole(projectParam);
   const channels = listChannels(project.id);
   const vi = lang === "vi";
   const base = publicUrl();
-  const q = embedded ? "?embed=1" : "";
+  const q = new URLSearchParams();
+  if (embedded) q.set("embed", "1");
+  if (project.id) q.set("project", project.id);
+  const qs = q.toString() ? `?${q.toString()}` : "";
   return (
     <ChannelShell embed={embedded} title={vi ? "Kênh" : "Channels"}>
       <h1 className="mb-1 text-lg font-semibold">{vi ? "Kênh" : "Channels"}</h1>
@@ -43,7 +46,7 @@ export default async function ChannelsPage({
         {channels.map((ch) => (
           <Link
             key={ch.id}
-            href={`/app/channels/${ch.type}${q}`}
+            href={`/app/channels/${ch.type}${qs}`}
             className="panel p-4 hover:bg-white/5"
           >
             <div className="flex items-center justify-between">
