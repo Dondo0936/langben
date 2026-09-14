@@ -13,6 +13,24 @@ export default async function ChangelogPage() {
       <main className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-4xl font-semibold tracking-tight">{vi ? "Nhật ký" : "Changelog"}</h1>
         <article className="mt-8">
+          <p className="text-sm text-muted">14 Sep 2026 · v0.3.3</p>
+          <h2 className="mt-1 text-xl font-semibold">
+            {vi ? "GitHub công khai. Chỉ tự vận hành." : "Public GitHub. Self-host only."}
+          </h2>
+          <ul className="mt-3 list-disc pl-5 text-sm text-muted">
+            <li>
+              {vi
+                ? "Clone: github.com/Dondo0936/langben. Hỗ trợ: GitHub Issues của Vết."
+                : "Clone: github.com/Dondo0936/langben. Support: Vết GitHub Issues."}
+            </li>
+            <li>
+              {vi
+                ? "NOTICE bỏ gói Cloud. Bản công khai là MIT docker compose."
+                : "NOTICE drops Cloud plans. The public product is MIT docker compose."}
+            </li>
+          </ul>
+        </article>
+        <article className="mt-8">
           <p className="text-sm text-muted">13 Sep 2026 · v0.3.2</p>
           <h2 className="mt-1 text-xl font-semibold">
             {vi ? "Sidebar console tiếng Việt" : "Vietnamese console sidebar"}

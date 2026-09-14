@@ -1,6 +1,6 @@
 # Contributing to Vết
 
-Vết is MIT. Issues and PRs are welcome.
+Vết is MIT. Open issues and PRs at [github.com/Dondo0936/langben](https://github.com/Dondo0936/langben/issues).
 
 ## Dev
 

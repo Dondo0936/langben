@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
 import { getLang } from "@/lib/get-lang";
+import { VET_GITHUB_ISSUES } from "@/lib/github";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Tài liệu" };
@@ -41,7 +42,8 @@ await getAnswer({
   message: "Chính sách hoàn tiền đơn DH-88421?",
 })`;
 
-const composeSnippet = `git submodule update --init --recursive
+const composeSnippet = `git clone --recurse-submodules https://github.com/Dondo0936/langben.git
+cd langben
 cp .env.console.example .env
 bash scripts/up.sh`;
 
@@ -232,6 +234,15 @@ export default async function DocsPage() {
           <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">
             {vi ? "Đơn vị là gì" : "What a unit is"}
           </Link>
+          {" · "}
+          <a
+            href={VET_GITHUB_ISSUES}
+            className="text-ink underline-offset-4 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub Issues
+          </a>
         </p>
       </main>
       <MarketingFooter lang={lang} />

@@ -4,6 +4,8 @@ Langfuse-class LLM observability **plus** Vietnamese production channels (Zalo, 
 
 **Working name.** Vietnamese for “trace / mark.” MIT licensed.
 
+Public clone: [github.com/Dondo0936/langben](https://github.com/Dondo0936/langben). Issues: [github.com/Dondo0936/langben/issues](https://github.com/Dondo0936/langben/issues).
+
 The **console** is Langfuse OSS (MIT, ClickHouse, Inc.) rebranded as Vết. Marketing, Kênh / Lộ trình, and Zalo–FPT hooks are original. We do not ship `ee/` or `LANGFUSE_EE_LICENSE_KEY`. See [NOTICE](NOTICE).
 
 Pinned runtime: **Langfuse v4.33.0** (`81bbfd169b72ea2ed53639699cc6632e8f908ce8`) in `vendor/langfuse`.
@@ -21,10 +23,13 @@ A **đơn vị / unit** is not an LLM token. One unit = one trace, observation, 
 ## Run locally
 
 ```bash
-git submodule update --init --recursive   # or: bash scripts/bootstrap-langfuse.sh
+git clone --recurse-submodules https://github.com/Dondo0936/langben.git
+cd langben
 cp .env.console.example .env
 bash scripts/up.sh
 ```
+
+Already cloned: `git submodule update --init --recursive` (or `bash scripts/bootstrap-langfuse.sh`), then the same `.env` and `up.sh` steps.
 
 `scripts/up.sh` applies the Vết overlay, builds `vet-console:local`, and starts marketing + Langfuse. The first build compiles the console overlay and takes several minutes. Later runs are faster if the images still exist. Equivalent after overlay: `bash scripts/compose.sh up --build`. Do not rely on `COMPOSE_FILE` in `.env`; the script passes `-f` flags and unsets `COMPOSE_FILE`. If `docker` needs root, the script uses `sudo`.
 

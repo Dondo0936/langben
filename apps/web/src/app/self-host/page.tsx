@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
 import { getLang } from "@/lib/get-lang";
+import { VET_GITHUB_REPO } from "@/lib/github";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Tự vận hành" };
 
-const composeSnippet = `git submodule update --init --recursive
+const composeSnippet = `git clone --recurse-submodules https://github.com/Dondo0936/langben.git
+cd langben
 cp .env.console.example .env
 bash scripts/up.sh`;
 
@@ -36,6 +38,25 @@ export default async function SelfHostPage() {
           {vi
             ? "Chạy overlay Vết trên Langfuse OSS. Dữ liệu ở infra của bạn. Một lệnh là docker compose: marketing :43173 và console :3000 trên máy bạn."
             : "Run the Vết overlay on Langfuse OSS. Data stays on your infra. One command is docker compose: marketing :43173 and the console :3000 on your machine."}
+        </p>
+        <p className="mt-3 text-sm text-muted">
+          {vi ? (
+            <>
+              Mã nguồn:{" "}
+              <a href={VET_GITHUB_REPO} className="underline-offset-4 hover:underline">
+                github.com/Dondo0936/langben
+              </a>
+              .
+            </>
+          ) : (
+            <>
+              Source:{" "}
+              <a href={VET_GITHUB_REPO} className="underline-offset-4 hover:underline">
+                github.com/Dondo0936/langben
+              </a>
+              .
+            </>
+          )}
         </p>
 
         <h2 className="mt-10 text-xl font-semibold">{vi ? "Một lệnh" : "One command"}</h2>

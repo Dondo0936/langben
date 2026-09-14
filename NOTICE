@@ -39,9 +39,7 @@ imply affiliation with Langfuse GmbH or ClickHouse, Inc.
 
 Product packaging
 -----------------
-The same MIT codebase ships in three ways:
-
-  1. Open Source (self-host) — you run marketing (:43173) + Langfuse OSS
-     console (:3000: web, worker, Postgres, ClickHouse, Redis, MinIO).
-  2. Vết Cloud — we host it for you (Hobby / Core / Pro / Enterprise).
-  3. Self-hosted Enterprise — your infra, commercial support and compliance add-ons.
+The public product is MIT self-host. You run marketing (:43173) plus the
+Langfuse OSS console (:3000: web, worker, Postgres, ClickHouse, Redis, MinIO).
+There is no hosted Vết Cloud plan in this release (no Hobby / Core / Pro /
+Enterprise SKU). Community support: https://github.com/Dondo0936/langben/issues

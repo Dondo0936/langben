@@ -3,6 +3,7 @@ import { Wordmark } from "@/components/brand/Logo";
 import { LangToggle } from "@/components/LangToggle";
 import { tr, t } from "@/lib/i18n";
 import { consoleSignInUrl } from "@/lib/console-target";
+import { VET_GITHUB_ISSUES, VET_GITHUB_REPO } from "@/lib/github";
 import type { Lang } from "@/lib/types";
 
 export function MarketingHeader({ lang }: { lang: Lang }) {
@@ -79,6 +80,16 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
             <li><Link href="/open-source" className="hover:text-ink">{tr(lang, t.nav.openSource)}</Link></li>
             <li><Link href="/changelog" className="hover:text-ink">{tr(lang, t.nav.changelog)}</Link></li>
             <li><Link href="/security" className="hover:text-ink">{lang === "vi" ? "Bảo mật" : "Security"}</Link></li>
+            <li>
+              <a href={VET_GITHUB_REPO} className="hover:text-ink" target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a href={VET_GITHUB_ISSUES} className="hover:text-ink" target="_blank" rel="noopener noreferrer">
+                Issues
+              </a>
+            </li>
           </ul>
         </div>
         <div className="text-sm">

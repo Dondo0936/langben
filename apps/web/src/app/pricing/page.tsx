@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
 import { getLang } from "@/lib/get-lang";
+import { VET_GITHUB_ISSUES } from "@/lib/github";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Giá tự vận hành" };
@@ -38,7 +39,23 @@ export default async function PricingPage() {
           <ul className="mt-4 space-y-2 text-sm text-muted">
             <li>{vi ? "MIT. Toàn bộ tính năng sản phẩm, không giới hạn đơn vị" : "MIT. All product features, unlimited units"}</li>
             <li>Docker Compose / Kubernetes</li>
-            <li>{vi ? "Hỗ trợ cộng đồng GitHub" : "GitHub community support"}</li>
+            <li>
+              {vi ? (
+                <>
+                  Hỗ trợ cộng đồng{" "}
+                  <a href={VET_GITHUB_ISSUES} className="underline-offset-4 hover:underline">
+                    GitHub Issues
+                  </a>
+                </>
+              ) : (
+                <>
+                  <a href={VET_GITHUB_ISSUES} className="underline-offset-4 hover:underline">
+                    GitHub Issues
+                  </a>{" "}
+                  community support
+                </>
+              )}
+            </li>
             <li>{vi ? "Dữ liệu ở infra của bạn" : "Data on your infrastructure"}</li>
           </ul>
           <Link href="/self-host" className="btn-solid mt-6">

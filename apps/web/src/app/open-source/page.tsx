@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
 import { getLang } from "@/lib/get-lang";
+import { VET_GITHUB_ISSUES, VET_GITHUB_REPO } from "@/lib/github";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Mã nguồn mở" };
@@ -50,7 +51,13 @@ export default async function OpenSourcePage() {
             : "LICENSE is MIT. NOTICE: console runtime is Langfuse OSS (ClickHouse, Inc. MIT) plus a Vết overlay. No ee/, no Langfuse wordmark, no affiliation claim."}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/self-host" className="btn-solid">
+          <a href={VET_GITHUB_REPO} className="btn-solid" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <a href={VET_GITHUB_ISSUES} className="btn-ghost" target="_blank" rel="noopener noreferrer">
+            Issues
+          </a>
+          <Link href="/self-host" className="btn-ghost">
             docker compose up
           </Link>
           <Link href="/docs/units" className="btn-ghost">
