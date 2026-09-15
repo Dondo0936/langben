@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Wordmark } from "@/components/brand/Logo";
 import { LangToggle } from "@/components/LangToggle";
 import { tr, t } from "@/lib/i18n";
-import { consoleSignInUrl } from "@/lib/console-target";
 import { VET_GITHUB_ISSUES, VET_GITHUB_REPO } from "@/lib/github";
 import type { Lang } from "@/lib/types";
 
@@ -31,9 +30,6 @@ export function MarketingHeader({ lang }: { lang: Lang }) {
         </nav>
         <div className="flex items-center gap-2">
           <LangToggle lang={lang} />
-          <Link href={consoleSignInUrl()} className="text-[11px] uppercase tracking-[0.14em]">
-            {tr(lang, t.nav.login)}
-          </Link>
           <Link href="/self-host" className="btn-solid !min-h-0 whitespace-nowrap px-3 py-1.5 text-[11px]">
             {tr(lang, t.nav.selfHost)}
           </Link>
