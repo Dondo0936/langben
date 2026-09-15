@@ -1,8 +1,29 @@
 # Vết
 
+<img src="readme/logo.png" alt="Vết" width="72" align="right" />
+
 **Tiếng Việt** · [English](README.en.md)
 
-Quan sát LLM **kèm** kênh production Việt Nam (Zalo, FPT.AI, Viettel, Lark, Google Chat, .NET). Tự host, MIT. Console ghim Langfuse OSS v4.33.0.
+LLM observability plus Vietnamese production channels (Zalo, FPT.AI, Viettel, Lark). Self-hosted. Console is Langfuse OSS v4.33.0.
+
+<p align="center">
+  <img src="readme/vi/overview.png" alt="Tổng quan Vết: vết, chi phí model, và điểm của Bot Zalo shop" width="900" />
+</p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="readme/vi/session.png" alt="Phiên Zalo OA: hủy đơn, DH-88421, và điểm helpful trên một luồng" /></td>
+    <td width="50%"><img src="readme/vi/trace.png" alt="Cây vết: zalo.inbound → fpt.nlu → crm.lookup_order → Claude → zalo.outbound" /></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="readme/vi/channels.png" alt="Kênh: Zalo OA, Zalo Bot, FPT.AI, Viettel, Lark, Google Chat, Teams" /></td>
+    <td width="50%"><img src="readme/vi/routes.png" alt="Lộ trình từ webhook inbound tới NLU, generation, và tin trả" /></td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="readme/vi/scores.png" alt="Điểm: helpful = 1 trên cả hai lượt hủy đơn" width="900" />
+</p>
 
 ## Chạy local
 
@@ -13,31 +34,25 @@ cp .env.console.example .env
 bash scripts/up.sh
 ```
 
-Đã clone: `git submodule update --init --recursive` (hoặc `bash scripts/bootstrap-langfuse.sh`), rồi cùng bước `.env` và `up.sh`.
-
-| Mặt | URL |
+| | URL |
 |---|---|
 | Console | [http://localhost:3000](http://localhost:3000) |
-| Web nền tảng (Kênh, Lộ trình, `/hooks`) | [http://localhost:43173](http://localhost:43173) |
+| Kênh, Lộ trình, `/hooks` | [http://localhost:43173](http://localhost:43173) |
 
-Đăng nhập: `demo@vet.dev` / `demodemo`. Org **Vết**, project **Bot Zalo shop** (`prj-vet-demo`).
+Đăng nhập: `demo@vet.dev` / `demodemo`. Org Vết, project Bot Zalo shop (`prj-vet-demo`).
 
-Lần đầu `up.sh` gắn overlay, build `vet-console:local`, rồi chạy compose. Mất vài phút. `docker` cần root thì script dùng `sudo`.
+Lần đầu mất vài phút. `docker` cần root thì script dùng `sudo`. Đổi mật khẩu và khóa demo trước khi mở cổng ra ngoài.
 
-## Tài liệu
-
-Cách dùng từng mục trên console: [docs/README.md](docs/README.md).
+Tài liệu: [docs/README.md](docs/README.md).
 
 ## Cấu trúc repo
 
 ```
-apps/web                 Site public (Vercel) + Kênh / Lộ trình / webhook. Docker gỡ brochure.
+apps/web                 Kênh / Lộ trình / webhook
 vendor/langfuse          Submodule Langfuse OSS (console :3000)
-overlay/langfuse         Logo, nav tiếng Việt, hội thoại — gắn lúc build image
-packages/schema          Zod: lượt, span, enum kênh
-packages/sdk-js          observe, wrapAnthropic, wrapFptGetAnswer → ingest Langfuse
+overlay/langfuse         UI tiếng Việt trên console
 docs                     Tài liệu console
-LICENSE · NOTICE
+readme                   Ảnh GitHub README
 ```
 
-MIT. Console là Langfuse OSS; phần gốc là Kênh / Lộ trình và hook. Xem [NOTICE](NOTICE).
+Xem [NOTICE](NOTICE).

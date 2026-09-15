@@ -1,8 +1,29 @@
 # Vết
 
+<img src="readme/logo.png" alt="Vết" width="72" align="right" />
+
 [Tiếng Việt](README.md) · **English**
 
-LLM observability **plus** Vietnamese production channels (Zalo, FPT.AI, Viettel, Lark, Google Chat, .NET). Self-hosted, MIT. Console pins Langfuse OSS v4.33.0.
+LLM observability plus Vietnamese production channels (Zalo, FPT.AI, Viettel, Lark). Self-hosted. Console is Langfuse OSS v4.33.0.
+
+<p align="center">
+  <img src="readme/overview.png" alt="Vết overview: traces, model cost, and scores for Bot Zalo shop" width="900" />
+</p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="readme/session.png" alt="Zalo OA session: hủy đơn, DH-88421, and a helpful score on one thread" /></td>
+    <td width="50%"><img src="readme/trace.png" alt="Trace tree: zalo.inbound → fpt.nlu → crm.lookup_order → Claude → zalo.outbound" /></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="readme/channels.png" alt="Kênh: Zalo OA, Zalo Bot, FPT.AI, Viettel, Lark, Google Chat, Teams" /></td>
+    <td width="50%"><img src="readme/routes.png" alt="Lộ trình maps from webhook inbound to NLU, generation, and reply" /></td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="readme/scores.png" alt="Điểm: helpful = 1 on both hủy-đơn turns" width="900" />
+</p>
 
 ## Run locally
 
@@ -13,31 +34,25 @@ cp .env.console.example .env
 bash scripts/up.sh
 ```
 
-Already cloned: `git submodule update --init --recursive` (or `bash scripts/bootstrap-langfuse.sh`), then the same `.env` and `up.sh` steps.
-
-| Surface | URL |
+| | URL |
 |---|---|
 | Console | [http://localhost:3000](http://localhost:3000) |
-| Platform web (Kênh, Lộ trình, `/hooks`) | [http://localhost:43173](http://localhost:43173) |
+| Kênh, Lộ trình, `/hooks` | [http://localhost:43173](http://localhost:43173) |
 
-Login: `demo@vet.dev` / `demodemo`. Org **Vết**, project **Bot Zalo shop** (`prj-vet-demo`).
+Login: `demo@vet.dev` / `demodemo`. Org Vết, project Bot Zalo shop (`prj-vet-demo`).
 
-The first `up.sh` applies the overlay, builds `vet-console:local`, then starts compose. That takes several minutes. If `docker` needs root, the script uses `sudo`.
+First run takes several minutes. If `docker` needs root, the script uses `sudo`. Rotate the demo password and keys before exposing any port.
 
-## Docs
-
-How to use every item in the console: [docs/README.en.md](docs/README.en.md).
+Docs: [docs/README.en.md](docs/README.en.md).
 
 ## Repo layout
 
 ```
-apps/web                 Public site (Vercel) + Kênh / Lộ trình / webhooks. Docker strips the brochure.
+apps/web                 Kênh / Lộ trình / webhooks
 vendor/langfuse          Langfuse OSS submodule (console :3000)
-overlay/langfuse         Logo, Vietnamese nav, hội thoại — applied at image build
-packages/schema          Zod: turns, spans, channel enums
-packages/sdk-js          observe, wrapAnthropic, wrapFptGetAnswer → Langfuse ingest
+overlay/langfuse         Vietnamese UI overlay on the console
 docs                     Console documentation
-LICENSE · NOTICE
+readme                   GitHub README screenshots
 ```
 
-MIT. The console is Langfuse OSS; Kênh / Lộ trình and the hooks are original. See [NOTICE](NOTICE).
+See [NOTICE](NOTICE).
