@@ -2,50 +2,52 @@
 
 <img src="docs/screenshots/logo.png" alt="Vết" width="72" align="right" />
 
-Langfuse-class LLM observability **plus** Vietnamese production channels (Zalo, FPT.AI, Viettel, Lark, Google Chat, .NET). Built-in generation layers for Amazon Bedrock, Google Cloud Vertex AI, and Microsoft Foundry.
+**Tiếng Việt** · [English](README.en.md)
 
-**Working name.** Vietnamese for “trace / mark.” MIT licensed.
+Quan sát LLM kiểu Langfuse **kèm** kênh production Việt Nam (Zalo, FPT.AI, Viettel, Lark, Google Chat, .NET). Có lớp generation cho Amazon Bedrock, Google Cloud Vertex AI, và Microsoft Foundry.
 
-Public clone: [github.com/Dondo0936/langben](https://github.com/Dondo0936/langben). Issues: [github.com/Dondo0936/langben/issues](https://github.com/Dondo0936/langben/issues).
+**Tên đang dùng.** Vết = dấu vết / mark. Giấy phép MIT.
 
-The **console** is Langfuse OSS (MIT, ClickHouse, Inc.) rebranded as Vết. Kênh / Lộ trình and Zalo–FPT hooks are original. The public landing is a separate Vercel site. We do not ship `ee/` or `LANGFUSE_EE_LICENSE_KEY`. See [NOTICE](NOTICE).
+Clone công khai: [github.com/Dondo0936/langben](https://github.com/Dondo0936/langben). Issues: [github.com/Dondo0936/langben/issues](https://github.com/Dondo0936/langben/issues).
 
-Pinned runtime: **Langfuse v4.33.0** (`81bbfd169b72ea2ed53639699cc6632e8f908ce8`) in `vendor/langfuse`.
+**Console** là Langfuse OSS (MIT, ClickHouse, Inc.) gắn thương hiệu Vết. Kênh / Lộ trình và hook Zalo–FPT là phần gốc. Landing public là site Vercel riêng. Không ship `ee/` hay `LANGFUSE_EE_LICENSE_KEY`. Xem [NOTICE](NOTICE).
+
+Runtime ghim: **Langfuse v4.33.0** (`81bbfd169b72ea2ed53639699cc6632e8f908ce8`) trong `vendor/langfuse`.
 
 <p align="center">
-  <img src="docs/screenshots/overview.png" alt="Vết overview: traces, model cost, and scores for Bot Zalo shop" width="900" />
+  <img src="docs/screenshots/vi/overview.png" alt="Tổng quan Vết: vết, chi phí model, và điểm của Bot Zalo shop" width="900" />
 </p>
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/session.png" alt="Zalo OA session: hủy đơn, DH-88421, and a helpful score on one thread" /></td>
-    <td width="50%"><img src="docs/screenshots/trace.png" alt="Trace tree: zalo.inbound → fpt.nlu → crm.lookup_order → Claude → zalo.outbound" /></td>
+    <td width="50%"><img src="docs/screenshots/vi/session.png" alt="Phiên Zalo OA: hủy đơn, DH-88421, và điểm helpful trên một luồng" /></td>
+    <td width="50%"><img src="docs/screenshots/vi/trace.png" alt="Cây vết: zalo.inbound → fpt.nlu → crm.lookup_order → Claude → zalo.outbound" /></td>
   </tr>
   <tr>
-    <td width="50%"><img src="docs/screenshots/channels.png" alt="Kênh: Zalo OA, Zalo Bot, FPT.AI, Viettel, Lark, Google Chat, Teams" /></td>
-    <td width="50%"><img src="docs/screenshots/routes.png" alt="Lộ trình maps from webhook inbound to NLU, generation, and reply" /></td>
+    <td width="50%"><img src="docs/screenshots/vi/channels.png" alt="Kênh: Zalo OA, Zalo Bot, FPT.AI, Viettel, Lark, Google Chat, Teams" /></td>
+    <td width="50%"><img src="docs/screenshots/vi/routes.png" alt="Lộ trình từ webhook inbound tới NLU, generation, và tin trả" /></td>
   </tr>
 </table>
 
 <p align="center">
-  <img src="docs/screenshots/scores.png" alt="Điểm: helpful = 1 on both hủy-đơn turns" width="900" />
+  <img src="docs/screenshots/vi/scores.png" alt="Điểm: helpful = 1 trên cả hai lượt hủy đơn" width="900" />
 </p>
 
-Screenshots are a local **Bot Zalo shop** run after `bash scripts/up.sh`: customer says hủy đơn, the bot looks up DH-88421, and the same turn is a session, a tree, and a score.
+Ảnh từ project local **Bot Zalo shop** sau `bash scripts/up.sh`: khách nói hủy đơn, bot tra DH-88421; cùng một lượt hiện thành phiên, cây vết, và điểm.
 
 ---
 
-## How we package it
+## Cách đóng gói
 
-Vết is **open source self-host** (MIT). You run it. Units are unlimited. Start with `bash scripts/up.sh`.
+Vết là **open source tự host** (MIT). Bạn chạy trên máy mình. Đơn vị không giới hạn. Bắt đầu bằng `bash scripts/up.sh`.
 
-Docker starts the **platform**: console on `:3000`, plus Kênh / Lộ trình and webhooks on `:43173`. It does not start the public landing, docs, or pricing pages. Those stay on the Vercel site.
+Docker mở **nền tảng**: console `:3000`, cộng Kênh / Lộ trình và webhook `:43173`. Không mở landing, docs, hay trang giá. Những trang đó nằm trên site Vercel.
 
-A **đơn vị / unit** is not an LLM token. One unit = one trace, observation, or score. Self-host does not meter them. Explainer: `/docs/units`. Pricing: `/pricing`.
+Một **đơn vị** không phải token LLM. Một đơn vị = một vết, observation, hoặc điểm. Tự host không đếm. Giải thích: `/docs/units`. Giá: `/pricing`.
 
 ---
 
-## Run locally
+## Chạy local
 
 ```bash
 git clone --recurse-submodules https://github.com/Dondo0936/langben.git
@@ -54,102 +56,91 @@ cp .env.console.example .env
 bash scripts/up.sh
 ```
 
-Already cloned: `git submodule update --init --recursive` (or `bash scripts/bootstrap-langfuse.sh`), then the same `.env` and `up.sh` steps.
+Đã clone: `git submodule update --init --recursive` (hoặc `bash scripts/bootstrap-langfuse.sh`), rồi cùng bước `.env` và `up.sh`.
 
-`scripts/up.sh` applies the Vết overlay, builds `vet-console:local`, and starts the platform web + Langfuse. The first build compiles the console overlay and takes several minutes. Later runs are faster if the images still exist. Equivalent after overlay: `bash scripts/compose.sh up --build`. Do not rely on `COMPOSE_FILE` in `.env`; the script passes `-f` flags and unsets `COMPOSE_FILE`. If `docker` needs root, the script uses `sudo`.
+`scripts/up.sh` gắn overlay Vết, build `vet-console:local`, rồi chạy web nền tảng + Langfuse. Lần đầu compile overlay, mất vài phút. Lần sau nhanh hơn nếu image còn. Tương đương sau overlay: `bash scripts/compose.sh up --build`. Đừng dựa vào `COMPOSE_FILE` trong `.env`; script tự truyền `-f` và gỡ `COMPOSE_FILE`. Nếu `docker` cần root, script dùng `sudo`.
 
-Webhook URLs on Kênh start empty. Paste the public origin there (your domain or a tunnel). An `https` `VET_PUBLIC_URL` in `.env` is only a default until someone saves a different host on Kênh. Do not export `VET_PUBLIC_URL` in the shell — `compose.sh` drops a leftover shell value so `.env` wins. **Gửi thử** posts to loopback `:43173` and does not use that origin.
-
-### Public HTTPS for live Zalo (Cloudflare Tunnel)
-
-This is not a Vết channel. Zalo cannot POST to `localhost:43173`. The Vercel site is the public brochure. It is not this Docker backend. Cloudflare Tunnel (or ngrok) publishes https to compose on your machine.
-
-```bash
-# https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation/
-cloudflared tunnel --url http://localhost:43173
-```
-
-Put the printed origin on Kênh → Origin công khai (or in `.env` as `VET_PUBLIC_URL` if it is `https`, then `bash scripts/compose.sh up -d web`). A quick tunnel hostname changes when the process restarts — update the field and copy the full webhook (`https://<host>/hooks/zalo/bot/prj-vet-demo`). Gửi thử still works without a public origin.
-
-| Surface | URL |
+| Mặt | URL |
 |---|---|
-| Platform web (Kênh, Lộ trình, `/hooks`) | [http://localhost:43173](http://localhost:43173) |
-| Console (Vết overlay on Langfuse OSS) | [http://localhost:3000](http://localhost:3000) |
+| Web nền tảng (Kênh, Lộ trình, `/hooks`) | [http://localhost:43173](http://localhost:43173) |
+| Console (overlay Vết trên Langfuse OSS) | [http://localhost:3000](http://localhost:3000) |
 
-Console login: `demo@vet.dev` / `demodemo` (≥ 8 characters). Org **Vết**, project **Bot Zalo shop** (`prj-vet-demo`).
+Đăng nhập console: `demo@vet.dev` / `demodemo` (≥ 8 ký tự). Org **Vết**, project **Bot Zalo shop** (`prj-vet-demo`).
 
-Ingest keys (Langfuse public API): `pk-lf-vet-demo` / `sk-lf-vet-demo`.
+Khóa ingest (Langfuse public API): `pk-lf-vet-demo` / `sk-lf-vet-demo`.
 
-Seed the Zalo «hủy đơn» tree into the console (filters / waterfall):
+URL webhook trên Kênh lúc đầu trống. **Gửi thử** và các script fixture gọi loopback `:43173` — đủ để xem phiên local, không cần HTTPS công khai. Tin Zalo / Lark / Chat **thật** mới cần origin `https://` (domain hoặc tunnel) dán vào Kênh → Origin công khai. `VET_PUBLIC_URL` `https` trong `.env` chỉ là mặc định cho đến khi ai đó lưu origin khác trên Kênh. Đừng `export VET_PUBLIC_URL` trong shell; `compose.sh` bỏ giá trị shell để `.env` thắng.
+
+Seed cây Zalo «hủy đơn» vào console (filter / waterfall):
 
 ```bash
 node scripts/seed-langfuse-zalo.mjs
 ```
 
-### Zalo OA fixture (signature verify → Langfuse traces)
+### Fixture Zalo OA (đối chiếu chữ ký → vết Langfuse)
 
 ```bash
-# Uses VET_PUBLIC_URL if set, else http://localhost:43173
+# Dùng VET_PUBLIC_URL nếu có, không thì http://localhost:43173
 unset VET_PUBLIC_URL
 node scripts/zalo-fixture.mjs
 ```
 
-Invalid MAC → **401** and no turn. Valid MAC → session `zalo_oa:user_fixture` on **Sessions** in the console.
+MAC sai → **401**, không có lượt. MAC đúng → phiên `zalo_oa:user_fixture` trên **Phiên** trong console.
 
-### Zalo Bot (bot.zapps.me, no OA package)
+### Zalo Bot (bot.zapps.me, không gói OA)
 
-This is not the Chatbot tab inside OA admin (that tab is paid). Create a bot at [bot.zapps.me](https://bot.zapps.me).
+Đây không phải tab Chatbot trong OA admin (tab đó trả phí). Tạo bot tại [bot.zapps.me](https://bot.zapps.me).
 
-1. On Kênh → Zalo Bot, paste **Secret Token** (not Bot Token) and Lưu.
-2. Publish `:43173` with HTTPS (see **Public HTTPS for live Zalo** above). Paste that origin on Kênh → Origin công khai.
-3. Copy the full URL `https://<host>/hooks/zalo/bot/prj-vet-demo` into Webhook URL. Zalo rejects a path without `https://`.
-4. Lưu thay đổi on bot.zapps.me, then message the bot. Session `zalo_bot:<user id>` appears in the console.
+1. Kênh → Zalo Bot, dán **Secret Token** (không phải Bot Token) rồi Lưu.
+2. Dán origin `https://` công khai trên Kênh → Origin công khai. Zalo không POST được `localhost`.
+3. Copy URL đầy đủ `https://<host>/hooks/zalo/bot/prj-vet-demo` vào Webhook URL. Zalo từ chối path thiếu `https://`.
+4. Lưu thay đổi trên bot.zapps.me, rồi nhắn bot. Phiên `zalo_bot:<user id>` hiện trên console.
 
 ```bash
 unset VET_PUBLIC_URL
 node scripts/zalo-bot-fixture.mjs
 ```
 
-### Lark / Google Chat fixtures (no developer app)
+### Fixture Lark / Google Chat (không cần app)
 
-You do not need a Lark or Google Chat app to test those webhooks locally. Demo tokens are already on Kênh.
+Không cần app Lark hay Google Chat để thử webhook local. Token demo đã có trên Kênh.
 
 ```bash
 unset VET_PUBLIC_URL
-node scripts/lark-fixture.mjs    # url_verification + inbound → session lark:ou_fixture
-node scripts/gchat-fixture.mjs   # Bearer token + inbound → session gchat:users_fixture
+node scripts/lark-fixture.mjs    # url_verification + inbound → phiên lark:ou_fixture
+node scripts/gchat-fixture.mjs   # Bearer token + inbound → phiên gchat:users_fixture
 ```
 
-Invalid token → **401**. In the console, Kênh → Lark or Google Chat → **Gửi thử** does the same ingest into sessions `lark:ou_local` / `gchat:users_local`.
+Token sai → **401**. Trong console, Kênh → Lark hoặc Google Chat → **Gửi thử** ingest vào phiên `lark:ou_local` / `gchat:users_local`.
 
-A real Lark/Google bot still needs their developer console and a public HTTPS URL. Do that when you have the app; the local fixtures cover ingest + overlay first.
+Bot Lark/Google thật vẫn cần developer console của họ và URL `https` công khai. Làm bước đó khi đã có app; fixture local lo ingest + overlay trước.
 
-Public site only (landing / docs / pricing, no console). This is not the Docker product:
+Chỉ site public (landing / docs / giá, không console). Đây không phải sản phẩm Docker:
 
 ```bash
 npm install
-npm run dev   # :43173 with the brochure
+npm run dev   # :43173 với brochure
 ```
 
 ---
 
-## Repo layout
+## Cấu trúc repo
 
 ```
-apps/web                 Public site (Vercel) + platform routes. Docker strips the brochure.
-vendor/langfuse          Langfuse OSS submodule (console :3000)
-overlay/langfuse         Vết logo, nav, hội thoại — applied at image build
-packages/schema          Zod: turns, spans, channel enums
-packages/sdk-js          observe, wrapAnthropic, wrapFptGetAnswer → Langfuse ingest
-docs/plans               Product plan (HTML)
+apps/web                 Site public (Vercel) + route nền tảng. Docker gỡ brochure.
+vendor/langfuse          Submodule Langfuse OSS (console :3000)
+overlay/langfuse         Logo Vết, nav, hội thoại — gắn lúc build image
+packages/schema          Zod: lượt, span, enum kênh
+packages/sdk-js          observe, wrapAnthropic, wrapFptGetAnswer → ingest Langfuse
+docs/plans               Kế hoạch sản phẩm (HTML)
 LICENSE · NOTICE
 ```
 
 ---
 
-## SDKs
+## SDK
 
-`@vet/sdk` is `packages/sdk-js` in this repo. It is not published to npm yet. After clone, import the workspace package.
+`@vet/sdk` là `packages/sdk-js` trong repo này. Chưa publish lên npm. Sau khi clone, import package workspace.
 
 ```ts
 import Anthropic from "@anthropic-ai/sdk"
@@ -166,17 +157,17 @@ await observe("hỗ-trợ-khách", () =>
 { publicKey, secretKey, baseUrl, sessionId, userId, tags: ["zalo"] })
 ```
 
-Never send `ANTHROPIC_API_KEY` (or AWS/GCP/Azure secrets) to Vết. Send traces only.
+Đừng gửi `ANTHROPIC_API_KEY` (hay secret AWS/GCP/Azure) cho Vết. Chỉ gửi traces.
 
-OTLP: Langfuse public OTLP on the console. Homemade `POST /otlp/v1/traces` on :43173 still dual-writes when `LANGFUSE_*` keys are set.
+OTLP: OTLP public của Langfuse trên console. `POST /otlp/v1/traces` tự viết trên :43173 vẫn dual-write khi đã set khóa `LANGFUSE_*`.
 
 ---
 
-## Parked (not this build)
+## Tạm để (không nằm build này)
 
-| Idea | Doc |
+| Ý tưởng | Tài liệu |
 |------|-----|
-| Excel pipeline-point eval kit | [docs/ideas/01-excel-pipeline-eval.md](docs/ideas/01-excel-pipeline-eval.md) |
-| Standalone usage-report SaaS | [docs/ideas/02-agent-trace-usage-saas.md](docs/ideas/02-agent-trace-usage-saas.md) (absorbed as turn receipts) |
+| Bộ eval điểm pipeline trên Excel | [docs/ideas/01-excel-pipeline-eval.md](docs/ideas/01-excel-pipeline-eval.md) |
+| SaaS báo cáo usage tách riêng | [docs/ideas/02-agent-trace-usage-saas.md](docs/ideas/02-agent-trace-usage-saas.md) (gộp thành biên lai lượt) |
 
-Implementation source of truth: [docs/plans/vet-full-plan.html](docs/plans/vet-full-plan.html).
+Nguồn sự thật khi implement: [docs/plans/vet-full-plan.html](docs/plans/vet-full-plan.html).
