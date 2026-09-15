@@ -1,17 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import type { Lang } from "@/lib/types";
 
 export function LangToggle({ lang, variant = "marketing" }: { lang: Lang; variant?: "marketing" | "console" }) {
-  const router = useRouter();
   async function setLang(next: Lang) {
     await fetch("/api/lang", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ lang: next }),
     });
-    router.refresh();
     window.location.reload();
   }
   const wrap =

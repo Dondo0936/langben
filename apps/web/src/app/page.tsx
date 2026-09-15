@@ -120,12 +120,10 @@ export default async function LandingPage() {
               ? [
                   ["Vết khác gì một bản Langfuse dán sticker?", "Langfuse thấy lần gọi LLM. Vết thấy Zalo vào, FPT NLU, TTS Viettel và tin ra trong cùng một phiên. UI tiếng Việt gốc, không dịch trình duyệt."],
                   ["Tự host có thật sự miễn phí?", "Có. MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra."],
-                  ["Đơn vị (unit) là gì?", "Không phải token. Mỗi vết, quan sát, và điểm đánh giá là một đơn vị. Tự vận hành không đếm. Xem /docs/units."],
                 ]
               : [
                   ["Is this a Langfuse reskin?", "Langfuse sees the LLM call. Vết sees Zalo in, FPT NLU, Viettel TTS and the reply in the same session. Native Vietnamese chrome."],
                   ["Is self-hosting actually free?", "Yes. MIT, docker compose up, unlimited units. You pay infra."],
-                  ["What is a unit?", "Not a token. Each trace, observation, and score is one unit. Self-host does not meter them. See /docs/units."],
                 ]
             ).map(([q, a]) => (
               <div key={q}>
@@ -133,14 +131,34 @@ export default async function LandingPage() {
                 <dd className="mt-1 text-muted">{a}</dd>
               </div>
             ))}
+            <div>
+              <dt className="font-medium">{vi ? "Đơn vị (unit) là gì?" : "What is a unit?"}</dt>
+              <dd className="mt-1 text-muted">
+                {vi ? (
+                  <>
+                    Không phải token. Mỗi vết, quan sát, và điểm đánh giá là một đơn vị. Tự vận hành không đếm.{" "}
+                    <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">
+                      Bộ công cụ đơn vị
+                    </Link>
+                    .
+                  </>
+                ) : (
+                  <>
+                    Not a token. Each trace, observation, and score is one unit. Self-host does not meter them.{" "}
+                    <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">
+                      Units toolkit
+                    </Link>
+                    .
+                  </>
+                )}
+              </dd>
+            </div>
           </dl>
         </section>
 
         <section className="border-t border-white/10 py-16">
           <div className="mx-auto max-w-6xl px-4 text-center">
-            <h2 className="text-3xl font-semibold">
-              Self host
-            </h2>
+            <h2 className="text-3xl font-semibold">{vi ? "Tự vận hành" : "Self-host"}</h2>
             <div className="mt-6 flex justify-center gap-3">
               <Link href="/self-host" className="btn-solid">
                 docker compose up

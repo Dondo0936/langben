@@ -10,11 +10,9 @@ export function consoleOrigin() {
   return "http://localhost:3000";
 }
 
-/** Homepage tour when this deployment does not host a console. */
+/** Brochure demo is the in-page tour, not the local Langfuse console. */
 export function marketingDemoHref() {
-  const origin = consoleOrigin();
-  if (!origin) return "/#san-pham";
-  return `${origin}/traces`;
+  return "/#san-pham";
 }
 
 export function consoleProjectId() {
