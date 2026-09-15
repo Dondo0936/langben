@@ -77,6 +77,11 @@ export default async function DocsPage() {
       title: vi ? "Kênh" : "Channels",
       body: vi ? "Zalo, FPT.AI, Viettel, Lark, Google Chat." : "Zalo, FPT.AI, Viettel, Lark, Google Chat.",
     },
+    {
+      href: "/docs/scores",
+      title: "Scores",
+      body: vi ? "Nhãn chất lượng trên một lượt." : "Quality label on a turn.",
+    },
   ];
   const surfaces = [
     {
@@ -119,8 +124,8 @@ export default async function DocsPage() {
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">
           {vi
-            ? "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Sau docker compose: marketing :43173, console :3000."
-            : "From the Zalo message to the reply, you see each step the agent takes. After docker compose: marketing :43173, console :3000."}
+            ? "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Sau docker compose: nền tảng :43173, console :3000."
+            : "From the Zalo message to the reply, you see each step the agent takes. After docker compose: platform :43173, console :3000."}
         </p>
 
         <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -229,6 +234,10 @@ export default async function DocsPage() {
           {vi ? "Giấy phép MIT. Bạn trả infra." : "MIT license. You pay infra."}{" "}
           <Link href="/pricing" className="text-ink underline-offset-4 hover:underline">
             {vi ? "Giá tự vận hành" : "Self-host pricing"}
+          </Link>
+          {" · "}
+          <Link href="/docs/scores" className="text-ink underline-offset-4 hover:underline">
+            Scores
           </Link>
           {" · "}
           <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">

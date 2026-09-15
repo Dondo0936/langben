@@ -13,6 +13,24 @@ export default async function ChangelogPage() {
       <main className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-4xl font-semibold tracking-tight">{vi ? "Nhật ký" : "Changelog"}</h1>
         <article className="mt-8">
+          <p className="text-sm text-muted">14 Sep 2026 · v0.3.4</p>
+          <h2 className="mt-1 text-xl font-semibold">
+            {vi ? "Console: Scores, Lộ trình, Hỗ trợ." : "Console: scores, routes, support."}
+          </h2>
+          <ul className="mt-3 list-disc pl-5 text-sm text-muted">
+            <li>
+              {vi
+                ? "Ẩn Cần xử lý (migration Langfuse v4). Hỗ trợ trỏ GitHub Dondo0936/langben."
+                : "Hide Cần xử lý (Langfuse v4 migration). Support points at GitHub Dondo0936/langben."}
+            </li>
+            <li>
+              {vi
+                ? "Scores: splash trong console; /docs/scores trên brochure (không có trên Docker :43173). Lộ trình: mở kênh và phiên. Cài đặt: mục tiếng Việt. Đánh giá agent trên sidebar."
+                : "Scores: console splash; /docs/scores on the brochure (not on Docker :43173). Lộ trình: open channel and sessions. Settings nav in Vietnamese. Sidebar group Đánh giá agent."}
+            </li>
+          </ul>
+        </article>
+        <article className="mt-8">
           <p className="text-sm text-muted">14 Sep 2026 · v0.3.3</p>
           <h2 className="mt-1 text-xl font-semibold">
             {vi ? "GitHub công khai. Chỉ tự vận hành." : "Public GitHub. Self-host only."}

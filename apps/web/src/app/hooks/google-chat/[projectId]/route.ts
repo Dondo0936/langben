@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getChannel, getProject } from "@/lib/store";
+import { getChannel, getProject, getWebhookOrigin } from "@/lib/store";
 import { bearerToken, recordChannelEvent, tokenMatches } from "@/lib/hooks";
 import { googleChatBearerOk } from "@/lib/google-chat-verify";
 import { gchatInbound } from "@/lib/messenger-inbound";
@@ -16,13 +16,10 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
   const sharedOk = tokenMatches(presented, ch.secrets.verificationToken, ch.secrets.webhookToken);
   if (!sharedOk) {
     const hookPath = new URL(req.url).pathname;
-    const publicBase = process.env.VET_PUBLIC_URL?.replace(/\/$/, "");
-    const xfHost = req.headers.get("x-forwarded-host");
-    const xfProto = req.headers.get("x-forwarded-proto") || "https";
+    const pinned = getWebhookOrigin();
     const jwtOk = await googleChatBearerOk(presented, [
       req.url,
-      publicBase ? `${publicBase}${hookPath}` : undefined,
-      xfHost ? `${xfProto}://${xfHost}${hookPath}` : undefined,
+      pinned ? `${pinned}${hookPath}` : undefined,
       ch.secrets.audience,
       ch.secrets.googleProjectNumber,
     ]);
@@ -43,6 +40,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     output: { text: inbound.text, space: inbound.space },
     metadata: { note: "Google Chat channel, not Vertex AI" },
     traceName: "google-chat · message",
+    routeId: "rt_gchat",
   });
   return NextResponse.json({ ok: true, traceId: recorded.trace.id, sessionId: recorded.sessionId });
 }

@@ -1,5 +1,8 @@
 import type { ObservationType, TraceStatus } from "./types";
 
+/** Console Kênh renders on the server (Docker TZ is UTC). Pin Vietnam local. */
+export const DISPLAY_TIME_ZONE = "Asia/Ho_Chi_Minh";
+
 export function formatTime(iso: string, lang: "vi" | "en" = "vi") {
   const d = new Date(iso);
   return new Intl.DateTimeFormat(lang === "vi" ? "vi-VN" : "en-GB", {
@@ -8,6 +11,8 @@ export function formatTime(iso: string, lang: "vi" | "en" = "vi") {
     second: "2-digit",
     day: "2-digit",
     month: "2-digit",
+    hourCycle: "h23",
+    timeZone: DISPLAY_TIME_ZONE,
   }).format(d);
 }
 

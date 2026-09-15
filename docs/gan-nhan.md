@@ -19,6 +19,6 @@ Cần quyền `annotationQueues:read`.
 
 ## Liên quan
 
-- [Điểm](diem.md)
+- [Scores](scores.md)
 - [Bộ đánh giá](bo-danh-gia.md)
 - [Vết](vet.md)

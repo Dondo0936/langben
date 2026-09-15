@@ -1,32 +1,23 @@
 /* eslint-disable @repo/no-style-props, @repo/no-null-render */
 import { useSupportDrawer } from "@/src/features/support-chat/SupportDrawerProvider";
-import { useState } from "react";
 import { Button } from "@/src/components/ui/button";
-import { X, Slash } from "lucide-react";
+import { X } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/src/components/ui/breadcrumb";
 import { IntroSection } from "@/src/features/support-chat/IntroSection";
-import { SuccessSection } from "@/src/features/support-chat/SuccessSection";
-import { ConnectedSupportFormSection } from "@/src/features/support-chat/ConnectedSupportFormSection";
 import { cn } from "@/src/utils/tailwind";
 
 export const SupportDrawer = (props: {
   showCloseButton?: boolean;
   className?: string;
 }) => {
-  const { open, openEpoch } = useSupportDrawer();
-
+  const { open } = useSupportDrawer();
   if (!open) return null;
-
-  // Keyed by openEpoch so re-opening (openWithMode while already open)
-  // remounts the content and re-seeds mode/topic from the provider.
-  return <SupportDrawerContent key={openEpoch} {...props} />;
+  return <SupportDrawerContent {...props} />;
 };
 
 const SupportDrawerContent = ({
@@ -36,10 +27,7 @@ const SupportDrawerContent = ({
   showCloseButton?: boolean;
   className?: string;
 }) => {
-  const { setOpen, initialMode } = useSupportDrawer();
-  const [currentMode, setCurrentMode] = useState<"intro" | "form" | "success">(
-    initialMode,
-  );
+  const { setOpen } = useSupportDrawer();
   const close = () => setOpen(false);
 
   return (
@@ -53,31 +41,9 @@ const SupportDrawerContent = ({
         <div className="flex min-h-11 w-full items-center justify-between gap-1 px-4 py-1">
           <Breadcrumb>
             <BreadcrumbList>
-              {currentMode === "intro" ? (
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Hỗ trợ</BreadcrumbPage>
-                </BreadcrumbItem>
-              ) : (
-                <>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                      <button
-                        type="button"
-                        onClick={() => setCurrentMode("intro")}
-                        className="text-foreground"
-                      >
-                        Hỗ trợ
-                      </button>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>
-                    <Slash />
-                  </BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>Gửi email</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </>
-              )}
+              <BreadcrumbItem>
+                <BreadcrumbPage>Hỗ trợ</BreadcrumbPage>
+              </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
           {showCloseButton && (
@@ -96,18 +62,7 @@ const SupportDrawerContent = ({
         <div className="px-2 py-1">
           <div className="bg-background h-full">
             <div className="p-2">
-              {currentMode === "intro" && (
-                <IntroSection onStartForm={() => setCurrentMode("form")} />
-              )}
-              {currentMode === "form" && (
-                <ConnectedSupportFormSection
-                  onSuccess={() => setCurrentMode("success")}
-                  onCancel={() => setCurrentMode("intro")}
-                />
-              )}
-              {currentMode === "success" && (
-                <SuccessSection onAnother={() => setCurrentMode("form")} />
-              )}
+              <IntroSection />
             </div>
           </div>
         </div>

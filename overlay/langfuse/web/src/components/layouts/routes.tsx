@@ -46,7 +46,7 @@ export enum RouteSection {
 export enum RouteGroup {
   Observability = "Quan sát",
   PromptManagement = "Quản lý prompt",
-  Evaluation = "Đánh giá",
+  Evaluation = "Đánh giá agent",
 }
 
 export type Route = {
@@ -178,7 +178,7 @@ export const ROUTES: Route[] = [
     section: RouteSection.Main,
   },
   {
-    title: "Điểm",
+    title: "Scores",
     pathname: `/project/[projectId]/scores`,
     group: RouteGroup.Evaluation,
     section: RouteSection.Main,
@@ -220,13 +220,11 @@ export const ROUTES: Route[] = [
     section: RouteSection.Main,
   },
   {
-    // Keep Action required first in the secondary nav so it is not sandwiched
-    // between regular items like Upgrade Plan and Settings.
+    // Langfuse Cloud SDK/eval migration. Vết already pins v4.33.0 — hide it.
     title: "Cần xử lý",
     pathname: "",
     section: RouteSection.Secondary,
-    show: ({ projectId, v4UpgradeUiAvailable }) =>
-      v4UpgradeUiAvailable && projectId !== undefined,
+    show: () => false,
     menuNode: <V4MigrationNavItem />,
   },
   {
@@ -243,8 +241,7 @@ export const ROUTES: Route[] = [
     section: RouteSection.Secondary,
     featureFlag: "v4BetaToggleVisible",
     // v4-upgrade users get this toggle inside the migration panel instead.
-    show: ({ canToggleV4, forceV3Experience, v4UpgradeUiAvailable }) =>
-      canToggleV4 && (!v4UpgradeUiAvailable || forceV3Experience),
+    show: () => false,
     menuNode: <V4SidebarToggle />,
   },
   {

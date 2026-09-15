@@ -3,6 +3,7 @@ import { Be_Vietnam_Pro, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteFx } from "@/components/brand/SiteFx";
 import { getLang } from "@/lib/get-lang";
+import { isPlatformSurface } from "@/lib/platform-surface";
 
 const sans = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
@@ -22,22 +23,28 @@ const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:43173";
 
+const platform = isPlatformSurface();
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Vết · Quan sát mọi bước đi của Agent",
+    default: platform ? "Vết" : "Vết · Quan sát mọi bước đi của Agent",
     template: "%s · Vết",
   },
-  description:
-    "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Tự vận hành trên infra của bạn (MIT).",
+  description: platform
+    ? "Kênh, Lộ trình và webhook. Console trên cổng 3000."
+    : "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Tự vận hành trên infra của bạn (MIT).",
   icons: { icon: "/logo.svg" },
-  openGraph: {
-    title: "Vết · Quan sát mọi bước đi của Agent",
-    description:
-      "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Tự vận hành trên infra của bạn (MIT).",
-    locale: "vi_VN",
-    type: "website",
-  },
+  robots: platform ? { index: false, follow: false } : undefined,
+  openGraph: platform
+    ? undefined
+    : {
+        title: "Vết · Quan sát mọi bước đi của Agent",
+        description:
+          "Từ tin nhắn Zalo đến câu trả lời, bạn nhìn thấy agent đi từng bước. Tự vận hành trên infra của bạn (MIT).",
+        locale: "vi_VN",
+        type: "website",
+      },
 };
 
 export const viewport: Viewport = {

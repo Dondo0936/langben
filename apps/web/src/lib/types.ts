@@ -180,4 +180,6 @@ export type StoreShape = {
   routes: RouteDef[];
   connections: LlmConnection[];
   webhookReplays: WebhookReplay[];
+  /** Public origin operators paste into Zalo / Lark / Chat. Empty = not set. */
+  webhookOrigin?: string | null;
 };

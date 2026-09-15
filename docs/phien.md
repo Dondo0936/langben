@@ -17,7 +17,7 @@ Id demo: `zalo_oa:user_ph_demo` sau seed; `lark:ou_local` / `gchat:users_local` 
 1. Click một session id. Header hiện user, số vết, cost.
 2. Từng vết trên phiên có input/output. Đọc text khách và text bot trước, rồi mới nhảy sang cây.
 3. Khối **Hội thoại** (nếu có) liệt kê inbound / NLU / outbound theo thời gian.
-4. Gắn điểm trên lượt: tên + giá trị (ví dụ `helpful` = 1). Bảng [Điểm](diem.md) sẽ có hàng.
+4. Gắn score trên lượt: tên + giá trị (ví dụ `helpful` = 1). Bảng [Scores](scores.md) sẽ có hàng.
 5. Click tên trace để mở [Vết](vet.md).
 
 Empty «Chưa có phiên»: chưa ingest session id. Gửi thử trên Kênh (Lark / Google Chat) tạo phiên ngay, không cần HTTPS.

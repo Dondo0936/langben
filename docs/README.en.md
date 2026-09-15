@@ -18,7 +18,7 @@ Every page in these docs uses the same frame: **what it is**, **when to open it*
 1. [Run locally](../README.en.md#run-locally) — `bash scripts/up.sh`, sign in `demo@vet.dev` / `demodemo`.
 2. Open project **Bot Zalo shop**. The left sidebar is the whole console.
 3. Create one demo turn (pick one):
-   - `node scripts/seed-langfuse-zalo.mjs` — the DH-88421 cancel-order tree
+   - `node scripts/seed-langfuse-zalo.mjs` — the cancel-order tree (`tr_zalo_huy_don`)
    - Kênh → Lark or Google Chat → **Gửi thử** — a session immediately, no public HTTPS
 4. Read that turn on [Sessions](en/sessions.md), then the same turn on [Traces](en/traces.md).
 5. Only then open Channels, Scores, or Prompts when you need them.

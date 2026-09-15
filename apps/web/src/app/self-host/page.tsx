@@ -14,7 +14,7 @@ bash scripts/up.sh`;
 const tunnelSnippet = `cloudflared tunnel --url http://localhost:43173
 # copy the https://<subdomain>.trycloudflare.com origin into .env:
 # VET_PUBLIC_URL=https://<subdomain>.trycloudflare.com
-bash scripts/compose.sh up -d marketing`;
+bash scripts/compose.sh up -d web`;
 
 const envSnippet = `NEXTAUTH_URL=http://localhost:3000
 VET_PUBLIC_URL=http://localhost:43173
@@ -36,8 +36,8 @@ export default async function SelfHostPage() {
         </h1>
         <p className="mt-4 text-muted">
           {vi
-            ? "Chạy overlay Vết trên Langfuse OSS. Dữ liệu ở infra của bạn. Một lệnh là docker compose: marketing :43173 và console :3000 trên máy bạn."
-            : "Run the Vết overlay on Langfuse OSS. Data stays on your infra. One command is docker compose: marketing :43173 and the console :3000 on your machine."}
+            ? "Chạy overlay Vết trên Langfuse OSS. Dữ liệu ở infra của bạn. Docker chỉ mở nền tảng: web :43173 (Kênh, Lộ trình, webhook) và console :3000. Trang landing này không nằm trong image."
+            : "Run the Vết overlay on Langfuse OSS. Data stays on your infra. Docker only starts the platform: web :43173 (Channels, Routes, webhooks) and the console :3000. This landing page is not in the image."}
         </p>
         <p className="mt-3 text-sm text-muted">
           {vi ? (
@@ -68,8 +68,8 @@ export default async function SelfHostPage() {
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{composeSnippet}</pre>
         <p className="mt-3 text-sm text-muted">
           {vi
-            ? "Marketing http://localhost:43173. Console http://localhost:3000. Tài khoản local: demo@vet.dev / demodemo. Khóa ingest Langfuse: pk-lf-vet-demo / sk-lf-vet-demo."
-            : "Marketing http://localhost:43173. Console http://localhost:3000. Local login: demo@vet.dev / demodemo. Langfuse ingest keys: pk-lf-vet-demo / sk-lf-vet-demo."}
+            ? "Nền tảng http://localhost:43173 (Kênh và webhook, không phải trang chủ). Console http://localhost:3000. Tài khoản local: demo@vet.dev / demodemo. Khóa ingest Langfuse: pk-lf-vet-demo / sk-lf-vet-demo."
+            : "Platform http://localhost:43173 (Channels and webhooks, not the homepage). Console http://localhost:3000. Local login: demo@vet.dev / demodemo. Langfuse ingest keys: pk-lf-vet-demo / sk-lf-vet-demo."}
         </p>
         <p className="mt-3 text-sm text-muted">
           {vi
@@ -81,8 +81,8 @@ export default async function SelfHostPage() {
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{envSnippet}</pre>
         <p className="mt-3 text-sm text-muted">
           {vi
-            ? "File đầy đủ là .env.console.example. Copy thành .env rồi sửa. Compose đã đặt VET_DEPLOYMENT=self-host cho marketing. Đặt tunnel vào .env, đừng export VET_PUBLIC_URL trong shell. Tunnel chết thì fixture và webhook OA/Bot gãy. Gửi thử trên Kênh gọi loopback :43173, không đi ra tunnel. Zalo Bot: dán Secret Token (không phải Bot Token) và URL https:// đầy đủ. Chi tiết tunnel nằm ở mục Cloudflare Tunnel bên dưới."
-            : "The full file is .env.console.example. Copy it to .env and edit. Compose already sets VET_DEPLOYMENT=self-host on marketing. Put a tunnel in .env. Do not export VET_PUBLIC_URL in the shell. A dead tunnel breaks fixtures and live OA/Bot webhooks. Gửi thử on Channels posts to loopback :43173 and does not use the tunnel. Zalo Bot: paste Secret Token (not Bot Token) and a full https:// webhook URL. Tunnel steps are in Cloudflare Tunnel below."}
+            ? "File đầy đủ là .env.console.example. Copy thành .env rồi sửa. Compose đã đặt VET_DEPLOYMENT=self-host và VET_SURFACE=platform cho service web. Đặt tunnel vào .env, đừng export VET_PUBLIC_URL trong shell. Tunnel chết thì fixture và webhook OA/Bot gãy. Gửi thử trên Kênh gọi loopback :43173, không đi ra tunnel. Zalo Bot: dán Secret Token (không phải Bot Token) và URL https:// đầy đủ. Chi tiết tunnel nằm ở mục Cloudflare Tunnel bên dưới."
+            : "The full file is .env.console.example. Copy it to .env and edit. Compose already sets VET_DEPLOYMENT=self-host and VET_SURFACE=platform on the web service. Put a tunnel in .env. Do not export VET_PUBLIC_URL in the shell. A dead tunnel breaks fixtures and live OA/Bot webhooks. Gửi thử on Channels posts to loopback :43173 and does not use the tunnel. Zalo Bot: paste Secret Token (not Bot Token) and a full https:// webhook URL. Tunnel steps are in Cloudflare Tunnel below."}
         </p>
 
         <h2 id="https-tunnel" className="mt-10 scroll-mt-24 text-xl font-semibold">
@@ -90,8 +90,8 @@ export default async function SelfHostPage() {
         </h2>
         <p className="mt-2 text-sm text-muted">
           {vi
-            ? "Zalo không gọi được http://localhost:43173. Cloudflare Tunnel chỉ mở một URL https công khai tới Docker trên máy bạn. Đây không phải kênh Vết. Site Vercel là marketing; hook và console vẫn chạy trên compose."
-            : "Zalo cannot POST to http://localhost:43173. Cloudflare Tunnel only publishes an https URL to Docker on your machine. It is not a Vết channel. The Vercel site is marketing; hooks and the console still run on compose."}
+            ? "Zalo không gọi được http://localhost:43173. Cloudflare Tunnel chỉ mở một URL https công khai tới Docker trên máy bạn. Đây không phải kênh Vết. Site Vercel là trang giới thiệu; hook và console vẫn chạy trên compose."
+            : "Zalo cannot POST to http://localhost:43173. Cloudflare Tunnel only publishes an https URL to Docker on your machine. It is not a Vết channel. The Vercel site is the brochure; hooks and the console still run on compose."}
         </p>
         <p className="mt-2 text-sm text-muted">
           {vi
@@ -101,15 +101,15 @@ export default async function SelfHostPage() {
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{tunnelSnippet}</pre>
         <p className="mt-3 text-sm text-muted">
           {vi
-            ? "Quick tunnel đổi hostname mỗi lần chạy. Đừng export VET_PUBLIC_URL trong shell; ghi vào .env rồi recreate marketing. Sao chép webhook đầy đủ trên Kênh (https://.../hooks/zalo/bot/prj-vet-demo). Gửi thử không cần tunnel."
-            : "A quick tunnel changes hostname every run. Do not export VET_PUBLIC_URL in the shell; write it in .env then recreate marketing. Copy the full webhook on Channels (https://.../hooks/zalo/bot/prj-vet-demo). Gửi thử does not need the tunnel."}
+            ? "Quick tunnel đổi hostname mỗi lần chạy. Đừng export VET_PUBLIC_URL trong shell; ghi vào .env rồi recreate web. Sao chép webhook đầy đủ trên Kênh (https://.../hooks/zalo/bot/prj-vet-demo). Gửi thử không cần tunnel."
+            : "A quick tunnel changes hostname every run. Do not export VET_PUBLIC_URL in the shell; write it in .env then recreate web. Copy the full webhook on Channels (https://.../hooks/zalo/bot/prj-vet-demo). Gửi thử does not need the tunnel."}
         </p>
 
-        <h2 className="mt-10 text-xl font-semibold">{vi ? "Dev laptop, không Docker" : "Laptop, no Docker"}</h2>
+        <h2 className="mt-10 text-xl font-semibold">{vi ? "Sửa trang giới thiệu, không Docker" : "Edit the brochure, no Docker"}</h2>
         <p className="mt-2 text-sm text-muted">
           {vi
-            ? "Chỉ chạy marketing và webhook. Console Langfuse cần Docker."
-            : "This starts marketing and webhooks only. The Langfuse console needs Docker."}
+            ? "npm run dev mở landing, docs và pricing trên :43173. Đó không phải sản phẩm tự vận hành. Console Langfuse vẫn cần Docker."
+            : "npm run dev serves the landing, docs, and pricing on :43173. That is not the self-host product. The Langfuse console still needs Docker."}
         </p>
         <pre className="panel mt-3 overflow-x-auto p-4 font-mono text-sm">{`npm install
 npm run dev`}</pre>

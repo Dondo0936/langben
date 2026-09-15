@@ -1,61 +1,15 @@
 import { ActionButton } from "@/src/components/ActionButton";
-import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
 import { SplashScreen } from "@/src/components/ui/splash-screen";
-import { copyTextToClipboard } from "@/src/utils/clipboard";
 import { ApiKeyDetailContent } from "@/src/features/public-api/components/ApiKeyDetailContent";
 import { useLangfuseBaseUrl } from "@/src/features/public-api/hooks/useLangfuseEnvCode";
 import { useHasProjectAccess } from "@/src/features/rbac";
 import { api, reportNonTrpcError } from "@/src/utils/api";
 import { type RouterOutput } from "@/src/utils/types";
 import { usePostHogClientCapture } from "@/src/features/posthog-analytics";
-import { Check, Copy, LockIcon, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { LockIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-
-const SKILLS_INSTALL_COMMAND =
-  "Install the Langfuse AI skill from github.com/langfuse/skills and use it to add tracing to this application with Langfuse following best practices.";
-const MANUAL_TRACING_DOCS_URL =
-  "https://langfuse.com/docs/observability/get-started";
-
-function CopyableSnippet({
-  value,
-  onCopy,
-}: {
-  value: string;
-  onCopy?: () => void;
-}) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await copyTextToClipboard(value);
-      onCopy?.();
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1000);
-    } catch {
-      toast.error("Không sao chép được vào clipboard");
-    }
-  };
-
-  return (
-    <div className="bg-muted/50 flex items-center gap-4 rounded-2xl border p-5 shadow-xs">
-      <code className="min-w-0 flex-1 font-mono text-xs leading-6 break-words whitespace-pre-wrap sm:text-sm">
-        {value}
-      </code>
-      <Button
-        variant="outline"
-        size="sm"
-        className="shrink-0 gap-2"
-        onClick={() => handleCopy()}
-      >
-        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-        {copied ? "Đã sao chép" : "Sao chép prompt"}
-      </Button>
-    </div>
-  );
-}
 
 export function TracesSetupOnboardingCard({
   projectId,
@@ -93,13 +47,25 @@ export function TracesSetupOnboardingCard({
   return (
     <SplashScreen
       waitingFor="Đang chờ vết đầu tiên"
-      title="Ghi vết đầu tiên đi, chỉ mất khoảng một phút"
-      description="Lấy API key trước, rồi nhờ coding agent thêm observability Langfuse vào ứng dụng."
+      title="Ghi lượt đầu tiên"
+      description="Gửi thử trên Kênh. Khóa API chỉ cần khi bot production ingest."
       videoPosition="bottom"
       steps={[
         {
-          title: "Tạo API key",
-          description: "Ứng dụng cần API key để gửi vết tới console này.",
+          title: "Gửi thử trên Kênh",
+          description: "Bật Lark hoặc Google Chat, nhấn Gửi thử. Phiên xuất hiện trong vài giây.",
+          content: (
+            <ActionButton
+              href={`/project/${projectId}/channels`}
+              variant="default"
+            >
+              Mở Kênh
+            </ActionButton>
+          ),
+        },
+        {
+          title: "Khóa API (bot production)",
+          description: "pk/sk để ingest từ bot. Không cần cho Gửi thử local.",
           content: apiKeys ? (
             <ApiKeyDetailContent
               scope="project"
@@ -117,7 +83,7 @@ export function TracesSetupOnboardingCard({
                   loading={mutCreateApiKey.isPending}
                   className="self-start"
                 >
-                  Tạo API key mới
+                  Tạo khóa API
                 </Button>
               ) : (
                 <Button disabled className="self-start">
@@ -125,60 +91,17 @@ export function TracesSetupOnboardingCard({
                     className="mr-2 -ml-0.5 h-4 w-4"
                     aria-hidden="true"
                   />
-                  Tạo API key mới
+                  Tạo khóa API
                 </Button>
               )}
               <ActionButton
                 href={`/project/${projectId}/settings/api-keys`}
                 variant="secondary"
               >
-                Quản lý API key
+                Quản lý khóa API
               </ActionButton>
             </div>
           ),
-        },
-        {
-          title: "Thêm tracing bằng coding agent",
-          badge: (
-            <Badge variant="tertiary" className="gap-1">
-              <Sparkles className="h-3 w-3" />
-              Khuyên dùng
-            </Badge>
-          ),
-          description:
-            "Dán prompt này vào Claude, Cursor, Copilot hoặc coding agent khác.",
-          content: (
-            <>
-              <CopyableSnippet
-                value={SKILLS_INSTALL_COMMAND}
-                onCopy={() =>
-                  capture("onboarding:tracing_agent_prompt_copy_clicked", {
-                    projectId,
-                  })
-                }
-              />
-              <div className="mt-3">
-                <Link
-                  href={MANUAL_TRACING_DOCS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary inline-flex text-sm underline underline-offset-4 hover:no-underline"
-                  onClick={() =>
-                    capture("onboarding:tracing_manual_docs_link_clicked", {
-                      href: MANUAL_TRACING_DOCS_URL,
-                      projectId,
-                    })
-                  }
-                >
-                  hoặc làm theo docs để tự cài tracing
-                </Link>
-              </div>
-            </>
-          ),
-        },
-        {
-          title: "Chạy app, vết sẽ hiện ở đây",
-          description: "Khi app gọi LLM, vết hiện trong vài giây.",
         },
       ]}
     />

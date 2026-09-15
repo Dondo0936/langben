@@ -6,6 +6,9 @@ const consoleOrigin = (
   "http://localhost:3000"
 ).replace(/\/$/, "");
 
+const platformSurface =
+  process.env.VET_SURFACE === "platform" || process.env.NEXT_PUBLIC_VET_SURFACE === "platform";
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -21,10 +24,15 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@vet/schema", "@vet/sdk"],
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   async redirects() {
+    if (platformSurface) return [];
     return [
       { source: "/pricing/self-host", destination: "/pricing", permanent: false },
       { source: "/enterprise", destination: "/self-host", permanent: false },
     ];
+  },
+  async rewrites() {
+    if (!platformSurface) return [];
+    return [{ source: "/", destination: "/platform" }];
   },
   async headers() {
     return [

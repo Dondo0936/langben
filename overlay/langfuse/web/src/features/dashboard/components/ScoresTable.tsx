@@ -148,7 +148,7 @@ export const ScoresTable = ({
 
   if (!zeroValueScores || !oneValueScores) {
     return (
-      <DashboardCard title="Điểm" isLoading={false}>
+      <DashboardCard title="Scores" isLoading={false}>
         <NoDataOrLoading isLoading={false} />
       </DashboardCard>
     );
@@ -200,7 +200,7 @@ export const ScoresTable = ({
       // shrink so the row area scrolls internally. (LFE-11035)
       className={cn(className, "h-full")}
       cardContentClassName="min-h-0"
-      title="Điểm"
+      title="Scores"
       isLoading={
         isLoading ||
         metrics.isPending ||
@@ -247,14 +247,13 @@ export const ScoresTable = ({
           oneValueScores.isPending
         }
         noDataProps={{
-          description:
-            "Điểm đánh giá chất lượng LLM, tạo thủ công hoặc bằng SDK.",
-          href: "https://langfuse.com/docs/evaluation/overview",
+          description: "Score gắn vào một lượt. Mở Phiên để thêm.",
+          href: "https://github.com/Dondo0936/langben",
         }}
       >
         <TotalMetric
           metric={totalScores ? compactNumberFormatter(totalScores) : "0"}
-          description="Tổng số điểm đã ghi"
+          description="Tổng số score đã ghi"
         />
       </DashboardTable>
     </DashboardCard>

@@ -52,10 +52,6 @@ export function AnnotationQueuesOnboarding({
           />
         ),
       }}
-      secondaryAction={{
-        label: "Tìm hiểu thêm",
-        href: "https://langfuse.com/docs/scores/annotation",
-      }}
     />
   );
 }

@@ -77,6 +77,14 @@ const batch = [
     output: { event: "oa_send_text", msg_id: "m_1002", quote_msg_id: "m_1001" },
     metadata: { vet_type: "channel.outbound", channel: "zalo_oa" },
   }),
+  ev("score-create", iso(t0ms + 2500), {
+    id: "sc_zalo_helpful",
+    traceId,
+    name: "helpful",
+    value: 1,
+    comment: "Hỏi mã đơn đúng intent cancel_order",
+    dataType: "NUMERIC",
+  }),
 ];
 
 const token = Buffer.from(`${pk}:${sk}`).toString("base64");

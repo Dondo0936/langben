@@ -1,9 +1,9 @@
 import { ChannelShell } from "@/components/app/ChannelShell";
 import { requireChannelConsole } from "@/lib/console";
-import { publicUrl } from "@/lib/deployment";
 import { formatTime } from "@/lib/format";
 import { getLang } from "@/lib/get-lang";
-import { listChannels } from "@/lib/store";
+import { getWebhookOrigin, listChannels } from "@/lib/store";
+import { hookUrl } from "@/lib/webhook-origin";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,7 @@ export default async function ChannelsPage({
   const { project } = await requireChannelConsole(projectParam);
   const channels = listChannels(project.id);
   const vi = lang === "vi";
-  const base = publicUrl();
+  const origin = getWebhookOrigin();
   const q = new URLSearchParams();
   if (embedded) q.set("embed", "1");
   if (project.id) q.set("project", project.id);
@@ -39,8 +39,8 @@ export default async function ChannelsPage({
       <h1 className="mb-1 text-lg font-semibold">{vi ? "Kênh" : "Channels"}</h1>
       <p className="mb-4 text-sm text-muted">
         {vi
-          ? "Webhook URL: dán vào OA khi có. Lark / Google Chat: chưa cần app, mở kênh rồi Gửi thử. Secret kênh lưu ở Vết, không phải project settings Langfuse."
-          : "Webhook URLs: paste into the OA when you have one. Lark / Google Chat: no app yet. Open the channel and Gửi thử. Channel secrets stay in Vết, not Langfuse project settings."}
+          ? "Mở kênh, dán origin https:// (domain hoặc tunnel), rồi sao chép webhook. Lark / Google Chat: Gửi thử không cần origin."
+          : "Open a channel, paste an https:// origin (your domain or tunnel), then copy the webhook. Lark / Google Chat: Gửi thử does not need an origin."}
       </p>
       <div className="grid gap-3 md:grid-cols-2">
         {channels.map((ch) => (
@@ -56,7 +56,11 @@ export default async function ChannelsPage({
               </span>
             </div>
             <p className="mt-2 font-mono text-[11px] text-muted">
-              {ch.webhookPath ? `${base}${ch.webhookPath}` : vi ? "SDK / OTLP, không webhook" : "SDK / OTLP, no webhook"}
+              {ch.webhookPath
+                ? hookUrl(origin, ch.webhookPath) ?? `https://<host>${ch.webhookPath}`
+                : vi
+                  ? "SDK / OTLP, không webhook"
+                  : "SDK / OTLP, no webhook"}
             </p>
             <p className="mt-2 text-xs text-muted">
               {vi ? "Sự kiện cuối" : "Last event"}: {ch.lastEventAt ? formatTime(ch.lastEventAt, lang) : vi ? "chưa có" : "none"}

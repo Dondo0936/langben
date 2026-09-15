@@ -140,8 +140,7 @@ export const TracesBarListChart = ({
         ) : (
           <NoDataOrLoading
             isLoading={isLoading || traces.isPending || totalTraces.isPending}
-            description="Vết chứa chi tiết ứng dụng LLM và có thể tạo bằng SDK."
-            href="https://langfuse.com/docs/get-started"
+            description="Vết chứa chi tiết ứng dụng LLM. Gửi thử trên Kênh cũng ghi vết."
             className="h-auto grow"
           />
         )}

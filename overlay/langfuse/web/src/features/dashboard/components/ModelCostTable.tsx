@@ -125,10 +125,7 @@ export const ModelCostTable = ({
           metric={costFormatter(totalTokenCost)}
           description="Tổng chi phí"
         >
-          <DocPopup
-            description="Tính bằng số token nhân đơn giá từng model."
-            href="https://langfuse.com/docs/model-usage-and-cost"
-          />
+          <DocPopup description="Tính bằng số token nhân đơn giá từng model." />
         </TotalMetric>
       </DashboardTable>
     </DashboardCard>

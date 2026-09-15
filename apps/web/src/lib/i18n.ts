@@ -32,7 +32,7 @@ export const t = {
     studio: { vi: "Studio", en: "Studio" },
     playground: { vi: "Playground", en: "Playground" },
     prompts: { vi: "Prompt", en: "Prompts" },
-    evals: { vi: "Đánh giá", en: "Evals" },
+    evals: { vi: "Đánh giá agent", en: "Agent evals" },
     settings: { vi: "Cài đặt", en: "Settings" },
     billing: { vi: "Gói dịch vụ", en: "Plan" },
     tracing: { vi: "Theo dõi", en: "Tracing" },

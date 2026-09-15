@@ -9,6 +9,7 @@ cd "$ROOT"
 
 export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-vet}"
 export COMPOSE_BAKE="${COMPOSE_BAKE:-false}"
+export COMPOSE_PARALLEL_LIMIT="${COMPOSE_PARALLEL_LIMIT:-1}"
 export DOCKER_BUILDKIT="${DOCKER_BUILDKIT:-1}"
 # Do not let a leftover COMPOSE_FILE (or one in .env) fight the -f list.
 unset COMPOSE_FILE || true

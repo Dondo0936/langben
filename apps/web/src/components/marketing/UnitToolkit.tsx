@@ -19,7 +19,7 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
     () => [
       { label: vi ? "Vết (trace)" : "Traces", value: traces, why: vi ? "Mỗi lượt hội thoại = 1 vết" : "Each turn is 1 trace" },
       { label: vi ? "Quan sát (observation)" : "Observations", value: obsTotal, why: vi ? "Inbound, NLU, generation, outbound…" : "Inbound, NLU, generation, outbound…" },
-      { label: vi ? "Điểm đánh giá (score)" : "Scores", value: scoreTotal, why: vi ? "Chỉ tính khi bạn gửi điểm" : "Only if you send a score" },
+      { label: "Scores", value: scoreTotal, why: vi ? "Chỉ tính khi bạn gửi score" : "Only if you send a score" },
     ],
     [vi, traces, obsTotal, scoreTotal],
   );
@@ -102,7 +102,7 @@ export function UnitToolkit({ lang }: { lang: Lang }) {
             onChange={setObservations}
           />
           <Slider
-            label={vi ? "Điểm đánh giá / lượt" : "Scores / turn"}
+            label={vi ? "Scores / lượt" : "Scores / turn"}
             value={scores}
             min={0}
             max={3}

@@ -81,6 +81,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ projectId:
     input: payload,
     output: { text: inbound.text },
     traceName: "lark · im.message.receive_v1",
+    routeId: "rt_lark",
   });
   return NextResponse.json({ ok: true, traceId: recorded.trace.id, sessionId: recorded.sessionId });
 }

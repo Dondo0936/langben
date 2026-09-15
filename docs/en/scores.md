@@ -1,6 +1,6 @@
 # Scores
 
-[Tiếng Việt](../diem.md) · **English**
+[Tiếng Việt](../scores.md) · **English**
 
 A **score** is a quality label on a turn, observation, or session — for example `helpful = 1`. Not a token. Not a billing unit.
 
@@ -8,7 +8,7 @@ Open it when you already have a turn on [Sessions](sessions.md) and you want to 
 
 ## Open
 
-Sidebar **Điểm** (Đánh giá agent). URL: `/project/{projectId}/scores`.
+Sidebar **Scores** (Đánh giá agent). URL: `/project/{projectId}/scores`.
 
 ## Use
 
@@ -18,7 +18,7 @@ Sidebar **Điểm** (Đánh giá agent). URL: `/project/{projectId}/scores`.
 4. Declare score names under Settings → score configs before you score in bulk.
 5. Production: the SDK sends the score with the trace (pk/sk in [Settings](settings.md)).
 
-Do not use Phân tích until the Điểm table has rows.
+Do not use Phân tích until the Scores table has rows.
 
 ## Related
 

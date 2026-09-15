@@ -231,8 +231,7 @@ export const TracesAndObservationsTimeSeriesChart = ({
                       observations.isPending ||
                       (!isV2 && traces.isPending)
                     }
-                    description="Vết chứa chi tiết ứng dụng LLM và có thể tạo bằng SDK."
-                    href="https://langfuse.com/docs/observability/overview"
+                    description="Vết chứa chi tiết ứng dụng LLM. Gửi thử trên Kênh cũng ghi vết."
                     className="h-auto grow"
                   />
                 )}

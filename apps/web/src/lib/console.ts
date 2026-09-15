@@ -1,17 +1,20 @@
 import { NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "./auth";
+import { consoleSignInUrl } from "./console-target";
 import { ensureOrgProject, getOrg, getProject, listProjects } from "./store";
 import { isCloud } from "./deployment";
+import { isLocalOperatorRequest } from "./local-operator";
+import { isPlatformSurface } from "./platform-surface";
 import type { Organization, Project, User } from "./types";
 
 const DEMO_PROJECT = "prj-vet-demo";
 
 export async function requireConsole(): Promise<{ user: User; project: Project; org: Organization | null }> {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect(isPlatformSurface() ? consoleSignInUrl() : "/login");
   const created = ensureOrgProject(user.orgId);
-  if (!created) redirect("/login");
+  if (!created) redirect(isPlatformSurface() ? consoleSignInUrl() : "/login");
   return { user, project: created.project, org: getOrg(user.orgId) };
 }
 
@@ -53,14 +56,17 @@ function projectIdFromRequest(req?: Request): string | null {
   }
 }
 
-/** Kênh / Lộ trình stay on marketing. Self-host embed does not need vet_session. */
+/** Kênh / Lộ trình stay on the platform origin (:43173). Self-host embed does not need vet_session. */
 export async function requireChannelConsole(requestedProjectId?: string | null): Promise<{
   user: User | null;
   project: Project;
   org: Organization | null;
 }> {
   const ctx = await resolveChannelContext(requestedProjectId);
-  if (!ctx.project) redirect("/login");
+  if (!ctx.project) {
+    if (isPlatformSurface()) redirect(consoleSignInUrl());
+    redirect("/login");
+  }
   return { user: ctx.user, project: ctx.project, org: ctx.org };
 }
 
@@ -85,6 +91,15 @@ export async function requireChannelApi(req?: Request) {
     return { error: NextResponse.json({ error: "No project" }, { status: 403 }) as NextResponse };
   }
   return { user: ctx.user, project: ctx.project, org: ctx.org };
+}
+
+/** Mutations: session, laptop UI, or VET_ALLOW_PUBLIC_DEMO. Not a public tunnel. */
+export async function requireChannelWrite(req: Request) {
+  const ctx = await requireChannelApi(req);
+  if ("error" in ctx) return ctx;
+  if (ctx.user) return ctx;
+  if (!isCloud() && (isLocalOperatorRequest(req) || process.env.VET_ALLOW_PUBLIC_DEMO === "1")) return ctx;
+  return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) as NextResponse };
 }
 
 export function requestLang(req: Request): "vi" | "en" {

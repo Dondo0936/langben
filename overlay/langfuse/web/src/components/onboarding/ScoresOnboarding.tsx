@@ -2,43 +2,43 @@ import {
   SplashScreen,
   type ValueProposition,
 } from "@/src/components/ui/splash-screen";
-import { ThumbsUp, Star, LineChart, Code } from "lucide-react";
+import { useQueryProject } from "@/src/features/projects/hooks";
+import { MessageSquare, PenLine, Code } from "lucide-react";
 
 export function ScoresOnboarding() {
+  const { project } = useQueryProject();
+  const sessionsHref = project?.id
+    ? `/project/${project.id}/sessions`
+    : "/";
   const valuePropositions: ValueProposition[] = [
     {
-      title: "Thu thập phản hồi người dùng",
+      title: "Gắn vào một lượt",
       description:
-        "Thu thập thích hoặc không thích để nhận diện output tốt và kém.",
-      icon: ThumbsUp,
+        "Mở Phiên, chọn lượt, thêm score (tên + giá trị). Gửi thử trên Kênh chỉ tạo phiên — chưa tạo score.",
+      icon: PenLine,
     },
     {
-      title: "Chạy đánh giá bằng model",
-      description: "Dùng LLM để tự động đánh giá output của ứng dụng.",
-      icon: Star,
+      title: "Đo câu trả lời, không đo token",
+      description:
+        "Ví dụ helpful 0/1, hoặc nhãn đúng/sai. Cấu hình tên score ở Cài đặt → Cấu hình score.",
+      icon: MessageSquare,
     },
     {
-      title: "Theo dõi chỉ số chất lượng",
+      title: "SDK khi bot chạy production",
       description:
-        "Giám sát chỉ số chất lượng theo thời gian để thấy xu hướng và vấn đề.",
-      icon: LineChart,
-    },
-    {
-      title: "Dùng chỉ số tùy chỉnh",
-      description:
-        "Điểm linh hoạt, theo dõi được mọi chỉ số gắn với ứng dụng LLM.",
+        "Ingest khi bot chạy production, cùng lượt với tin Zalo/Lark. Khóa pk/sk ở Cài đặt → Khóa API.",
       icon: Code,
     },
   ];
 
   return (
     <SplashScreen
-      title="Bắt đầu với Điểm"
-      description="Điểm giúp đánh giá chất lượng hoặc an toàn của ứng dụng LLM qua phản hồi người dùng, đánh giá bằng model, hoặc review thủ công. Có thể dùng qua API và SDK."
+      title="Chưa có score"
+      description="Score là nhãn chất lượng trên một lượt agent. Bảng này trống cho đến khi bạn gắn score vào một phiên."
       valuePropositions={valuePropositions}
-      secondaryAction={{
-        label: "Tìm hiểu thêm",
-        href: "https://langfuse.com/docs/evaluation/evaluation-methods/custom-scores",
+      primaryAction={{
+        label: "Mở Phiên",
+        href: sessionsHref,
       }}
     />
   );

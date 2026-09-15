@@ -114,8 +114,8 @@ export function ChartScores(props: {
   return (
     <DashboardCard
       className={props.className}
-      title="Điểm"
-      description="Trung bình trượt theo điểm"
+      title="Scores"
+      description="Trung bình trượt theo score"
       isLoading={props.isLoading || scores.isPending}
     >
       {!isEmptyTimeSeries({ data: extractedScores }) ? (
@@ -135,8 +135,7 @@ export function ChartScores(props: {
       ) : (
         <NoDataOrLoading
           isLoading={props.isLoading || scores.isPending}
-          description="Điểm đánh giá chất lượng LLM, tạo thủ công hoặc bằng SDK."
-          href="https://langfuse.com/docs/evaluation/overview"
+          description="Score gắn vào một lượt. Mở Phiên để thêm."
           className="h-auto grow"
         />
       )}

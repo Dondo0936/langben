@@ -7,12 +7,12 @@
 LLM observability plus Vietnamese production channels (Zalo, FPT.AI, Viettel, Lark). Self-hosted. Console is Langfuse OSS v4.33.0.
 
 <p align="center">
-  <img src="readme/vi/overview.png" alt="Tổng quan Vết: vết, chi phí model, và điểm của Bot Zalo shop" width="900" />
+  <img src="readme/vi/overview.png" alt="Tổng quan Vết: vết, chi phí model, và score của Bot Zalo shop" width="900" />
 </p>
 
 <table>
   <tr>
-    <td width="50%"><img src="readme/vi/session.png" alt="Phiên Zalo OA: hủy đơn, DH-88421, và điểm helpful trên một luồng" /></td>
+    <td width="50%"><img src="readme/vi/session.png" alt="Phiên Zalo OA: hủy đơn, DH-88421, và score helpful trên một luồng" /></td>
     <td width="50%"><img src="readme/vi/trace.png" alt="Cây vết: zalo.inbound → fpt.nlu → crm.lookup_order → Claude → zalo.outbound" /></td>
   </tr>
   <tr>
@@ -22,7 +22,7 @@ LLM observability plus Vietnamese production channels (Zalo, FPT.AI, Viettel, La
 </table>
 
 <p align="center">
-  <img src="readme/vi/scores.png" alt="Điểm: helpful = 1 trên cả hai lượt hủy đơn" width="900" />
+  <img src="readme/vi/scores.png" alt="Scores: helpful = 1 trên cả hai lượt hủy đơn" width="900" />
 </p>
 
 ## Chạy local

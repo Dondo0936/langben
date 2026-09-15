@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signatureHint } from "@/lib/channel-copy";
 import type { ChannelConfig, ChannelType } from "@/lib/types";
 
 const SAVED = "đã lưu. Nhập lại để đổi.";
@@ -18,15 +19,6 @@ const FORWARD_PLACEHOLDER: Partial<Record<ChannelType, string>> = {
 
 function channelApi(path: string, projectId: string) {
   return `${path}?project=${encodeURIComponent(projectId)}`;
-}
-
-function signatureHint(type: ChannelType) {
-  if (type === "lark") return "Verification token sai thì webhook trả 401, không tạo lượt.";
-  if (type === "gchat") return "Bearer token sai thì webhook trả 401, không tạo lượt.";
-  if (type === "fpt" || type === "viettel") return "HMAC sai thì webhook trả 401, không tạo lượt.";
-  if (type === "msteams") return "Kênh này đi SDK, không kiểm chữ ký webhook messenger.";
-  if (type === "zalo_bot") return "Secret Token sai thì webhook trả 401, không tạo lượt.";
-  return "Chữ ký OA-MAC sai thì webhook trả 401, không tạo lượt.";
 }
 
 export function ChannelForm({ channel }: { channel: ChannelConfig }) {

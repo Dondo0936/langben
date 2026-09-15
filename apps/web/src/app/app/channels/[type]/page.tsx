@@ -5,8 +5,7 @@ import { ChannelShell } from "@/components/app/ChannelShell";
 import { CopyHookUrl } from "@/components/app/CopyHookUrl";
 import { getLang } from "@/lib/get-lang";
 import { requireChannelConsole } from "@/lib/console";
-import { getChannel } from "@/lib/store";
-import { publicUrl } from "@/lib/deployment";
+import { getChannel, getWebhookOrigin } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +35,12 @@ export default async function ChannelDetailPage({
       </Link>
       <h1 className="mb-1 mt-1 text-lg font-semibold">{channel.name}</h1>
       {channel.webhookPath ? (
-        <CopyHookUrl url={`${publicUrl()}${channel.webhookPath}`} />
+        <CopyHookUrl
+          path={channel.webhookPath}
+          origin={getWebhookOrigin()}
+          requireHttps={channel.type === "zalo_bot"}
+          projectId={project.id}
+        />
       ) : (
         <p className="mb-4 text-sm text-muted">
           {vi ? "Kênh này đi SDK / OTLP, không phải webhook messenger." : "This channel is SDK / OTLP, not a messenger webhook."}

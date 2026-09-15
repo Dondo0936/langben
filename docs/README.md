@@ -6,7 +6,7 @@ Hai bề mặt, một project:
 
 | Bề mặt | Cổng | Việc |
 |---|---|---|
-| Console | [http://localhost:3000](http://localhost:3000) | Xem lượt, điểm, prompt, cài đặt |
+| Console | [http://localhost:3000](http://localhost:3000) | Xem lượt, score, prompt, cài đặt |
 | Web nền tảng | [http://localhost:43173](http://localhost:43173) | Kênh, Lộ trình, webhook. Console nhúng hai mục này vào sidebar |
 
 Kênh và Lộ trình không phải trang Langfuse. Chúng chạy trên `:43173` và hiện trong console qua iframe.
@@ -18,10 +18,10 @@ Mỗi trang tài liệu cùng một khung: **là gì**, **khi nào mở**, **cá
 1. [Chạy local](../README.md#chạy-local) — `bash scripts/up.sh`, đăng nhập `demo@vet.dev` / `demodemo`.
 2. Mở project **Bot Zalo shop**. Sidebar trái là toàn bộ console.
 3. Tạo một lượt demo (chọn một):
-   - `node scripts/seed-langfuse-zalo.mjs` — cây hủy đơn DH-88421
+   - `node scripts/seed-langfuse-zalo.mjs` — cây hủy đơn (`tr_zalo_huy_don`)
    - Kênh → Lark hoặc Google Chat → **Gửi thử** — phiên ngay, không cần HTTPS công khai
 4. Đọc lượt đó trên [Phiên](phien.md), rồi cùng lượt trên [Vết](vet.md).
-5. Sau đó mới sang Kênh, Điểm, Prompt khi bạn cần chúng.
+5. Sau đó mới sang Kênh, Scores, Prompt khi bạn cần chúng.
 
 Đừng bắt đầu từ Playground hay Bộ đánh giá. Playground cần model config. Bộ đánh giá cần lượt đã có.
 
@@ -33,7 +33,7 @@ Thứ tự giống sidebar.
 
 | Mục | Việc |
 |---|---|
-| [Tổng quan](tong-quan.md) | Số vết, chi phí, điểm của project |
+| [Tổng quan](tong-quan.md) | Số vết, chi phí, score của project |
 | [Bảng điều khiển](bang-dieu-khien.md) | Dashboard tùy biến (cost, usage, widget) |
 
 ### Quan sát
@@ -58,7 +58,7 @@ Thứ tự giống sidebar.
 
 | Mục | Việc |
 |---|---|
-| [Điểm](diem.md) | Nhãn chất lượng trên lượt / observation / phiên |
+| [Scores](scores.md) | Nhãn chất lượng trên lượt / observation / phiên |
 | [Bộ đánh giá](bo-danh-gia.md) | Chấm tự động (LLM-as-judge) |
 | [Gán nhãn](gan-nhan.md) | Hàng đợi người chấm |
 | [Tập dữ liệu](tap-du-lieu.md) | Input/output kỳ vọng để so sánh |
@@ -68,4 +68,4 @@ Thứ tự giống sidebar.
 
 | Mục | Việc |
 |---|---|
-| [Cài đặt](cai-dat.md) | Khóa API, thành viên, cấu hình điểm, host ingest |
+| [Cài đặt](cai-dat.md) | Khóa API, thành viên, cấu hình score, host ingest |

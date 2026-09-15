@@ -212,7 +212,6 @@ export const UserChart = ({
                   <NoDataOrLoading
                     isLoading={isLoading || user.isPending}
                     description="Mức dùng theo người được ghi khi truyền id trên vết."
-                    href="https://langfuse.com/docs/observability/features/users"
                     className="h-auto grow"
                   />
                 )}

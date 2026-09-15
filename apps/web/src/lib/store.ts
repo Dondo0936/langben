@@ -13,6 +13,8 @@ import type {
   User,
 } from "./types";
 import { seedStore } from "./seed";
+import { publicUrl } from "./deployment";
+import { resolveWebhookOrigin } from "./webhook-origin";
 
 const DEMO_PROJECT_ID = "prj-vet-demo";
 const LEGACY_DEMO_PROJECT_ID = "prj_demo";
@@ -387,6 +389,17 @@ export function listChannels(projectId: string) {
 
 export function getChannel(projectId: string, type: string) {
   return loadStore().channels.find((c) => c.projectId === projectId && c.type === type) ?? null;
+}
+
+export function getWebhookOrigin(): string | null {
+  return resolveWebhookOrigin(loadStore(), publicUrl());
+}
+
+export function setWebhookOrigin(origin: string | null) {
+  commit((s) => {
+    s.webhookOrigin = origin;
+  });
+  return origin;
 }
 
 export function updateChannel(projectId: string, type: string, patch: Partial<ChannelConfig>) {

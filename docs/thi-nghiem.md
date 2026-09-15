@@ -21,4 +21,4 @@ Sidebar **Thí nghiệm** — chỉ khi flag bật. URL: `/project/{projectId}/e
 
 - [Tập dữ liệu](tap-du-lieu.md)
 - [Prompt](prompt.md)
-- [Điểm](diem.md)
+- [Scores](scores.md)

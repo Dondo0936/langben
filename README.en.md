@@ -22,7 +22,7 @@ LLM observability plus Vietnamese production channels (Zalo, FPT.AI, Viettel, La
 </table>
 
 <p align="center">
-  <img src="readme/scores.png" alt="Điểm: helpful = 1 on both hủy-đơn turns" width="900" />
+  <img src="readme/scores.png" alt="Scores: helpful = 1 on both hủy-đơn turns" width="900" />
 </p>
 
 ## Run locally

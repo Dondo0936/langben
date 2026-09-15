@@ -61,10 +61,6 @@ export function DatasetsOnboarding({ projectId }: { projectId: string }) {
           </CreateDatasetDialogController>
         ),
       }}
-      secondaryAction={{
-        label: "Tìm hiểu thêm",
-        href: "https://langfuse.com/docs/datasets",
-      }}
     />
   );
 }

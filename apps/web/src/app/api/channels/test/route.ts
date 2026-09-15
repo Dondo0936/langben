@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireChannelApi } from "@/lib/console";
+import { requireChannelWrite } from "@/lib/console";
 import { getChannel } from "@/lib/store";
 import { buildChannelTestCalls, canSendChannelTest } from "@/lib/messenger-test";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  const auth = await requireChannelApi(req);
+  const auth = await requireChannelWrite(req);
   if ("error" in auth) return auth.error;
   const body = (await req.json().catch(() => null)) as { type?: string } | null;
   const type = body?.type;
