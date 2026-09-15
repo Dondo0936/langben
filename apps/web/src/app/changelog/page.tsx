@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/Chrome";
 import { getLang } from "@/lib/get-lang";
+import { VET_GITHUB_ISSUES, VET_GITHUB_REPO } from "@/lib/github";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Nhật ký" };
@@ -19,14 +21,42 @@ export default async function ChangelogPage() {
           </h2>
           <ul className="mt-3 list-disc pl-5 text-sm text-muted">
             <li>
-              {vi
-                ? "Ẩn Cần xử lý (migration Langfuse v4). Hỗ trợ trỏ GitHub Dondo0936/langben."
-                : "Hide Cần xử lý (Langfuse v4 migration). Support points at GitHub Dondo0936/langben."}
+              {vi ? (
+                <>
+                  Ẩn Cần xử lý (migration Langfuse v4). Hỗ trợ trỏ GitHub{" "}
+                  <a href={VET_GITHUB_REPO} className="text-ink underline-offset-4 hover:underline" target="_blank" rel="noopener noreferrer">
+                    Dondo0936/langben
+                  </a>
+                  .
+                </>
+              ) : (
+                <>
+                  Hide Cần xử lý (Langfuse v4 migration). Support points at GitHub{" "}
+                  <a href={VET_GITHUB_REPO} className="text-ink underline-offset-4 hover:underline" target="_blank" rel="noopener noreferrer">
+                    Dondo0936/langben
+                  </a>
+                  .
+                </>
+              )}
             </li>
             <li>
-              {vi
-                ? "Scores: splash trong console; /docs/scores trên brochure (không có trên Docker :43173). Lộ trình: mở kênh và phiên. Cài đặt: mục tiếng Việt. Đánh giá agent trên sidebar."
-                : "Scores: console splash; /docs/scores on the brochure (not on Docker :43173). Lộ trình: open channel and sessions. Settings nav in Vietnamese. Sidebar group Đánh giá agent."}
+              {vi ? (
+                <>
+                  Scores: splash trong console;{" "}
+                  <Link href="/docs/scores" className="text-ink underline-offset-4 hover:underline">
+                    /docs/scores
+                  </Link>{" "}
+                  trên brochure (không có trên Docker :43173). Lộ trình: mở kênh và phiên. Cài đặt: mục tiếng Việt. Đánh giá agent trên sidebar.
+                </>
+              ) : (
+                <>
+                  Scores: console splash;{" "}
+                  <Link href="/docs/scores" className="text-ink underline-offset-4 hover:underline">
+                    /docs/scores
+                  </Link>{" "}
+                  on the brochure (not on Docker :43173). Lộ trình: open channel and sessions. Settings nav in Vietnamese. Sidebar group Đánh giá agent.
+                </>
+              )}
             </li>
           </ul>
         </article>
@@ -37,9 +67,31 @@ export default async function ChangelogPage() {
           </h2>
           <ul className="mt-3 list-disc pl-5 text-sm text-muted">
             <li>
-              {vi
-                ? "Clone: github.com/Dondo0936/langben. Hỗ trợ: GitHub Issues của Vết."
-                : "Clone: github.com/Dondo0936/langben. Support: Vết GitHub Issues."}
+              {vi ? (
+                <>
+                  Clone:{" "}
+                  <a href={VET_GITHUB_REPO} className="text-ink underline-offset-4 hover:underline" target="_blank" rel="noopener noreferrer">
+                    github.com/Dondo0936/langben
+                  </a>
+                  . Hỗ trợ:{" "}
+                  <a href={VET_GITHUB_ISSUES} className="text-ink underline-offset-4 hover:underline" target="_blank" rel="noopener noreferrer">
+                    GitHub Issues
+                  </a>{" "}
+                  của Vết.
+                </>
+              ) : (
+                <>
+                  Clone:{" "}
+                  <a href={VET_GITHUB_REPO} className="text-ink underline-offset-4 hover:underline" target="_blank" rel="noopener noreferrer">
+                    github.com/Dondo0936/langben
+                  </a>
+                  . Support: Vết{" "}
+                  <a href={VET_GITHUB_ISSUES} className="text-ink underline-offset-4 hover:underline" target="_blank" rel="noopener noreferrer">
+                    GitHub Issues
+                  </a>
+                  .
+                </>
+              )}
             </li>
             <li>
               {vi
@@ -115,7 +167,25 @@ export default async function ChangelogPage() {
           </h2>
           <ul className="mt-3 list-disc pl-5 text-sm text-muted">
             <li>{vi ? "Tự vận hành MIT là sản phẩm" : "MIT self-host is the product"}</li>
-            <li>{vi ? "Bộ công cụ /docs/units: đơn vị ≠ token" : "Toolkit at /docs/units: units ≠ tokens"}</li>
+            <li>
+              {vi ? (
+                <>
+                  Bộ công cụ{" "}
+                  <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">
+                    /docs/units
+                  </Link>
+                  : đơn vị ≠ token
+                </>
+              ) : (
+                <>
+                  Toolkit at{" "}
+                  <Link href="/docs/units" className="text-ink underline-offset-4 hover:underline">
+                    /docs/units
+                  </Link>
+                  : units ≠ tokens
+                </>
+              )}
+            </li>
           </ul>
         </article>
         <article className="mt-8">

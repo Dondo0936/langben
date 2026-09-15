@@ -217,7 +217,7 @@ export default async function DocsPage() {
           <p className="mt-3 text-sm text-muted">
             {vi
               ? "Thử local không cần app Zalo, Lark hay Google: nút Gửi thử trên trang Kênh (inbound), hoặc node scripts/zalo-fixture.mjs, zalo-bot-fixture.mjs, lark-fixture.mjs, gchat-fixture.mjs. Tin nhắn Zalo thật cần Cloudflare Tunnel tới :43173. Hướng dẫn: trang Tự vận hành, mục Cloudflare Tunnel. Teams không có webhook tin nhắn như Zalo."
-              : "Try locally without a Zalo, Lark, or Google app: Gửi thử on the Channels page (inbound), or node scripts/zalo-fixture.mjs, zalo-bot-fixture.mjs, lark-fixture.mjs, gchat-fixture.mjs. A live Zalo message needs a Cloudflare Tunnel to :43173. Steps: Self-host page, Cloudflare Tunnel. Teams has no messenger webhook like Zalo."}
+              : "Try locally without a Zalo, Lark, or Google app: Try-send (Gửi thử) on the Channels page (inbound), or node scripts/zalo-fixture.mjs, zalo-bot-fixture.mjs, lark-fixture.mjs, gchat-fixture.mjs. A live Zalo message needs a Cloudflare Tunnel to :43173. Steps: Self-host page, Cloudflare Tunnel. Teams has no messenger webhook like Zalo."}
           </p>
         </section>
 

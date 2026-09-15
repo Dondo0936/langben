@@ -32,7 +32,7 @@ export default async function ScoresDocsPage() {
           <p>
             {vi
               ? "Gửi thử trên Kênh chỉ ghi phiên. Score xuất hiện sau khi bạn gắn nhãn vào một lượt, hoặc ingest ghi score cùng traceId."
-              : "Gửi thử on Channels writes a session. A score appears after you label a turn, or ingest writes one on the same traceId."}
+              : "Try-send (Gửi thử) on Channels writes a session. A score appears after you label a turn, or ingest writes one on the same traceId."}
           </p>
         </section>
 

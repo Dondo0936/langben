@@ -28,6 +28,9 @@ const nextConfig: NextConfig = {
     return [
       { source: "/pricing/self-host", destination: "/pricing", permanent: false },
       { source: "/enterprise", destination: "/self-host", permanent: false },
+      { source: "/login", destination: "/self-host", permanent: false },
+      { source: "/signup", destination: "/self-host", permanent: false },
+      { source: "/docs/diem", destination: "/docs/scores", permanent: false },
     ];
   },
   async rewrites() {
