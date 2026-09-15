@@ -8,15 +8,25 @@ import {
   mapRetiredConsolePath,
 } from "./lib/platform-surface";
 
+function redirectTo(request: NextRequest, dest: string) {
+  if (dest.startsWith("http://") || dest.startsWith("https://")) {
+    return NextResponse.redirect(dest);
+  }
+  return NextResponse.redirect(new URL(dest, request.url));
+}
+
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  if (isRetiredConsolePath(path)) {
-    return NextResponse.redirect(consoleProjectUrl(mapRetiredConsolePath(path)));
+  if (!isPlatformSurface()) {
+    if (path === "/app" || path.startsWith("/app/")) {
+      return redirectTo(request, "/self-host");
+    }
+    return NextResponse.next();
   }
 
-  if (!isPlatformSurface()) {
-    return NextResponse.next();
+  if (isRetiredConsolePath(path)) {
+    return redirectTo(request, consoleProjectUrl(mapRetiredConsolePath(path)));
   }
 
   if (path === "/" || path === "") {
@@ -26,7 +36,7 @@ export function proxy(request: NextRequest) {
   }
 
   if (path === "/login" || path === "/signup" || path === "/demo") {
-    return NextResponse.redirect(consoleSignInUrl());
+    return redirectTo(request, consoleSignInUrl());
   }
 
   if (isPlatformPath(path)) {

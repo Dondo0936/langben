@@ -30,6 +30,8 @@ const nextConfig: NextConfig = {
       { source: "/enterprise", destination: "/self-host", permanent: false },
       { source: "/login", destination: "/self-host", permanent: false },
       { source: "/signup", destination: "/self-host", permanent: false },
+      { source: "/app", destination: "/self-host", permanent: false },
+      { source: "/app/:path*", destination: "/self-host", permanent: false },
       { source: "/docs/diem", destination: "/docs/scores", permanent: false },
     ];
   },
