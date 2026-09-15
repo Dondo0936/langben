@@ -16,3 +16,7 @@ yarn-debug.log*
 yarn-error.log*
 .vercel
 .build/
+docs/ideas/
+docs/plans/
+docs/screenshots/
+launch/
