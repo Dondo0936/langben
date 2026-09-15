@@ -62,7 +62,7 @@ export default async function LandingPage() {
         <section className="border-y border-white/10 py-16">
           <div className="mx-auto max-w-6xl px-4">
             <h2 className="text-3xl font-semibold tracking-tight">
-              {vi ? "Mở, không khóa dữ liệu" : "Open platform, no lock-in"}
+              {vi ? "Mã nguồn mở" : "Open source"}
             </h2>
             <div className="mt-8 grid gap-6 md:grid-cols-3">
               <div>
@@ -99,20 +99,7 @@ export default async function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-16">
-          <div className="mb-8 flex items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-semibold tracking-tight">{vi ? "Giá" : "Pricing"}</h2>
-              <p className="mt-2 text-muted">
-                {vi
-                  ? "MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra."
-                  : "MIT, docker compose up, unlimited units. You pay infra."}
-              </p>
-            </div>
-            <Link href="/pricing" className="text-[12px] uppercase tracking-[0.14em] text-ink">
-              {vi ? "Giá tự vận hành →" : "Self-host pricing →"}
-            </Link>
-          </div>
-          <div className="panel mb-6 p-6">
+          <div className="panel p-6">
             <div className="text-[11px] font-medium uppercase tracking-[0.16em]">{vi ? "Mã nguồn mở" : "Open Source"}</div>
             <div className="mt-2 text-3xl font-semibold">{vi ? "Miễn phí" : "Free"}</div>
             <p className="mt-3 max-w-xl text-sm text-muted">
@@ -124,9 +111,6 @@ export default async function LandingPage() {
               {vi ? "Hướng dẫn deploy" : "Deployment guide"}
             </Link>
           </div>
-          <p className="mt-4 text-sm text-muted">
-            <Link href="/docs/units" className="text-ink">{vi ? "Giải thích đơn vị" : "What a unit is"}</Link>
-          </p>
         </section>
 
         <section className="mx-auto max-w-3xl px-4 py-12">
@@ -137,13 +121,11 @@ export default async function LandingPage() {
                   ["Vết khác gì một bản Langfuse dán sticker?", "Langfuse thấy lần gọi LLM. Vết thấy Zalo vào, FPT NLU, TTS Viettel và tin ra trong cùng một phiên. UI tiếng Việt gốc, không dịch trình duyệt."],
                   ["Tự host có thật sự miễn phí?", "Có. MIT, docker compose up, không giới hạn đơn vị. Bạn trả infra."],
                   ["Đơn vị (unit) là gì?", "Không phải token. Mỗi vết, quan sát, và điểm đánh giá là một đơn vị. Tự vận hành không đếm. Xem /docs/units."],
-                  ["Vertex khác Google Chat chứ?", "Có. Vertex/Foundry/Bedrock là lớp mô hình. Google Chat và Teams là kênh. Tách menu: Kết nối LLM vs Kênh."],
                 ]
               : [
                   ["Is this a Langfuse reskin?", "Langfuse sees the LLM call. Vết sees Zalo in, FPT NLU, Viettel TTS and the reply in the same session. Native Vietnamese chrome."],
                   ["Is self-hosting actually free?", "Yes. MIT, docker compose up, unlimited units. You pay infra."],
                   ["What is a unit?", "Not a token. Each trace, observation, and score is one unit. Self-host does not meter them. See /docs/units."],
-                  ["Vertex vs Google Chat?", "Vertex/Foundry/Bedrock are model layers. Google Chat and Teams are channels. Separate nav."],
                 ]
             ).map(([q, a]) => (
               <div key={q}>
