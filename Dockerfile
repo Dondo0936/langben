@@ -15,16 +15,23 @@ FROM deps AS build
 COPY package.json ./
 COPY apps/web ./apps/web
 COPY packages ./packages
+COPY scripts/prepare-platform-surface.sh scripts/prepare-platform-surface.sh
 ARG NEXT_PUBLIC_VET_CONSOLE_URL=http://localhost:3000
+ARG VET_SURFACE=platform
 ENV NEXT_PUBLIC_VET_CONSOLE_URL=$NEXT_PUBLIC_VET_CONSOLE_URL
+ENV VET_SURFACE=$VET_SURFACE
+ENV NEXT_PUBLIC_VET_SURFACE=$VET_SURFACE
+ENV VET_DEPLOYMENT=self-host
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+RUN sh scripts/prepare-platform-surface.sh && npm run build
 
 FROM node:22-alpine AS runner
 WORKDIR /repo
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV VET_DEPLOYMENT=self-host
+ENV VET_SURFACE=platform
+ENV NEXT_PUBLIC_VET_SURFACE=platform
 ENV VET_DATA_DIR=/data
 ENV PORT=43173
 

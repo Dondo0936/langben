@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command self-host: overlay → branded console + marketing.
+# One-command self-host: overlay → branded console + platform web (no landing).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -14,5 +14,5 @@ if [[ ! -f "$ROOT/.env" ]]; then
 fi
 
 bash "$ROOT/scripts/apply-langfuse-overlay.sh" "$ROOT/.build/langfuse"
-echo "Starting Compose. Marketing http://localhost:43173  Console http://localhost:3000  Login demo@vet.dev / demodemo"
+echo "Starting Compose. Platform http://localhost:43173 (Kênh / hooks)  Console http://localhost:3000  Login demo@vet.dev / demodemo"
 exec bash "$ROOT/scripts/compose.sh" up --build "$@"

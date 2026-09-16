@@ -1,7 +1,8 @@
 # Default console image: overlay applied (Kênh, Lộ trình, Hội thoại, Vết mark).
 # Built from .build/langfuse after scripts/apply-langfuse-overlay.sh (see scripts/up.sh).
-# Iframe origin for Kênh / Lộ trình. This is the URL the browser loads, not the
-# Zalo webhook tunnel (VET_PUBLIC_URL). Keep it loopback for local compose.
+# Iframe origin for Kênh / Lộ trình on the platform web service. This is the
+# URL the browser loads, not the Zalo webhook tunnel (VET_PUBLIC_URL) and not
+# the Vercel brochure. Keep it loopback for local compose.
 services:
   langfuse-web:
     image: vet-console:local
